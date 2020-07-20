@@ -1,0 +1,36 @@
+Create a Notifction Util file
+
+- Create a fun to send the message
+- Create a Notification builder, the builder requires a small Icon, ContentTitle, Content Text
+- set the priority of the builder. 
+- show the notifiation
+
+```
+fun NotificationManager.sendNotification(message: String, mContext: Context) {
+  /*
+   * Build the noitication
+   * Constructor requires context, CHANNEL_ID
+   * setSmallIcon: displays the icon in the status bar
+   * setContentTitle: sets the Title of the notification
+   * setContentText: set the text in the notification.
+   * setPriority: Determines how intrusive the notificatioin is. 
+   */
+   val builder = NotificationCompat.Builder(mContext, message) 
+    .setSmallIcon(R.drawable.notification_icon)
+    .setContentTitle("My Notification")
+    .setContenetText("This is what my notification is going to read")
+    .setPriority(NotificationCompat.PRIORITY_HIGH)
+    
+  /*
+   * Show the notification
+   * with: calls teh specified function block with as its reciever and returns its results.
+   * NotificationManagerCompat: Notify the user something has happened, compat is backwards compatible. 
+   * from: instance of provided context.
+   * notify: post a notification to be displayed in the status bar.
+   */
+   with(NotificationManagerCompat.from(mcontext)) {
+    notify(NOTIFICATION_ID, builder.build())
+   }
+   
+}
+```
