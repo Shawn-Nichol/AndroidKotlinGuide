@@ -7,6 +7,26 @@ Create a Notifction Util file
 
 ```
 fun NotificationManager.sendNotification(message: String, mContext: Context) {
+  
+  // Create an explicit intent for an Activity(specify what activity you want to run)
+  val contentIntent = Intent(mContext, MainActivity::clasas.java
+  
+  /*
+   * PendingIntent lets us pass a future intent to another application, which allows that application to execute
+   * that intent as if it had the same permissions as our application.
+   *
+   * - Context: this is the context in which the PendingIntent starts teh activity. 
+   * - Requestcode: This assigns a number to the PendingIntent so this PendingIntent can be used later on. 
+   * - Intent: Explicit intent object of the activity to be launched. 
+   * - flag: check list of what flags do " https://developer.android.com/reference/android/app/PendingIntent#FLAG_CANCEL_CURRENT "
+   */
+   val contentPendingIntent: PendingINtent! = PendingIntent.getActivity(
+    mContext,
+    REQUEST_CODE,
+    contentIntnet,
+    PendingIntent.FLAG_ONE_SHOT
+    )
+  
   /*
    * Build the noitication
    * Constructor requires context, CHANNEL_ID
@@ -14,12 +34,16 @@ fun NotificationManager.sendNotification(message: String, mContext: Context) {
    * setContentTitle: sets the Title of the notification
    * setContentText: set the text in the notification.
    * setPriority: Determines how intrusive the notificatioin is. 
+   * setContentIntent: sets the Intent that will fire when the user touches the notificaion.
+   * setAutoCancel: will automatically close the notification after the user taps it. 
    */
    val builder = NotificationCompat.Builder(mContext, message) 
     .setSmallIcon(R.drawable.notification_icon)
     .setContentTitle("My Notification")
     .setContenetText("This is what my notification is going to read")
     .setPriority(NotificationCompat.PRIORITY_HIGH)
+    .setContentIntent(contentPendingIntent)
+    .setAutoCancel(true)
     
   /*
    * Show the notification
