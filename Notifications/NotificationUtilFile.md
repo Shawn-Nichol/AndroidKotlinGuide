@@ -18,7 +18,7 @@ fun NotificationManager.sendNotification(message: String, mContext: Context) {
    * - Context: this is the context in which the PendingIntent starts teh activity. 
    * - Requestcode: This assigns a number to the PendingIntent so this PendingIntent can be used later on. 
    * - Intent: Explicit intent object of the activity to be launched. 
-   * - flag: check list of what flags do " https://developer.android.com/reference/android/app/PendingIntent#FLAG_CANCEL_CURRENT "
+   * - flag: check link for available flags do https://developer.android.com/reference/android/app/PendingIntent#FLAG_CANCEL_CURRENT
    */
    val contentPendingIntent: PendingINtent! = PendingIntent.getActivity(
     mContext,
