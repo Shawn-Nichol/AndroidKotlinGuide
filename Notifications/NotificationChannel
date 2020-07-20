@@ -1,4 +1,4 @@
-#Create a Notification channel
+# Create a Notification channel
 
 A notification channel repesents a number of settings that apply to a collection of similarly themed notifications. Starting in API 26+ all notifictions must be assigned to a 
 channel. After you create a notification channel, you cannot change the notification behaviors, the user has complete control of the behaviors at this point. 
