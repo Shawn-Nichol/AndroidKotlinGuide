@@ -27,12 +27,17 @@ fun NotificationManager.sendNotification(message: String, mContext: Context) {
     PendingIntent.FLAG_ONE_SHOT
     )
   
+  // Convet a png file to a Bitmap for the large Notification Icon.
+  var largeIcon = BitmapFactory.decodeResource(mContext.resources, R.drawable.mypng)
+  
   /*
    * Build the noitication
    * Constructor requires context, CHANNEL_ID
    * setSmallIcon: displays the icon in the status bar
    * setContentTitle: sets the Title of the notification
    * setContentText: set the text in the notification.
+   * SetLargeIcon: Displays a large icon in the notification whem minimized on the right side. 
+   * SetStyle, BigrPicture: Displays a large image when the Notification is expanded and a small icon when it isn't. 
    * setPriority: Determines how intrusive the notificatioin is. 
    * setContentIntent: sets the Intent that will fire when the user touches the notificaion.
    * setAction: will display a button with text, you can have up to three
@@ -42,6 +47,10 @@ fun NotificationManager.sendNotification(message: String, mContext: Context) {
     .setSmallIcon(R.drawable.notification_icon)
     .setContentTitle("My Notification")
     .setContenetText("This is what my notification is going to read")
+    .setLargeIcon(largeIcon)
+    .setStyle(NotificationCompat.BigPictureStyle() 
+      .bigPicture(largeIcon)
+      .largeIcon(null))
     .setPriority(NotificationCompat.PRIORITY_HIGH)
     .setContentIntent(contentPendingIntent)
     .setAction(R.drawable.imageOne, "Btn One", ContentIntent)
