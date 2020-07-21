@@ -35,6 +35,7 @@ fun NotificationManager.sendNotification(message: String, mContext: Context) {
    * setContentText: set the text in the notification.
    * setPriority: Determines how intrusive the notificatioin is. 
    * setContentIntent: sets the Intent that will fire when the user touches the notificaion.
+   * setAction: will display a button with text, you can have up to three
    * setAutoCancel: will automatically close the notification after the user taps it. 
    */
    val builder = NotificationCompat.Builder(mContext, message) 
@@ -43,6 +44,8 @@ fun NotificationManager.sendNotification(message: String, mContext: Context) {
     .setContenetText("This is what my notification is going to read")
     .setPriority(NotificationCompat.PRIORITY_HIGH)
     .setContentIntent(contentPendingIntent)
+    .setAction(R.drawable.imageOne, "Btn One", ContentIntent)
+    .setAction(R.drawable.imageTwo, "Btn Two", ContentIntent)
     .setAutoCancel(true)
     
   /*
