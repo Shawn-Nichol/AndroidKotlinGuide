@@ -1,0 +1,58 @@
+Is the context of the current state of the application/object. It lets newly-created objects understand what has been going on.
+Typically you call it to get information regarding another part of your program
+
+Context in Android is one of the most used and abused objects. But most of the articlces
+on the web focus on the definition of what it is. I could not find a good resource which 
+gave me insight an dhelped me undrestand the bigger picture. So itried simplifying 
+things with this article. 
+
+
+Have you ever encountered this question: What is difference between getContext(), this, getBaseContgext() and getA;;icationct()? If yes, this article
+will help calrify most of your journey into the andorid world, this might not be the best place begin. 
+
+An adroindroid app or application package kit (APK) is a bundle of omponents. These
+componenets are dfined in the Manifest, and consist mainly of Activity (UI), Service
+(Background), BroadcastReceiver(Action) , ContentProvider(Data), and REsources
+(images, strings etc).
+
+The developer can choose to expose those components to a system using an intent-
+filter. For example: send email or sahre picture. They can also choose to expose the
+componenets only to other components of their app. 
+
+Similarly, the Android operating sytme was also designed to expose componentss. A few
+well known are WifiManager, Vibrator, and Package Manager. 
+
+Context is the bridge betweeen components. You use it to communicate between conponents, instantiate componetns and acces components. 
+
+Your own components
+We use context to instantiate our components with Activity, Content Providedr, 
+BroadcastReceiver, and so on. We use it to access resources and fiesystems as well.
+
+
+Your component and a system component
+Context acts as an entry point to the Android system. Some well-used system components are WifiManager, Vibrator, and PackageManager. You can access WifiManager using context.getSysteService(Context. WIFI_SERVICE)P. 
+
+In this same way, you can use context to access the filesystem dedicated to your app as a user in OS
+
+## Your own component and some other app's component
+Communicating between your own componetns and other app's components is almost identical if you use the intent-filter approach. After-all, every components is an equal citizen in Android. 
+
+An example of an intent used to send email is below. All componetns which are offering Intnet email = new Intent(android.content.Intent.ACTION_SEND)
+
+## Summary 
+Lets'agree that evertying in Android is a component. Context is the brdige between componetns. You use it to communicate between componetns, instantiate componetns, and access components. I hope the definition is now clear. 
+
+
+## Different types of Context. 
+There are many ways you can get a hold on context
+
+Most of the time we use one oft he following when we need context:
+
+## UI Context
+In reality, only the COntextThemeWrapper is UI Context which means Context + Your theme.
+
+Activity extneds ContextThemeWrapper. THis is the reason that, when you inflate any XML, your views are themed. If you inflate your layout with Non-UI context, your layout will not be themed.
+
+When you use Activity as a placeholder for Context, you are guaranteed to be using UI
+COntext. If you use the getContext method from Fragment, you are indirectly using Activity
+
