@@ -30,3 +30,16 @@ In addtion several convenience methods are offered to avoid unnecessary computat
 of the right and bottom edges of the rectangle representing the view. For instance, calling getRight9) is similar ot the following computation: getLeft() + getWidth()
 
 ## Size
+
+
+## How Android draws Views
+When an Android activity comes into the foreground, Android asks it for its root view. The root view is the top parent of the layout hierarchy. Android then starts drawing the whole view hierarchy. 
+
+Android draws the hierarchy starting from the top parent, then its children,  and if one of the childreni also a ViewGroup, Android will draw its children before drdawing the second child. So it's a depth-first traversal. 
+
+Android drawas teh children of a ViewGroup according to the  index of thed child(its position in the xml file).
+
+Android draws the layout hierarchy in three stages
+1) Measuring stage: each view must measur itself.
+2) Layout stage: each Viewgroup finds the right position for its children on the screen by using the child size and also by following the layout rules. 
+3) Drawing sage after measuring and positioning all of the views, each view happily drws itself
