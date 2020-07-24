@@ -1,0 +1,5 @@
+Clipping is a way to define regions of an image, canvas, or bitap that are selectively drawn or not drawn onto the screen. One purpose of clipping is to reduce overdraw. Overdraw is when a pixel on the screen is drawn more than once to display thien final image. When you reduce overdraw, you minimize the number of times a pixel or region of the display is drawn, in order to maximize ddrawing performance. You can also use clipping to create interesting effects in teh user interface desgien an danimation. 
+
+For example when you draw a stack of overlapping cards, instead of ully drawing each card from the bottom up, it is usually more effieint to only draw the visible portions. "Usually" becuase  clipping operations also have a cost and overall, the android system does a lot of drawing optimization. 
+
+To only draw the visible portions of the cards, you specify a clipping region for each card. For example in the diagram below, when a clipping rectangle is appied to an image, only the portion insdie that rectangle is displayed. 
