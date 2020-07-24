@@ -2,8 +2,8 @@
 1) Create a class with a primary constructor(there are 4 constructors to choose) that extends View. 
 2) Declare a paint Property, and provide some colors. 
 3) Override onDraw(), onDraw delivers a Canvas to which you can implement anything you want in 2D. 
-  - Use 'something.reset()' to remove any old path before drawing a new path. 
-  - To optimize performance, assign any required values of drawing and painting before using them in onDraw(), such as in the constructor or init() helper method
+   - Use 'something.reset()' to remove any old path before drawing a new path. 
+   - To optimize performance, assign any required values of drawing and painting before using them in onDraw(), such as in the constructor or init() helper method
 4) Add listeners to custom view interactions
 5) Create a Attrs.xml file in values folder, you can set the custom views attribute in here
 6) Add the custom view to an XML lalyout file with attributes to define its  apperaance, as you would witih other UI elements. 
