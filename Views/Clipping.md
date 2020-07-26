@@ -33,3 +33,11 @@ It is much simpler to move teh origin of the canvas and draw the same thing in a
 4) Apply clipping. 
 5) Draw shapes
 6) Restore the previous canvas state.
+
+
+## Quick Reject
+The quickReject() canvas method allows you to check whether a specified rectangle or patht would lie completely ouside the curretnly visible regions, after all transformations have been applied. 
+
+The quickReject() method is incredibly useful when you are constructing more complex drawings and need to do so as fast as possible. With quickReject(), you can decide efficiently which objects you do not have to draw at all, and there is no need to write your own intersection logic. 
+  - The quickReject() method returns true if the rectangel or path would not be visible at all on the screen. For partial overlaps, you stil have to do your own checking.
+  - The EdgeType is ether AA (antialiased: treat edges by rounding-out, becuase they may be antialiased) or BW(black-white: treat edges by just rounding to the nearest pixel boundary) for just rounding to the nearest pixel.
