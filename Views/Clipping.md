@@ -41,3 +41,13 @@ The quickReject() canvas method allows you to check whether a specified rectangl
 The quickReject() method is incredibly useful when you are constructing more complex drawings and need to do so as fast as possible. With quickReject(), you can decide efficiently which objects you do not have to draw at all, and there is no need to write your own intersection logic. 
   - The quickReject() method returns true if the rectangel or path would not be visible at all on the screen. For partial overlaps, you stil have to do your own checking.
   - The EdgeType is ether AA (antialiased: treat edges by rounding-out, becuase they may be antialiased) or BW(black-white: treat edges by just rounding to the nearest pixel boundary) for just rounding to the nearest pixel.
+
+
+## Summary
+- The context of an activity maintains a state that preserves transormations and clipping regions for the canvas.
+- Use canvas.save() and canvas.restore to draw and return the original state of your canvas
+- To draw multiple shapes on a canvas, you can either calculate their location, or you can move (Translate) the origin of your drawing surface. The latter can make it easier to create utility methods for repeated draw sequences. 
+- Clipping regions can be any shape, combinations of shapes or path.
+- You can add, subtract, and intersect clipping regions to get exactly the region you need.
+- You can apply transformations to text by trasnformign the canvas
+- the quickReject() canvas method allows you to check whether a specified rectagnel or path would lie completely outside the currently visible regions.
