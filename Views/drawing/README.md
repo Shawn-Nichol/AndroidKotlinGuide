@@ -1,4 +1,4 @@
-How to create a drawing custom drawing or a view. 
+To draw onto a canvas you will need the following
 
 1) Bitmap: to hold the pixels where the canvas will be drawn
 2) Canvas: to run the drawing commands.
