@@ -20,7 +20,7 @@
  ## storkeJoin
  Specifies how lines and curve segments join on a stroke path. The default is MITER
  
- ##strokeCap
+ ## strokeCap
  sets the shape of the end of the line to be a cap. Paint.Cap specifies how the begining and ending of stroked lines and paths. The default is BUTT
  
  ## strokeWidth
