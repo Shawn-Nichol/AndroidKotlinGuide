@@ -1,4 +1,18 @@
  # Paint
+
+The Paint class holds the style and color information about how to draw geometries, text and bitmaps. 
+
+```
+// Create a paint object. 
+var paint: Paint = Paint()
+
+init {
+  // Set color
+  paint.color = Color.RED
+  paint.style = 
+}
+
+```
  
  ## isAntiAlias
  Defines whether to apply edge smoothing. Setting isAntiAlias to true, smoothe out the edges of what is drawn without affecting the shape.
