@@ -1,6 +1,6 @@
  # Paint
 
-The Paint class holds the style and color information about how to draw geometries, text and bitmaps. 
+The Paint class holds the style and color information about how to draw geometries, text and bitmaps. The paint variable should be declared outside of the onDraw(), to ensure the onDraw() preforms as fast as possible. 
 
 ```
 // Create a paint object. 
