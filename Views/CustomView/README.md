@@ -54,3 +54,13 @@ To draw onto a canvas you will need the following
 - Canvas: to run the drawing commands.
 - Drawing commands: to indicate to the canvas what to draw. 
 - Paint: descibe the colors and styles of the drawing. 
+
+
+When creating a custom view you should follow these steps
+1) Save the current state of the canvas 'canvas.save()'
+The Activity context maintains a stack of drawing states. Drawing states consists of the current transformation matrix and the current clipping regioin. You can save teh crrent state, perform actions that change the drawing state such as translating or rotating the canvas and then restore the saved drawing state.
+2) Translate: move the orgin of the canvas and draw something in a new cordianate
+3) Transformations to the path
+4) Apply clipping
+5) Draw shapes
+6) Restore the previous canvas state.
