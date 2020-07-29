@@ -1,1 +1,9 @@
+# Drawing
 
+The onDraw() method has a canvas parameter, the view can use the canvas object to draw itself. The onDraw() method requires a class that extends View. The onDraw() will be called when the system decides that theview should be rendered onto the screen. 
+
+```
+override fun onDraw(canvas: Canvas) {
+
+}
+```
