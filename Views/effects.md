@@ -15,4 +15,13 @@ SweepingGradient, draws a sweeping gradient around a center point with the speci
 
 - BitmapShader draws a bitmap drawable as a texture. The bitmap can be repeated or mirrored by setting the TileMode mode. You willl learn more about BitmapShader and TileMode later in this codelab. 
 
-Concept: 
+## Concept:  PorterDuff.Mode
+The PorterDuff.Mode class provides several Alpha compositing and blending modes. Alpha compositing is the process of compositing a source image with a detination image to create the appearance of partial or full transparency. Transparency is defined by the alpha channel. The alpha channel represents the degree of transparency of a color, that is for its red, green and blue channesl
+
+DST The source pixels are discarded, leaving the destination intact.
+
+DST_ATOP The desetination pixels  that are not covered by source pixels are discarded. 
+
+DST_IN The destination pixels that cover source pixels, are kept and the remaining source and destination pixels are dicarded
+
+DST_OUT the destination pixels that are not covered by source are kept. 
