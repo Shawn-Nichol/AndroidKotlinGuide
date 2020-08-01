@@ -1,10 +1,10 @@
 
 # Bitmap
 
-A bitmap is an object, which is an instance of Bitmap class. This classs represents a 2d coordinate systme. The coordinate system omove to the right on the x axis, and to the bottom on they axis. Each hpoint in the coordinate system is called a pixel. A pixel is formed of bits, and bits represent the color of the pixel. A pixel can be formed of 8, 16, or 24 bits.
+A bitmap is an object, which is an instance of Bitmap class. This classs represents a 2d coordinate system. The coordinate system move to the right on the x axis, and to the bottom on they axis. Each point in the coordinate system is called a pixel. A pixel is formed of bits, and bits represent the color of the pixel. A pixel can be formed of 8, 16, or 24 bits.
 
 
-Everyint that is drawn in android is a Bitmap. we can creaet a Bitmap instance, either by using the Bitmap class which has methods that allow us to manipulate pixels in the 2d coordinate sywstme or we can create a bitmap from a n image or a file or a resource by using the BitmapFactory class. 
+Everything that is drawn in android is a Bitmap. we can create a Bitmap instance, either by using the Bitmap class which has methods that allow us to manipulate pixels in the 2d coordinate system or we can create a bitmap from an image or a file or a resource by using the BitmapFactory class. 
 
 
 ARGB_8888 Each pixel is stored on 4 bytes.
