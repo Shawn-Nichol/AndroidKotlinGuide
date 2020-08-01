@@ -25,3 +25,11 @@ DST_ATOP The desetination pixels  that are not covered by source pixels are disc
 DST_IN The destination pixels that cover source pixels, are kept and the remaining source and destination pixels are dicarded
 
 DST_OUT the destination pixels that are not covered by source are kept. 
+
+
+## Tile Mode
+The tileing mode, TileMode, defined in the Shader, specifies how the bitmap drawable is repeated or mirrored in the X and Y directions if the bitmap drawable being used for texture is smaller than the screen. Android provides three different ways to repeat(tile) the bitmap drawable. 
+
+- Repeat: Repeats the bitmap shader's image horizontally and vertically.
+- CLAMP: The edge colors will be used to fill the extra space outside of the shader's image bounds
+- Mirror: The shader's image is mirroed horizontally and vertically. 
