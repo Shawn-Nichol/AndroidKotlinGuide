@@ -33,3 +33,15 @@ The tileing mode, TileMode, defined in the Shader, specifies how the bitmap draw
 - Repeat: Repeats the bitmap shader's image horizontally and vertically.
 - CLAMP: The edge colors will be used to fill the extra space outside of the shader's image bounds
 - Mirror: The shader's image is mirroed horizontally and vertically. 
+
+
+## Matrix translation
+When the user touches and holds the screen for the spotlight, instead of calculating where the spotlight needs to be drawn, you move the shader matrix; that is, the texture/shader coordinate system, and then draw the texture at the same location in the translated coordinate system. The resulting effect will seem as if you are drawing the spotlight texture at a different location , which is the same as the shader matrix translated location. This is simpler and slighly more efficient
+
+## Summary
+- In Android, shader defines the color or the texture with which the Paint object should draw
+- Android defines several subclasses of shader for Paint to use, such as BitmapShader, composeShader, linearGradient RadialGradient, sweepGradient
+- A Shader defines the content for a paint object which should be drawn. A subclass of shader is installed in a Paint by calling paint.setShader
+- Alpha compsoiting is the process of compositing a source image with a destination image to create the appearance of partial or full transparency > The amount of transparency is defined by the alpha channel
+- BitmapShader draws a bitmap drawable as a texture. The bitmap can be repeated or mirrored by setting the TileMode mode. 
+- The tiling mode, TileMode, defined in the shader, specifies how the bitmap drawable is repeated in teh X and Y direction. Android provides three ways to repeat the bitmap drawble, REPEAT, CLAMP , MIRROR. 
