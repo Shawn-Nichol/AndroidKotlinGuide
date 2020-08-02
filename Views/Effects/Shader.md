@@ -16,4 +16,15 @@ Draws a sweeping gradient around a center point with the specified colors.
 - BitmapShader draws a bitmap drawable as a texture. The bitmap can be repeated or mirrored by setting the TileMode. 
 
 
+Create the bitmap in the init block
+initialize the canvas objec with the new bitmap
+create and intialize a Pain object
+```
+var bitmap: Bitmap
 
+init {
+  bitmap = Bitmap.createBitmap(spotlight.width, spotlight.height, Bitmap.Config.ARG_8888)
+  canvas = Canvas(bitmap)
+  val shaderPainnt = Paint(Paint.ANTI_ALIAS_FLAG)
+}
+```
