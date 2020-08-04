@@ -1,0 +1,7 @@
+property: , to the animation system, is a field that is exposed via setters and getters, either implicityly (as properties are in Kotlin) or explicityly(viwa the setter/getter pattern in the Java programming language. There are also a special case of properties exposed via the class android.util.propety which is used by the view class, which allows a type-savfe approach for animations. The animator system in Android was specifically written to animnate properties, meaning that can animate anything that has setter. 
+
+ViewProperties: are a set of functionality added to the base View class that allow all views to b transformed in specific ways that are useful in UI animations. There are properties for position rotations, scale and transparency. 
+
+There are actually two different ways to access th propeties by regular setter/getter pairs, like setTranslateX()/getTranslateX(), and tby static android.util.Property objects, like View.Translate_X(an object that has both a get() and a set() method). Android.util.Property have less overhead internally along with better type-safety, but you can also use the setters andgetters of any object. 
+
+Property animation is, simply the changine of property values overt time. ObjectAnimator was created to provide a simple set=andforget mechanism for animating properties. For example, you can define an animator that changes teh alph property of a view, which will alter the transparency of that view on the screen.
