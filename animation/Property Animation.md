@@ -14,6 +14,37 @@ The valueAnimator encapsulates a TimeInterpolator, which defines animations inte
 
 To start an animation, create a ValueAnimator and give it the starting and ending values for the proprety that you want to animate, along withthe duration fo the animation. When you call start() the animation begins. During the whole animation, the ValueAnimator calculate an elapsed fraction between 0 and 1 based on the duration of the animation and how much time has elapsed. Teh elapsed fraction represents the percentage of time that the animation has completed, 0 meaning 0% and 1 meaning 100%. 
 
-When the value animator is done calculating an elapsed fracti9on, it calls the TimeInterpolator that is currently set, to calculate an interpolated fraction. An interpolated fraction maps the elapsed fraction to a new fraction that takes into account the time interpolation that is set
+When the value animator is done calculating an elapsed fraction, it calls the TimeInterpolator that is currently set, to calculate an interpolated fraction. An interpolated fraction maps the elapsed fraction to a new fraction that takes into account the time interpolation that is set
 
 When the interpolated fraction is calculated, ValueAnimator calls the appropriate TypeEvaluator, to calculate the value of the property that you are animating, based onthe interpolated fraction, the starting value, and the ending value of the animation 
+
+
+## How property animation differs from view animation
+The view animation system provides the capability to only animate View objects, so if you wanted to animate non-View objects, you have to implemnet your own code to do so. The view animation system is also constrained in the fact that it only exposes a few aspects of a View object to animate, such as the scaling and rotation of a View but not the background color, for instance.  
+
+Another disadvantage of the view animation system is that it only modified where the View awas drawn, and not the actual View itself. For instance if you animated a button to move across the screen, the button draws corrrectly, but the actual location where you can click the button does not change, so you have to implement your own logic to handle this. 
+
+Whit the property animation system, theses constraints are completely removed, and you can animate any property of any object and the object itself is actually modified. The property animation system is also more robust in the way it carries out animation. At a high level, you assign animators to the properties that you want to animate, such as color position, or size and cna define aspsects of the animation such as interpolation and synchronization of multiple animators. 
+
+The view animation system, however, takes less time to setup and requires less code to write. If view animation accomplishes everything that you need todo, or if yourexisting code already works the way you want, there is no need to use the propertyu animation system. It also might make sense to use both animation systems for different situations if the use case arises.
+
+## API OverView
+You can find most of the property animation system APIs in android.animation. Becuase the view animation system already defines many interpolators in android.view.animation, you can use those interpolators in the property animation system as well. The following tables describe the main components of the property animation system. 
+
+The animator class provides the basic structure for creating animations. You normally do not use this class directly as it only provides minimal functionality that must be extended to fully support animating values> the following subclasses extend Animator. 
+
+### Value Animator
+The main timing engine for property animation that also computes the values for the property to be animated. It has all of the core functionality that calculates animation values and contains the timing details of each animation, information about whether an animation repeats, listeners that receive update events, and teh ability to set custom types to evaluate. There are two pieces to animating properties: calcualting the animated values and setting those values on teh object and property that is being animated. ValueAnimator does not carry out the second piece, so you must listen for updates to values calculated by the ValueAnimator and modify the objects that you want to animate with your own lgoic. 
+
+### ObjectAnimator
+A subclass of ValueAnimator that allows you to set a target object and object property to animate. This class updates the property accordingly when it computes a new value for the animation. You want to use ObjectAnimator most of the time, becuase it makes the process of animating values on target objects much easier. However, you sometimes want to use ValueAnimator directly becuase ObjectAnimator has a few more restrictions, such as requiring specific accessor methods to be present on the target object.
+
+### Animator Set
+Provides a mchanism to gropu animmations together so that they run in relation to one another. You can set animations to play toether, sequentially, or after a specified delay. 
+
+
+## Evaulators
+Evaluators tell teh property animation system how to calculate values for a given property. They take the timing data that is provided by an Animator class, teh animation's start and end value, and calculate the animated values of the property based on this data. The property animation system provides the following evaluators: 
+
+### TypeEvaluator
+An interface that allows you to create your own evaluator. If you are animating an object property that is not an int, float or color, you want to process those types different than the default behavior. 
