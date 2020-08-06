@@ -17,3 +17,7 @@ If prompted for another animation in middle of animation, the animation will jum
 
 If the repeat animation is started during an animation, the animation will continue from its current start position and return to the position where the position where the animation was request. This is due to the fact that a start position wasn't declared in the animation. 
 
+## Scaling animation
+There is no single property  that scales in both the x and Y dimensions, so animations that scale in both x and y need to animate both of thesee separate properties in parallel
+
+Property value Holder: Holds information about a single property, along with the values that proeprty animates between. An ObjectAnimator can hold multipel PropertyValuesHOlder objects, which PropertyValueHolder objects animate is specified by the ObjectAnimator. The ideal use case for ObjectAnimator which use PropertyValuesHolder parameters is when you need to animate several properties on the sam object in parallel. 
