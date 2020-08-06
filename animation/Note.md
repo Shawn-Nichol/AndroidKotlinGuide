@@ -11,3 +11,9 @@ Is simply the changing of property values over time. ObjectAnimator was created 
 
 ## handle request for animation during an animation
 If prompted for another animation in middle of animation, the animation will jump to the being. To avoid this you can use the Animators listeners, which call back into user code to notify the appliation fo changes in the state of the animation. There are callbacks for an animation starting, ending, pausing, resuming, and repeating. What 
+
+
+## Repetition is a way of telling animations to do the same task again and again. You can specify how many timse to repeat(or just tell it to run infinitley ). You can also specify the repetition behavior, either REVERSE(for reversing the direction every time it repeats) or RESTART (for animating from the orignial start value to the orignal end value, thus repeating in the same direction everytime
+
+If the repeat animation is started during an animation, the animation will continue from its current start position and return to the position where the position where the animation was request. This is due to the fact that a start position wasn't declared in the animation. 
+
