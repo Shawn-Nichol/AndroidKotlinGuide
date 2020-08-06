@@ -48,3 +48,29 @@ Evaluators tell teh property animation system how to calculate values for a give
 
 ### TypeEvaluator
 An interface that allows you to create your own evaluator. If you are animating an object property that is not an int, float or color, you want to process those types different than the default behavior. 
+
+
+## Use Interpolators 
+An interpolator  defines how specific values in an animation are calculated as a function of time. For example, you can specify animations to happen linearly across the whole animation, meaning the animation moves evenly the entire time, or you can specify animations to use non-linear time, for example using acceleration or decelartion at the beginning or end of the animation
+
+Interpolators in the animation system receive a fraction from Animators that represent teh elapsed time of the animation. Interpolators modify this fraction coincide with the type of animation that it aims to provide. The Android system provides a set of common interpolators in teh android.view.animation package. If none of these suit your needs, you can implmeent the TimeInterpolator interface and create your own. 
+
+As an example how the default interpolator AccelerateDecelerateInterpolator and the LinearInterpolator calculate interpolated fractions are compared below. The linearInterpolator has no effec on the elapsed fraction. Teh accelarationDeclerateInterpolator accelorates into the animation and decelerates out of it. The following methods define the logic for these interpolators. 
+
+```
+override fun getInterpolation(input: Float) : Float = 
+  Math.cos((input + 1)  * Math.PI) / 2.0f).toFloat() + 0.5f
+``` 
+  ## Specify keyframes
+  A keyframe object consists of a time/value pair that lets you define a specific state at a specific time of an animation. Each keyframe can aslo have its own interpolator to control the behavior of the animation in the interval between the previous keyframe's time and the time of this keyframe
+  
+  To instantiate a Keyframe object, you must use one of the factory methods, ofInt(), ofFloat(), or ofObject() to obtain teh appropriate type of Keyframe. You then call the ofKeyfram() factory method to obtain a PropertyValuesHolder object. Once you have the object, you can obtain an animator by passing in the PropertyValuesHolder object and the object to animate. The following code snippet demonstrates how to do this
+  
+```
+val kf0 = Keyframe.ofFloat(0f,0f)
+val kf1 = Keyframe.ofFloat(0.5f, 360f)
+val kf2 = Keyframe.ofFloat(1f, 0f)
+val pvhRotation = PropertyValuesHolder.ofKeyframe("rotation", kf0, kf1, kf2)
+ObjectAnimator.ofPropertyValuesHolder(target, pvhRotations).apply {
+duration = 5000
+```
