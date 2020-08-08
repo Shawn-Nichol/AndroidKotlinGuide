@@ -1,0 +1,1 @@
+An interpolator defines the rate of change of an animation. This allows the basic animation effects (alpha, scale, translate, rotate) to be accelerated, decelerated repeated.
