@@ -55,3 +55,46 @@ A KeyPosition has several attributes that describe how it modifies the path, the
 You can think of it this way , At framePosition modify the path of the motionTarget by moving it by the percenetX or percentY according to the coordinates determined by the keyPositionType
 
 By default MotionLayout will round any corners that are introduced by modifying the path. If you look at the animation you just created, you can see the moon follows a curved path at the bend. For most animations, this what youwant, and if not you can specify the curveFit attribute to customei it. 
+
+
+## KeyPosition
+There are three different types of keyPosition possible: parentRelative, pathRelative and deltaRelative. Specifying a type will change the coordinate system by which percentX and percentY are calculated
+
+### What is a coordinate system
+A coordiante system gives a way to specify a point in space. They are also useful for describing a position on the screen. 
+MotionLayout coordinate systems are a catesain coordiante system. This means they have an X and a Y axis defined by two perpendicular lines. The key differnece between them is where on the screen the X axis goes, the Y axis is always perependicular. 
+
+All coordiante systems in the MotionLayout use values between 0.0 and 1.0 on the both the X and Y axis. They allow negative values, and values larger than 1.0. So for example an percentX value of -2.0 would mean , go in the opposite direction of the X axis twice. 
+
+The keyPositionType of parentRelative uses the same coordiante system as the screen. It defines (0,0) to the top left of the entire Motionlayout, and (1,1) to the bottom right. 
+
+You can use parentRelative whenever you want to make it curve just a little bit, the other two coordiante system are a better choice. 
+
+Delta is a math term for change, so deltaRelative is a way of saying "change relative". In deltaRelative coordinates(0,0) is the starting position of the view, and (1,1) is the ending position. The X and Y axes is aligned with the screen. 
+
+The X axis is always horizaontal on the screen, and the Y axis is always vertical on the screen. Compared to parentRelative, the main difference is that the coordiates describe just the part of the screen in which the view will be moving
+
+deltaRealtive is a greater coordiante system for control horizontal or vertical motion in isolation. For example you could create an animation that completes just its vertcail movement at 50% and contiuse animation horizonatlly. 
+
+
+Coordiantes in deltaRelative are relative to the motion of the view. 
+So if the view moves to the right, X will go to the right. If the view moves to the left, X will go to the left. Similarly , the Y dimension will follow the view and go up or down. 
+Of course, you can always use negative values or values larger than 1.0 if you want the view to bounce past the start or stop position!
+
+The coordiantes of deltaRelative will expand or shrink based on the distance the view moves in both directions. 
+So, if you have a view that doesn't move very much, or at all, in one direction, deltaRelative won't create a useful coordiante system in that direction. For example, a view that moves horizontally from the right to left will not have a useful Y axis in deltaRelative. 
+
+
+## PathRelative
+Is quite different than the other two as the X axis follows the  motion path from start to end. So (0,0) is the starting position, and (1,0) is the  ending position. 
+
+Why would you want this? it's quite surprising at first glance, especially since this coordiante system isn't even aligned to the screen coordiante system. 
+
+It turns out pathRelative is really useful for a few things
+- Speeding up, slowing down, or stopping a view during part of the animation. Since the X dimension will always match the path the view takes exactly, you can use a pathRelative KeyPosition to change which framePosition a particular point in that path is reached. So a KeyPosition at framePosition="50" with a percentX="0.1" would cause the animation to take 50% of the time to travel the first 10% of the motion. 
+- Adding a subtle arc to a path. Since the Y dimension is always perpendicular to motion,changing Y will change the path to curve relative to the overall motion
+- Adding a second dimension whe deltaRelative won't work. For completelly hotizontal and vertical motion, deltaRelative will only create one useful dimension. However, pathRelative will always create usable X and y coordinates. 
+
+It's important to note that pathRelative will always define a coordiante system in terms of the motion, not of the screen. 
+This means it may be an angle to the overall screen. If you need to modify the horizontal or vertical motion in terms of screen coordiates, one of the other coordinate system is a better choice. 
+
