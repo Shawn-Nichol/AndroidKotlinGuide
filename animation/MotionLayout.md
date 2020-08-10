@@ -124,3 +124,9 @@ CustomValues can have any of the following.
 
 As long as Motionlayout can find a setter that takes the correct typek it can animate changes between values. 
 
+## Drag events
+The touchancourside passed to OnSwipe must progress in a single direction through the entire animation. If the anchored side reverses its path, or pauses, MotionLayout will get confused and not progress in a smooth motion. 
+In some animations, no view has an approperate touchAnchor side. This may happen if every side follows a complex path through the motion, or views resize in ways that would cause surprising animations. In these stiuation consider adding an invisible view that follows a simpler path to track. 
+
+You can also combine dragDirection with touchAnchorSide to make a side track a different direction than it normally would. It's still important that the touchAnchorSide only progress in one driection, but you can tell MotionLayout which direction to track. For example you can keep the touchAnchorside="bottom, but add dragDirection="dragRight". This will cause MotionLayout to track the position of the bottom of the view, but only consider its location when moving right. So even through the bottom goes up and down, it will still animate correctly with onSiwpe. 
+
