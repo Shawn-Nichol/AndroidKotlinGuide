@@ -107,4 +107,20 @@ If youdon't specify one dimension, it will have a default value(zero, or an appr
 ## Changing attributes during animation
 Building dynamic animations often means changin the size, rotation, or alpha  of a views as the animatin progresses. MotionLayout supports animating many attributes on a any view using a keyAttribute. 
 
+## Custom Attribute
+You can use a CustomAttribute to specify any other attribute.  A customAttribute can be used to set any value that has a setter. For example you can set the backgrouncColor on a View using a customAttribute. MotionLayout will use reflection to find the setter, then call it repeatedly to animate the view. 
+
+Custom attribute is added inside a KeyAttribte. The custom Attribute will be applied at the framePosition specified by the KeyAttribute. 
+inside the CustomAttribute you must specify an attributeName and one value to set
+- app:attrivuteName is the anme of the seeter that will be called by this custom attribute. 
+- app:custom*value is a custom value of the type noted in the name, in this example the custom value is a color specfied. 
+CustomValues can have any of the following. 
+- color
+- Integer
+- Float
+- String
+- Dimension
+- Boolean
+
+As long as Motionlayout can find a setter that takes the correct typek it can animate changes between values. 
 
