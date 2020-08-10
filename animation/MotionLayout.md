@@ -98,3 +98,13 @@ It turns out pathRelative is really useful for a few things
 It's important to note that pathRelative will always define a coordiante system in terms of the motion, not of the screen. 
 This means it may be an angle to the overall screen. If you need to modify the horizontal or vertical motion in terms of screen coordiates, one of the other coordinate system is a better choice. 
 
+
+###
+A keyPosition alwasy defines an (x, y, width, height) poistion that the View must move through during the transition from start to end. 
+If youdon't specify one dimension, it will have a default value(zero, or an approperiate value based on the framPosition). In this example, by specifying only percentY, the percentX keeps its default value for that keyPosition
+
+
+## Changing attributes during animation
+Building dynamic animations often means changin the size, rotation, or alpha  of a views as the animatin progresses. MotionLayout supports animating many attributes on a any view using a keyAttribute. 
+
+
