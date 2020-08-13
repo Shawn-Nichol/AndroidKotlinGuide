@@ -3,7 +3,7 @@
 This subclass of ValueAnimator provides support for animating properties on a target object. The constructors of this class take parameteres to define the targe object that will be animated as well as the name of the property that will be animated. Approperiate set/get functions are then deteremined interenally and the animation will call these functions as necessary to animate the property.
 
 ## Instante
-ObjectAnimator is similar to a ValueAnimatoe, but you specify the object and teh name of that object preoprty(as a string) along with the values to animate. 
+ObjectAnimator is similar to a ValueAnimatoe, but you specify the object and the name of that object property(as a string) along with the values to animate. 
 ```
 val animate = ObjectAnimator.ofFloat(textView, "traslationX", 100f).apply {
   duration = 1000
@@ -22,17 +22,17 @@ If there is no setter you have three options.
   - Use a wrapper class and receive the value with a valid setter method and forwardit to the orignial object.
   - Use a ValueAnimaotr instead. 
   
-- If you specify only one value of the values... paramter in one of the ObjectAnimator factory methods, it is assumed to be the ending value of the animation. Therefore, the object property that you are animating must have a getter function that is ued ot obtain the starting values of the animation. T
+- If you specify only one value of the values... parameter in one of the ObjectAnimator factory methods, it is assumed to be the ending value of the animation. Therefore, the object property that you are animating must have a getter function that is used to obtain the starting values of the animation. 
 ```
   getFoo()
 ```
 
-  The getter(if needed) and setter methods of the proepty that you are animating must operate on the same type as the starting and ending values that you specify to ObjectAnimator. For example, you must have targetObject.setProperNmae(float and targetObject.getPropName() if you construct the following ObjectAnimator. 
+The getter(if needed) and setter methods of the proepty that you are animating must operate on the same type as the starting and ending values that you specify to ObjectAnimator. For example, you must have targetObject.setProperNmae(float and targetObject.getPropName() if you construct the following ObjectAnimator. 
 ```
-ObjectAnimator.ofFloat(targetObject, "propNmae", 1f)
+ObjectAnimator.ofFloat(targetObject, "propName", 1f)
 ```
 
-- Depending on what property of object you are animating, you might need to call the invalidatemethod on a view to force the screen to redraw itself with the updated animated values. You do this in the onAnimationUpdate() callback. For eaxmple, animating the color property of a drawable object only causes updates to the screen when that object redrarws itself. All of the property setters on the View, such as setAlpha() and setTranslationX() invalidate the View properly, so you do not need to invalidate the View when calling theses methods with new values. For more information on listeners, see the section about Animation Listeners. 
+- Depending on what property of object you are animating, you might need to call the invalidate() on a view to force the screen to redraw itself with the updated animated values. You do this in the onAnimationUpdate() callback. For eaxmple, animating the color property of a drawable object only causes updates to the screen when that object redrarws itself. All of the property setters on the View, such as setAlpha() and setTranslationX() invalidate the View properly, so you do not need to invalidate the View when calling theses methods with new values. For more information on listeners, see the section about Animation Listeners. 
 
 ## Choreograph multiple animation using an AnimatorSet
 In many cases, you want to play an animation that depends on when another animatino starts or finsishes. The android system lets you budnel animations together into a an AnimatorSet, so that you can specify whether to start animations simultaneously, sequentially, or after a psecified delay, You can also  nest AnimatorSet objects within each other. 
