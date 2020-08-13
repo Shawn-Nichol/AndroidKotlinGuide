@@ -198,14 +198,28 @@ private class FloatEvaluator : TypeEvaluator<Any> {
 When ValueAnimator runs, it calculates a current elapsed fraction of the animation(a value betwee 0 and 1) and then calculates an interpolated version of that dpeending on what interpolator that you are using. The interpolated fraction is what your TypeEvaluator receives through the fraction parameter, so you don't have to take into account the interpolator when calculating animated values. 
 
 
+## Interpolators
 
+An interpolator define how specific values in an animation are calculated as a function of time. For example, you can specify animations to happen linearly across the whole animaition, meaning the animation moves evenly the entire time, or you can specify animations to use non-linear time, for example, using acceleration or deceleration at the beginning or end of the animation
 
-## KeyFrame
-Using keysframes allows animation to follow more compelx paths from the start to the end values. Not that you can specify explicit fractional values (from 0 to 1) for each keyframe to determine when, in the overall duration, the animation should arrive at that value. Alterantively, you can leaeve the fractions off and the keyframes will be equally ditributed within the total duration, the animation should arrive at that value.
+Interpolators in the animations system receive a fraction from Animators that represent the elapsed time of the animation. Interpolators modify this fraction to coincide with the type of animation that it aims to provide. The android system provides a set of common interpolators in the android.view.animation package. If none of these suit your needs, you can implement the TimeInterpolator interface and create your own. 
 
+LinearInterpolator has no effect on the elapsed fraction. The accelearateDecelerateInterpolator accelerates into the animation and decelerates out of it. 
 
-## Interpolator
-The interpolator will be applied on the interval betwen the keyframe that the interpolator is set on and the previous keyfram. When no interpolator is upplied the default Accelerate DeclaratInterpolatro will be used. 
+## KeyFrames
+A keyframe object consist of a time/value pair that lets you define a specific state at a specific time of an animation. Each keyframe can also have its own interpolator to control the behavior of the animation in the interval between the preious keyframes' time and the time of this keyframe. 
+
+To instantiate a Keyframe object, you must ues one of the factory methods, ofInt(), ofFloat(), or ofObject() to obtain the appropriate type of Keyframe. You then call the ofKeyframe() factory method to obtain a PropertyValuesHolder object. Once you have the object, you can obtain an animator by passing the PropertyValuesHolder object and the object to animate. 
+
+```
+val kf0 = Keyframe.ofFloat(0f, 0f)
+val kf1 = Keyframe.ofFloat(.5f, 360f)
+val kf2 = Keyframe.ofFloat(1f, 0f)
+val pvhRotation = PropertyValuesHolder.ofKeyframe("rotation", kf0, kf1, kf2).apply {
+  duration = 5000
+}
+```
+
 
 
 
