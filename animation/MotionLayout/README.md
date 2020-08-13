@@ -4,7 +4,7 @@
 - A transistion which is part of the MotionScene that specifies the animation duration, trigger and how to move the views. 
 - A constraintSet that specifies both the start and the end constraints of the transistion.
 
-A MotionLayout is a subclass of ConstrainLayout, so it supports all the same features while adding animation. To use a MotionLayout view where you would use ConstrainLayout. 
+A MotionLayout is a subclass of ConstrainLayout, so it supports all the same features while adding animation. Use a MotionLayout view where you would use ConstrainLayout. 
 
 Start: desceibes what the screen looks like before the animation
 End: Descibes what the screen looks like after the animation has completed. 
