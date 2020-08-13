@@ -1,3 +1,16 @@
+# PropertyAnimation
+The property animation system is a robust framework that allows you to animate almost anything. You can define an animation to chagne any object property over time, regardless of whether it draws to the screen or not. A property animation changes a propert's value over a specified length o ftime. To animate something, you specify the object property that you want to animate, suhc as an objedt's position on the screen how long you want to animat it for and what values you want to animate betwee. 
+
+The property animation system lets you define  the following characteristics of animations
+- Duration: you specify the duration of an aanimtaitoin. Defualt is 300 ms
+- Time interpolations: You can specify how the values for the property are calculated as a function of the animations current elapsed time. 
+- Repeat count and behavior: You can specify whether or not to have an aniation repeat when it reaches the end of a duration and how many times to repeat the animation. You can also specify whether you want the animation to play back in reverse. Setting it to reverse plays the animation fowards then backwards repeatedly, until the number of repeats is reached. 
+- Animators sets: You can group animations into logical sets that play toether or sequentially or after specified delays
+- Frame refresh delay: you can specify how often to refresh frames of your animation. The default is set to refresh every 10ms, but the speed in which you application can refresh frames is ultimately dependent on how busy th esystem is overall an d how fast the system can servcie the underlying timer. 
+
+
+
+
 ## ValueAnimator
 The main timing engine for property animation that also computes the values for the property to be animated. It has all of the core functionality that calculates animation values and contains the timing details of each animation, information about whether an animation repeats, listeners that recieve update events, and the ability  to set custom types to evaluate. There are to pieces to animating properties: calculating the animated values and setting those values on the object an property that is being animated. ValueAnimator does not carry out the second piece, so you must listen for updates to calues calculated by teh ValueAnimator and modify the objects that you want to animate with your own logic. 
 
