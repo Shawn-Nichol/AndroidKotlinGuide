@@ -1,4 +1,4 @@
-#Enable Path
+# Enable Path
 
 Enable path debugging, This will provide a visual path of the animation, you can draw the animation path for every view. This helpful when you want o visulaize your animation, or fine tune the small details of the animation.
 
