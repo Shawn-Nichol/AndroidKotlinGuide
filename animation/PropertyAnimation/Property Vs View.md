@@ -4,7 +4,7 @@
 View animation is only able to animate views. 
 
 Disavanatage
-- You cannot animate properties of the such as color. 
+- You cannot animate properties such as color. 
 - It is only modified where the View was drawn and not the acutal View itself. If a button moves to a new location a click will not take place at the new location, instead it will take place at the orignal draw location. 
 
 Advantages
@@ -15,9 +15,9 @@ Property animation allows you to animate any object. Disavantages
 - Takes longer to setup and has more code. 
 
 Advantages
-- You anc animate any object and property. 
-- The object is modifed, which means a you would click the button that has moved instead of the space where the button was before it moved. 
-- It is more robuts, you can assign animators to the properties that you want such such as color position, or size and can define aspects of teh animation such as interpolcation and syncronaization of multiple animatos. 
+- You can animate any object and property. 
+- The object is modifed, which means you would click the button that has moved instead of the space where the button was before it moved. 
+- It is more robuts, you can assign animators to the properties that you want such as color position, or size and can define aspects of the animation such as interpolcation and syncronaization of multiple animators. 
 
 
 ## Summary
