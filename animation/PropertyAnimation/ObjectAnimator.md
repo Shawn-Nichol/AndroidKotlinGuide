@@ -2,7 +2,7 @@
 
 This subclass of ValueAnimator provides support for animating properties on a target object. The constructors of this class take parameteres to define the targe object that will be animated as well as the name of the property that will be animated. Approperiate set/get functions are then deteremined interenally and the animation will call these functions as necessary to animate the property.
 
-## Instante
+## Instanate
 ObjectAnimator is similar to a ValueAnimatoe, but you specify the object and the name of that object property(as a string) along with the values to animate. 
 ```
 val animate = ObjectAnimator.ofFloat(textView, "traslationX", 100f).apply {
@@ -34,8 +34,8 @@ ObjectAnimator.ofFloat(targetObject, "propName", 1f)
 
 - Depending on what property of object you are animating, you might need to call the invalidate() on a view to force the screen to redraw itself with the updated animated values. You do this in the onAnimationUpdate() callback. For eaxmple, animating the color property of a drawable object only causes updates to the screen when that object redrarws itself. All of the property setters on the View, such as setAlpha() and setTranslationX() invalidate the View properly, so you do not need to invalidate the View when calling theses methods with new values. For more information on listeners, see the section about Animation Listeners. 
 
-## Choreograph multiple animation using an AnimatorSet
-In many cases, you want to play an animation that depends on when another animatino starts or finsishes. The android system lets you budnel animations together into a an AnimatorSet, so that you can specify whether to start animations simultaneously, sequentially, or after a psecified delay, You can also  nest AnimatorSet objects within each other. 
+## AnimatorSet Choregraph multiple animations. 
+The android system lets you bundle animations together into a an AnimatorSet, so that you can specify whether to start animations simultaneously, sequentially, or after a specified delay, You can also nest AnimatorSet objects within each other. 
 
 ```
 val bouncer = AnimaotrSet().apply {
