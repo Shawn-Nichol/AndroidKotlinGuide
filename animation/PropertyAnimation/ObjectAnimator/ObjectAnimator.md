@@ -11,6 +11,14 @@ val animate = ObjectAnimator.ofFloat(textView, "traslationX", 100f).apply {
 }
 ```
 
+## Animation
+- translationX and translationY: These properties control where the View is located as a delta from its left and top coordinates which are set by its layout container.
+- rotation, rotationX, and rotationY: These properties control the rotation in 2D (rotation property) and 3D around the pivot point.
+- scaleX and scaleY: These properties control the 2D scaling of a View around its pivot point.
+- pivotX and pivotY: These properties control the location of the pivot point, around which the rotation and scaling transforms occur. By default, the pivot point is located at the center of the object.
+- x and y: These are simple utility properties to describe the final location of the View in its container, as a sum of the left and top values and translationX and translationY values.
+- alpha: Represents the alpha transparency on the View. This value is 1 (opaque) by default, with a value of 0 representing full transparency (not visible).
+
 ## Update properties
 To have the ObjectAnimator update properties correctly you must 
 - The object requires a setter function. Becuase the ObjectAnimator automatically updates the property during animation you must be able to access the it through the setter method. 
