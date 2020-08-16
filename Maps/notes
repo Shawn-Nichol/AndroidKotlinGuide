@@ -1,0 +1,12 @@
+ Google maps requires an API key. To obtain the API key, you register your project in the Google API Console. The API key is tied toa digital certificate that links the app to its author.
+ 
+ Debug certificate is insecure by design, and described in sign your debug build. Published android apps that use the Google Maps API require a second API key: the key for the release certificate. 
+ 
+ Google maps include several types of maps, Normal, Satellite, Hybrid, terrain, and none. 
+ 
+ Zoom level
+1: World
+5: Landmass/continent
+10: City
+15: Streets
+20: Buildings
