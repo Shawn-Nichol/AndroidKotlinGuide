@@ -1,10 +1,23 @@
 # Pending Intent
 
-A description of an Intent and target action to perfrom with it. instances of this class are created with getActivity(Context, int, Intent, int), getActivites(Context, int, Intent[], int), getBroadcast(Context, int, Intent, int) , and getService(Context, int, Intent, int);  The returned object can be handed to other applications so that they can perform the action you descibed on your behalf at a later time. 
+A PendingIntent object is a wrapper around an Intent object. The primary purpose of a  PendingIntent is to grant permission to a foreign application to use the contained Intent as if it were executed from your app's own process. A PendingIntent itself is simply a reference to a token maintained by the systme descibing the original data used to retrieve it. This means that, even if its owning application's process is killed, the PendingIntent itself will remain usable from other processes that have been given it. If
 
-A PendingIntent itself is simply a reference to a token maintained by the system descibing the original data used to retrieve it. This means that, even if its owning application's process is killed, the PendingIntent itself will remain usable from other processes that have been given it. If the creating application later re-retrieves the same kind of PendingIntent (same operation, same Intent action, data, categories and components and same flags), it will receive a PendingIntent representing the same token if that is still valid, and can thus call cancel() to remove it. 
+Major use cases for a pending intent include the following
+- Declaring an intent to be executed when the user performs an action with your Notification
+- Declaring an intent to be exectued when the user perform an action with your App widget
+- Declaring an intent to be executed at a specified future time
 
-Becuase of this behavior, it is important to know when two Intents are considered to be the same for purposes of retrieving a PendingIntent. A common mistake is creating multiple PendingIntentObjects with Intents that only vary in the "extra" contents, expecting to get different PendingIntent each time. This does not happen. The parts of the Intent that are used for matching are the same one defined by the Intent#filterEquals(Intent).. If you use two Intent objects that are equivalent as per Intent#filterEqulas(Intent), then you 
+Just as each Intent object is designed to be handled by a specific  type of app conponent, os too must a PendingINtent be created with the same consideration. When using a pending intent, your app doesn't execute the intent with a call such as startActivity(). Instead you must declare the intended component type when you create the PendingINtnet by calling the respective creator method: 
+
+- PendingIntent.getActivit() for an Intent that starts an Activity
+- PendingIntent.getService for an Intent that starts a service. 
+- PendingIntent.getBroadcast() for an intent that starts a Broadcast receiver
+
+unless your app is receiving pending intents from other apps, the above methods to createa a pEndingINtent are probably the only PendingINtent methods you'll everneed. 
+
+Each method takes teh current app Context, the Intent you want to wrap, and one or more flags that specify how the intent should be used
+
+It is important to know when two Intents are considered to be the same for purposes of retrieving a PendingIntent. A common mistake is creating multiple PendingIntentObjects with Intents that only vary in the "extra" contents, expecting to get different PendingIntent each time. This does not happen. The parts of the Intent that are used for matching are the same one defined by the Intent#filterEquals(Intent).. If you use two Intent objects that are equivalent as per Intent#filterEqulas(Intent), then you 
 will get the same PendingIntent for both of them. 
 
 If you only need one PendingIntent active at a time for any of the Intents you will use, then you can alternatively use the flags FLAG_CANCEL_CURRENT or FLAG_UPDATE_CURRENT to either cancel or modify whatever current PendingINtent is associated with the Intent you are supplying. 
