@@ -47,9 +47,9 @@ A service is implemented as a subclass of Service
   
   Becuase the systme runs each app in a separate process with file permissions that restrict acces to other apps, you app cannot directly activiate a conponent in another app, deliver a message to the system that specifies your intent to start a particuolar component. The systme then activates the conponent for you. 
   
-## Activiating onponents
+## Activating Component
 
-Three of the four conponent types activites services and broadcast receivers are activated by an asynbchronous message called an intent. Intents bind individual components to each other at runtime. You can think of them as the messageengers that request an action fromother conponetns, whether the conponent belongs to your app or another. 
+Three of the four component types activites services and broadcast receivers are activated by an asynbchronous message called an intent. Intents bind individual components to each other at runtime. You can think of them as the messageengers that request an action fromother conponetns, whether the conponent belongs to your app or another. 
 
 An intent is created with an Intent object which defines a message to activate either a specific conponent or specific type of conponent(impliicit intent)
 
