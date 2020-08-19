@@ -1,8 +1,48 @@
 This repository will provide tips and tricks for create features in kotlin apps. This not an app to down load but examples provide so that you can implement these features in any app. 
 
 
-TODO
-A bitmap or a view: to hold the pixels where the canvas will be drawn
-Canvas to run the drawing commands
-drawing commands, to indicate to the canvas what to draw
-paint to describe how to draw the commands.
+Components contains information on the following
+    - TODO Activites
+    - TODO Services
+    - TODO Broadcast Receivers
+    - TODO Activating Components
+    - Read ME
+
+Data binding
+    - TODO provide additional info
+    - How to setup 
+    
+Input events
+    - ReadMe
+
+Maps
+    - Code lab info
+
+Notifications
+    - ReadMe, How to build
+    - CallFromFragment
+    - NotificationChannel
+    - NotificationUtilFile
+    - 
+    
+Object
+    - Intent
+    - PendingIntent
+    
+Views
+    - CustomViews
+    - Effects
+    - Clipping
+    - ReadMe
+    - effects
+    
+Animation
+    - MotionLayout
+    - Property Animation
+    - View
+    - Note
+    - ReadMe
+    - animation
+    
+Context
+    -Update ReadMe 
