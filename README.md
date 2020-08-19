@@ -25,8 +25,8 @@ Notifications
   - NotificationUtilFile
 
 Object
-  - Intent
-  - PendingIntent
+  - Intent , TODO provide examples
+  - PendingIntent, TODO provide exampels
 
 Views
   - CustomViews
