@@ -167,6 +167,22 @@ The first activity, MainActivity, is the app's main entry point-the activity tha
 - The ACTION_MAIN action indicates this is the main entry point and does not expect any intent data. 
 - The CATEGORY_LAUNCHER category indicates that this activity's icon should be placed in teh system's app launcher. If the <activity> element does not specify an icon with icon, then the system uses the icon from the <application> element. 
   
-  These two must be paired together in order for the activity to appear in the app launcher. 
+These two must be paired together in order for the activity to appear in the app launcher. 
   
-  The second activity, ShareActivity, is intended to facilitate sharing text and media content. Although users might enter this activity by navigating to it from MainActivity, they can also enter shareActivity directly from another app that issues an implicit intent matchign one of the two intent filters. 
+The second activity, ShareActivity, is intended to facilitate sharing text and media content. Although users might enter this activity by navigating to it from MainActivity, they can also enter shareActivity directly from another app that issues an implicit intent matchign one of the two intent filters. 
+  
+## Intent resolution
+When the system receives an implicit intent to start an activity, it searches for the best activity for the intent by compaing it to intent filters based on three aspects
+- Action
+-  Data
+- Category
+
+Action test
+To specify accepted intent actions, an intent filter can declare zero or more ,action> elements. To pass this filter, the action specified in the Intent must match one of the actions listed in the filter
+If the filter does not list any actions, there is nothing for an intent to match, so all intents fail the test. However, if an intent does not specify an action, it passes the test as long as the filter contains a least one action. 
+
+Category Test
+To specify accepted intent categories, an intent filter can declare zero or more <category> elements. For an intent to pass the category test, every category in the Intent must match a category in the filter. The reverse i not neccessary- the intent filter may declare more categories than  are specified in the Intent and the Intent still passes. Therfore an intent with no categories alwasy passes this test, regardless of what categories are declared in the filter. 
+ 
+ Data Test
+ To specify  accepted intent data, an intent filter can declare zero or more <data> elements. Each <data> element can specify a URI structure and a data type. Each part of the URI is a separate attribute: Scheme, host, port, and path
