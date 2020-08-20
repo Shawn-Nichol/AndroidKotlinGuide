@@ -71,3 +71,39 @@ Unless you specify otherwise a configuration chagne  will cause your current act
 This is done becuase any application resource, including layout files, can change based on any configuration value. Thus the only safe way to handle a configuration change is to re-retrieve all resouces, including layouts drawables, and strings. Becuase activites must already know how to save their state and re-create themeselves from that stae, this is a convenient way to have an activity restart itself with a new configuration. 
 
 In some special cases, you may want to bypass restarting of yyour activity based on one or more types of configuration changes. This is done with the android:configChanges attribute in the manifest. For anytypes of configuration changes you say that you handle there, you will receive a call to your current activity's method instead of being restarted. If a configuration change involves any that you do not handle, however thea ctivity will still be restarted and onConfigurationChange will not be called. 
+
+## Starting Activites and Gettign Results
+The startActivity(Intent) is used to start a new activity, which will be placed at the top of the activity stack. It takes a single argument, an Intent which describes the activity to be executed. 
+
+Sometimes you want to get a result back from an activity when it ends. For example, you may start an activity that lets the user pick a person in a list of contacts: when it ends, it retuns the person that waas selected. Todo this, you call the startActivityForResult(intent, int) version with asecond integer parameter identifying the call. The result will come back through your onActivityResult(int, int, Intent) method
+
+When an activity exits, it can call setResult(int) to return  data back to its parent. It must always supply a s result code, which can be the standard results RESULT_CANCELED, RESULT_OK, or any custom values starting at RESULT_FIRST_USER. In addition, it can optionallly return back an intent containing any additional data it wants. All of this information appears back on the parent's Activity.onActivityResult(), along with the integer identifier it orignailly suppied. 
+
+If a result fails for any reason the parent activity will receive a result with the code RESULT_CANCELED
+
+## Saving Persistent state
+There are generally two kinds of persistent state that an activity will deal with: shared document-like data and internal tate such as user preferences. 
+
+For content provider data, we suggest that activites use an "edit in place"  user model. That is, any edits a user makes are effectively made without requring an additional confirmation step. Supporting this model is generally a simple matter of following two rules. 
+- When creating a new document, the backing database entry or file for it is created immediately. For example, if the user chooses to write a new email, a new entry for that email is created as soon as they start entering data, so that if they go to any other activity after that point this email will now appear in the list of drafts. 
+- When an activity's onPause() is called, it should commit to the backing content provider or file any changes the user has made. This ensures that those changes will be seen by any other activity that is about to run. you will probably want to commit your data even more aggressively at key times during your activit's lifecycle: for example before starting a new activity, before finishing you own activity, when the use rswitches between input fields
+
+This model is designed to prevent data loss when a user is navigating between activities, and allows the systme to safely kill an activity (becuase system resources are needed somewhere else) at any time after it has been stopped. Note this implies that the user pressing back from your activity does not mean "cancel" it means to leave the activity with its current contents saved away. Canceling edits in an activity must be provied through some other mechanism, such as an explicit revert or undo option. 
+
+See the content package for more information about content providers. These are a key aspect o fhow different activites invoke and propgagate data between themselves. 
+
+The activity class also provides an API for managing internal persistent state associated with an activity. This can be used for example, to remeber the user's preferred inital display in a calendar or the user's default home page in a web browser. 
+
+The activity class also provides an API for managing internal persistent state associated with an activity. This can be used, for example to remeber the uer's preferred initial display in a calendar or the user's default home page in a web browser. 
+
+Activity persisttent state is maanged with the method getPreferences(int),allowing you to retrieve an dmodify a set of name/value paiers associated with the activity. To use preferences that are shared across multiple application components, you can use the underlying Context#getSharedPreferences to retieve a preferences object stored under a specific name
+
+## Process lifecycle
+ The andoird system attempts to keep an application process around for as long as possible but eventually will need to remove old processes when memory runs low. As described in Activity lifecycle, the decision about which process to remove is intimately tied to the state of the user's interaction with it. In general, there are four states a process can be in based on teh activites running in it, listed here in order or impmortance. The system will kill less important processes before it resorts to killing more important processes
+ 1) The foreground activity (activity at the top of the screen) is considered the most important. Its process will only be killed as a lst resort, if it uses more memory than is available on the device. Generally at this point the device has reached a memory paging state, so this is required in order to keep the user interface responsive. 
+ 2) A visble activity(an activity taht is visble to the user but no in the foreground, such as one sittign behind a foreground dialog or next to other activites in multi-window mode) is considered extremely important and will not be killed unless that is required to keep the foreground activity running
+ 3) A background activity (an activity that is not visible to the user and has been stopped) is no longer critical, so the sytem may safely kill its process to relaim memory for other foreground or visible processes. If its process needs to be killed, when the user navigates back to the activity its onCreate(bundle) method will be called with the savedINstance State it had previously supplied in onSaveInstanceState(Bundle) so that it can restart itself in the same state as the user last left it. 
+ 4) an empty process is one hosting  no activites or other application components(such as service or BroadcastReceivver classes). These are killled very quickly by the system as memory becomes low. For this reason, any background operation you do outside of an activity must be executed in the context of an activity BroadcastReceiver or Service to ensure that thesystme knows it needs to keep your process around. 
+ 
+ Sometimes an activity may need to do a long-running operation that exists independently of the activity lifecycle itself. An exmaple may be a camera application that allows you to upload a picture to a website. The upload may take a long time, and the appication should allow the user to leave the application while it is executing. To accomplish this, your Activity should start a service in which the upload takes place. this allows the system to properly priortize your process for the duration of the upload, independent of whether the original activity is paused, stopped or finsished. 
+
