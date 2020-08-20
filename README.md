@@ -2,7 +2,7 @@ This repository will provide tips and tricks for create features in kotlin apps.
 
 
 Components contains information on the following
-  - TODO Activites
+  - Activites, examples required. 
   - TODO Services
   - TODO Broadcast Receivers
   - TODO Activating Components
