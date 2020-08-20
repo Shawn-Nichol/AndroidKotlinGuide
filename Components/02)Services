@@ -31,4 +31,22 @@ A service can be both started an dhave connections bound to it. In such a case, 
 ## Permissions
 Global access to a service can be enforced when it is declared in the manifest<Service> tag. By doing so, other application will need to declare a corresponding <uses-permission> element in their own manifest to be able to start, stop, or bind the service. 
 
-As a of Build.VERSION_CODES.GINGERBREAD when using Context#startSErvice, you can also set INtent#FLAG_GRANT_READ_URIpeRMISSION and or 
+As a of Build.VERSION_CODES.GINGERBREAD when using Context#startSErvice, you can also set INtent#FLAG_GRANT_READ_URIpeRMISSION and or Intent#FLAG_GRANT_WRITE_URI_PERMISSION ON THE INTENT. This will grant ther serice temporary  access to the specific URIs in teh INtent. Access will remain until the SErvicde has called stopSelf(int) for that start command or a later one, or until the servide has been completely stopped. This works for granting access to the other apps that have not requested the permission protecting the SErvice, or even when the service is not exported at all. 
+
+In addition, a service can protect individual IPC calls into it with permissions, by calling the ContextWrapper.checkCallingPermission(string) method before executing the implementation of that call 
+
+
+## Process lifeCycle
+The Android system will attempt to keep the process hosting a service around as long as the service has been stgarted or has clients bound to it. When running low on memory and needing to kill existing processes, the proprity of a process hosting the service will be the higher of the following possiblitites. 
+
+- The service is currently executing code in its onCretae(), onStartCommand(), or onDestroy(), then the hosting process will be a foreground process to ensure this code can execute without being killed. 
+- If the service has been started, then its hosting process is considered to be less important than any process that are currently visible to the user on-screen, but more important than any process not visible. Becuase only a few processes are generally visible to the user, this means that the service should not be killed except in low memory conditions. However, since the user is not directly aware of a background service, in that state it is considereed a valid candidate to kill, and you hsould be prepared for this to happen. In particular, long-running services will lbe increasingly likely to kill and are guaranteed to be killed if they remain started long enough.
+
+If there are clients bound to the service, then the service's hosting process is never less important than the most important client. That is, if one of its clients is visible. The way a client's importance impacts the service's importance can be adjusted through 
+Context#BIND_ABOVE_CLIENT, Context#BIND_ALLOW_OOM_MANAGEMENT, Context#BIND_WAIVE_PRIORITY, Context#BIND_IMPORTANT, and Context#BIND_ADJUST_WITH_ACTIVITY.
+
+- A Started service can use the startForeground(int, android.app.Notification) API to put the service in a foreground state, where the system considers it to be somethign the user is actively aware of and thus not a candidate for killin ghwen low on memory. (It is still theorietically possible for the service to be killed under extreme memroy pressure from the current foreground application, but in practice this should not be a concern.
+
+Note this means that most of the time your service is running, it may be killed by the system if it is under heavy memory pressure. If this happens the systme willl later tyr to restart the service. An important consequence of this is that if you implement onStartCommand() to schedule work to be done asynchronously or in another thread, then you may want to use START_FLAG_REDILIVERY  to have th system re-deliver an intent for you so that it does not get lost if you r service is killed while processing it
+
+Other application components running in the smae process as the service can, of course, increase the importance of the overall process byond just the importance of the service itselt. 
