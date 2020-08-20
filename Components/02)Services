@@ -49,4 +49,11 @@ Context#BIND_ABOVE_CLIENT, Context#BIND_ALLOW_OOM_MANAGEMENT, Context#BIND_WAIVE
 
 Note this means that most of the time your service is running, it may be killed by the system if it is under heavy memory pressure. If this happens the systme willl later tyr to restart the service. An important consequence of this is that if you implement onStartCommand() to schedule work to be done asynchronously or in another thread, then you may want to use START_FLAG_REDILIVERY  to have th system re-deliver an intent for you so that it does not get lost if you r service is killed while processing it
 
-Other application components running in the smae process as the service can, of course, increase the importance of the overall process byond just the importance of the service itselt. 
+Other application components running in the same process as the service can, of course, increase the importance of the overall process beyond just the importance of the service itself. 
+
+## Local Service Sample
+One of the most common uses of a service is as a secondary component running alongside other parts of an application, in the same proceess as the rest of te components. All components of an .apk run in the smae process unless explicitly stated otherwise, so this is a typical situation. 
+
+When used in this way , by assuming the components are inthe same process, you can greatly simplify the interaction between them; clients of the service can simply cast the IBinder they reeive from it to a concrete class publsihed by the  service 
+
+An example of this use of a Service is whosn here. First is the service itself publshing a custom class when bound
