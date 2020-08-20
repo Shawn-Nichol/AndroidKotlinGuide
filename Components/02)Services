@@ -1,0 +1,34 @@
+#  Service  
+A  service is a pplication component respresenting either an application desire to perform a longer-running operation while not interacting with the user or to supply  fucntionality for other application to use. Each service class must have a corresponding <service> declaration in its package's AndroidManifes.xml. Services can be started with Context.startService() and Context.bindService()
+
+Note that services like othere application objects run in the main thread of their hosting process. This means that, if your service is going to do nay CPU intesive or blocking operations, it should spawn its own thread in which to do that work. More information on this can be found in Processes and Threads. The JobIntentService class is aviablabe as a standard implementation of Service that has itw own thread where it schedules its work to be done. 
+
+## Whats a service
+
+Most confusion about the service class actually revolves around what it is not
+-  A service is not a sepearatae process. The service object itself does not imply it is running in its own process; unless otherwise specified, it runs in the same process; it runs in the same process as the application it is par of. 
+
+- A service is not a thread. It is not a means itself todo work off the main thread
+
+Thus a  service itself is actually very simple providing tow main featgures
+- A facitlity for the application to tell the system about something it wants to be doing in the background. This corresponds to calls to Context.startService(), which ask the systme to schedule work for the service, to be run until the service or someone else explicity stop it.
+
+- A facility for an application eo expose some of its functionality to other applications. This corresponds to calls to Context.bindService, which allows a long-standing connection to be made to ther sercie in order to interact with it. 
+
+When a service conponent is actually created for either of these reasons, all that the system actually does is instantiate the component and call its onCreate() and any other appropriate callbacks on the main thread. It is up to the SErvice to implement these with the appropriate behavior, such as creating a secondary thread in which it does its work. 
+
+Note that becuase SErvice itself is so simple you can make your interactions with it as simple or complicated as you want: from treating it as local java object that you make direct mehtod calls on to providinga  full remoteable interface using AIDL. 
+
+## Service LifeCycle
+There are two reasons that a service can be run by the system. If someone calls Context.startSErvice() then the system will retrieve the service(creating it and calling its onCreate() method if needed) and then call its onStartCommand(intent, int, int) method with the arguments supplied by the client. THe service will at this point contineue running until COntext.stopService() or stopSelf() method to ensure the service is not stopped until started intents have been processeed. 
+
+For started service, there are two additional major modes of operation they  can decided to run in, depending on the value they return from onStartCommand(): START_STICKY is used for services that are explicitly started and stopped as needed,  while START_NOT_STICKY or START_REDELIVER_INTENT are used for services tghat should only remain running while processing any commands sent to them. See the  linked docuemtnation for more details on the semantics. 
+
+Clients can also use Context.bindService if it is not already running(calling onCreate() while doiong so), but does not call onStartCommand(). The client will recieve the IBinder object that the service returns from its onBind(Intent) method, allowing the client to then make calls back the ther service. The servi ce will remain running as long as the connection is established. ususally the IBinder returned is for a complex interface that has been written in aidl. 
+
+A service can be both started an dhave connections bound to it. In such a case, the system will keep the service running as long as either it is started or there are one or more connections to it with the Context.Bind_AUTO_CREATE flag. Once neither of these situations hold, the service's onDestroy() method is called and the service is effectively terminated. All cleanup(stopping threads, unregistering recievers) should be complete upon returning from onDestory().
+
+## Permissions
+Global access to a service can be enforced when it is declared in the manifest<Service> tag. By doing so, other application will need to declare a corresponding <uses-permission> element in their own manifest to be able to start, stop, or bind the service. 
+
+As a of Build.VERSION_CODES.GINGERBREAD when using Context#startSErvice, you can also set INtent#FLAG_GRANT_READ_URIpeRMISSION and or 
