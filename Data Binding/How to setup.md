@@ -26,8 +26,8 @@ class MainActivity : AppcompatActivity() {
     
     // Link layout to databinding variable
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-    // add XML expression to databinding. 
-    binding.nameOfActivity
+    // add XML variable name expression to databinding with context
+    binding.mybinding = this
   }
   
   // This method must be public or the XML expression won't see the method. 
@@ -48,7 +48,7 @@ class MainActivity : AppcompatActivity() {
 ...> 
   <data>
     <variable
-      name="nameOfActivity" // You can name it what ever you want. 
+      name="myBinding" // You can name it what ever you want. 
       type="com.example.MainActivity" 
     />
   </data>
@@ -57,7 +57,7 @@ class MainActivity : AppcompatActivity() {
   <Button
     android:id="@id/myButton"
     ...
-    android:onClick="@{() -> nameOfActivity.myClick()}"
+    android:onClick="@{() -> myBinding.myClick()}"
   />
 
 </layout>
