@@ -1,17 +1,17 @@
 Activity 
-
+- provide breif descriptioin
 
 Activity lifecyce
-  
+- Provide brief description
 
 Configuration changes
-  - Provide examples
+- Provide breif description
 
 Process lifecycle
-  - Provide examples
+- Provide breif description
 
 Saving Persistent state
-  - Provide examples
+- Provide breif description
 
 Starting Activites
  - Provide examples
