@@ -1,8 +1,8 @@
 Activity 
-  - TODO Provide examples
+
 
 Activity lifecyce
-  - TODO Provide examples
+  
 
 Configuration changes
   - Provide examples
