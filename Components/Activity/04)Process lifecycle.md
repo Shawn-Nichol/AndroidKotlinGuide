@@ -1,7 +1,7 @@
-## Process lifecycle
- The andoird system attempts to keep an application process around for as long as possible but eventually will need to remove old processes when memory runs low. As described in Activity lifecycle, the decision about which process to remove is tied to the state of the user's interaction. In general, there are four states a process can be in based on the activites running in it, listed here in order or impmortance. The system will kill less important processes before it resorts to killing more important processes.
+# Process lifecycle
+The andoird system attempts to keep an application process around for as long as possible but eventually will need to remove old processes when memory runs low. In general, there are four states a process can be in based on the activites running in it, listed here in order or impmortance. The system will kill less important processes before it resorts to killing more important processes.
  
- 1) The foreground activity (activity at the top of the screen) is considered the most important. Its process will only be killed as a last resort, if it uses more memory than is available on the device. Generally at this point the device has reached a memory paging state, so this is required in order to keep the user interface responsive. 
+ 1) The foreground activity (activity at the top of the screen) is considered the most important. Its process will only be killed as a last resort, if it uses more memory than is available on the device. Generaly at this point the device has reached a memory paging state, so this is required in order to keep the user interface responsive. 
  
  2) A visble activity(an activity that is visble to the user but no in the foreground, such as one sitting behind a foreground dialog or next to other activites in multi-window mode) is considered extremely important and will not be killed unless that is required to keep the foreground activity running.
  
