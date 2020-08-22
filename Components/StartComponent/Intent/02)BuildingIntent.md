@@ -6,6 +6,7 @@ An intent object carries information that the Android system usees to determine 
 ## Explicit Intent
 An explict event requires context and componet name, (without a component name it is implicit intent). This allows you to launch a specific component. 
 
+MainActivity
 ```
 // Create a handler, 
 val intent: Intent = INtent(this, SecondActivity::class.java).apply {
@@ -18,8 +19,19 @@ if(intent.resoleActivity(packagenManager) != null) {
     startActivity(intent)
 }
 ```
-
-
+To receive the data in the second activity
+```
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_two)
+    
+    // Create a handler for the Bundle
+    val extra: Bundle? = intent.extras
+    
+    // Use the key in the extra handler to get the data you want. 
+    val text: String? = extras?.getString("MY_DATA_KEY")
+}
+```
 
 
 ## Imiplict Intent
@@ -31,13 +43,13 @@ ex ACTION_SEND, Also known as the share intent, you should use this in an intent
 
 You can specify the action for an intent with setAction() or with an Intent constructor. 
 
-- Data the URI that references the data to be acted on anand or the MIME type of that data. The type of data supplied is generally dicated by the intent's action.
+- Data the URI that references the data to be acted on and or the MIME type of that data. The type of data supplied is generally dicated by the intent's action.
 
-When creating an intent, it's often important to specify the type of data in addition to its URI. For example an activity that's able to display images probably  won't be able to play an audio file, even though the URI formats could be similar. Specifiying the MIME type of your data helps the Android systme find the best component to reeive your intent. However the MIME type can sometimes be inferred from the URI particularly when the data i sa content: URI. A content URI indicates the data is located on the device and controlled by a ContentProvider wihc makes the data MIME type visible to the system. 
+When creating an intent, it's often important to specify the type of data in addition to its URI. For example an activity that's able to display images probably won't be able to play an audio file, even though the URI formats could be similar. Specifiying the MIME type of your data helps the Android system find the best component to revive your intent. However the MIME type can sometimes be inferred from the URI particularly when the data is a content: URI. A content URI indicates the data is located on the device and controlled by a ContentProvider which makes the data MIME type visible to the system. 
 
-- Category  A string containing additiona l information about the kind of component that should handlle the  intent. Any number of category descriptions can be placed in an intent, but most intents do not require a category
+- Category  A string containing additional information about the kind of component that should handle the intent. Any number of category descriptions can be placed in an intent, but most intents do not require a category
 
-ex CATEGORY_BROWSABLE The target activity a llows itself to be started by a web browser to display data referenced by a link such as an image or an email
+ex CATEGORY_BROWSABLE The target activity allows itself to be started by a web browser to display data referenced by a link such as an image or an email
 
 ex CATEGORY_LAUNCHER The activity is the initial activity of a task and is listed in the system's application launcher, you can specify category with addCategory()
 
