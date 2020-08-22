@@ -1,10 +1,29 @@
 # Building an Intent
-An intent object carries information that the Android system usees to determine which components to start pluss information that the recipient component uses in order to prpoerly perform the action. The following properties represent the defining characteristics of an intent. By reading these properties, the android systme is able to resolve which app component it should start. However an intent can carry additional information that does not affect how it resolved to an app copmonent. 
+An intent object carries information that the Android system usees to determine which components to start pluss information that the recipient component uses in order to properly perform the action. By reading these properties, the android systme is able to resolve which app component it should start. However an intent can carry additional information that does not affect how it resolved to an app copmonent. 
 
-- Componet name: The name of the componet to start. This is optional, but it's critical piece of information that makes an intent expliciit. Without a component name the Intent is impicit and the system decides which component should receive the intent based on the other intent information
-- Action: A string that specifies the generic action to perform. In the case of a broadcastintent, this is the action that took place and is being reproted. The action largely determines how the rest of the intent is structured particularly the information that is contained in the data and extras
 
-You can specify your own actions for use by intents within your app, but you usually specify action constants defined by th e intent class or other framework classes. 
+
+## Explicit Intent
+An explict event requires context and componet name, (without a component name it is implicit intent). This allows you to launch a specific component. 
+
+```
+// Create a handler, 
+val intent: Intent = INtent(this, SecondActivity::class.java).apply {
+    putExtra("MY_DATA_KEY", "My string that I want to pass")
+}
+
+// Verify that the intent will resolve to an activity
+if(intent.resoleActivity(packagenManager) != null) {
+    // Launches a new activity.
+    startActivity(intent)
+}
+```
+
+
+
+
+## Imiplict Intent
+Specifies an action that can invokek any app on the device able to perform the action. Using an implicit intent when your app cannot perform the action but other apps can. 
 
 ex ACTION_VIEW use this action in an intent iwth startActivity() when you have some information that an activity ccan show to the user, such as a photo to view in  a gallery app, or an address to view in a map app. 
 
@@ -13,7 +32,6 @@ ex ACTION_SEND, Also known as the share intent, you should use this in an intent
 You can specify the action for an intent with setAction() or with an Intent constructor. 
 
 - Data the URI that references the data to be acted on anand or the MIME type of that data. The type of data supplied is generally dicated by the intent's action.
-
 
 When creating an intent, it's often important to specify the type of data in addition to its URI. For example an activity that's able to display images probably  won't be able to play an audio file, even though the URI formats could be similar. Specifiying the MIME type of your data helps the Android systme find the best component to reeive your intent. However the MIME type can sometimes be inferred from the URI particularly when the data i sa content: URI. A content URI indicates the data is located on the device and controlled by a ContentProvider wihc makes the data MIME type visible to the system. 
 
