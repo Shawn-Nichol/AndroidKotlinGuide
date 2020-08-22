@@ -1,41 +1,40 @@
 This repository will provide tips and tricks for create features in kotlin apps. This not an app to down load but examples provide so that you can implement these features in any app. 
 
 
-Components contains information on the following
-  - Activites, examples required. 
+## Components contains information on the following
+  - Activites
   - TODO Services
   - TODO Broadcast Receivers
   - TODO Activating Components
+  - Start components
+    - Intents 
+    - PendingIntent, TODO provide exampels
   - Read ME
 
-Data binding
+## Data binding
   - TODO provide additional info
   - How to setup 
 
-Input events
+## Input events
   - ReadMe
 
-Maps
+## Maps
   - Code lab info
 
-Notifications
+## Notifications
   - ReadMe, How to build
   - CallFromFragment
   - NotificationChannel
   - NotificationUtilFile
-
-Object
-  - Intent , TODO provide examples
-  - PendingIntent, TODO provide exampels
-
-Views
+  
+## Views
   - CustomViews
   - Effects
   - Clipping
   - ReadMe
   - effects
 
-Animation
+## Animation
   - MotionLayout
   - Property Animation
   - View
@@ -43,5 +42,5 @@ Animation
   - ReadMe
   - animation
 
-Context
+## Context
   - Update ReadMe 
