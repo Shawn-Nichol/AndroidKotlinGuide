@@ -1,4 +1,4 @@
-# Activity
+# what is an Activity
 An activity is a single, focused thing that the user can do. Almost all activities interact with the user, so the Activity class takes care of creating a window for you in which you can place your UI with setContentView(view). Activities can also be presented as floating windows, Muti-Window mode or embedded into other windows. There are two methods almost all subclasses of Activity will implmement. 
 
 ## OnCreate()
