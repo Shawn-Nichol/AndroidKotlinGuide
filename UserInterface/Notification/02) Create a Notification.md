@@ -19,3 +19,32 @@ private fun createNotificationChannel()( {
   }
 }
 ```
+
+
+## set Notification content
+To create a notification you need to create a notification object with a context and channel ID argument. 
+```
+var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+  .setSmallIcon(R.drawable.myDrawable)
+  .setContentTitle("Notification Title")
+  .setContentText("Notification info")
+  
+```
+
+.setStyle will allow you to modify the notification
+
+
+## set Tap action
+Every noitification should respond to a tap, create a pending intent for the setContextIntent argument. 
+```
+val intnet = Intent(this, MyActivity::class.java)
+val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+  .setSmallIcon(R.drawable.myDrawable)
+  .setConextTitle("Notification Title")
+  .setContextText("This is my notification")
+  .setContextIntent(pendingIntent)
+  .setAutoCancel(true) // Removes the notifcation after tap.
+
+```
