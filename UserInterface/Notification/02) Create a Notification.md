@@ -146,3 +146,7 @@ Notification sremain visible until on of the following happens
 - Cancel(): for a specific notification ID. THis mehtod also deletes ongoing notification
 - cancelAll(): removes all of the notification you previously issued.
 - If you set a timeout when creatinga  notification using setTimeoutAFter(), the system cancels the notification after the specified duration elapses. If requried, you can cancel a notification before the specified timout duration elapses. 
+
+
+# Note
+The Android system will remember the prioty level set by the user, if the user has set a low prioty and you are adjusting the code for a higher priority this may result in the notification not working as inteneded. At this point it is best to uninstall the app and reinstall it. 
