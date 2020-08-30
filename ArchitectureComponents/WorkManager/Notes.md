@@ -357,5 +357,94 @@ You can call the ListenableWOrker.isStopped() method to check if your worker has
 
 Note WorkManager ignores the Result set by a Worker that has received the onStop signal, becuase the Worker is already considered stopped. 
 
+# Observing intermediate Worker progress
+WorkManager adds first-class support for setting an d observing intermediate progress for workers. If the worker was running while the app was in the foreground, this information can also be shown to the useer using APIs which return the LiveData of WorkInfo.
 
+ListeneableWorker now supports the setProgessAsync() API, which allows it to persists intermediate progress. These APIs allow developers to set intermediate prgoress that can be observed by the UI. Progress is represented by the Data type, which is a serializable container of properties. (similar to input and output and subject to the same restrictions).
+
+Progress inofrmation can only be observed and updated while the ListenableWorrker is running. Attempts to set progress on a ListenableWorker after it has completed its execution are ignored. You can also observe progress inofrmation by using one of the getWorkInofBy...() or getWorkInfoBy..LiveData methods. These methods reutrn instances of WorkInfo, which has a new getProgress() method that returns data. 
+
+## Updating Progress
+Use the Coroutineworker object's setProgress extension function to update progress to 0 when it starts an upon completion updates the progress value to 100. 
 ```
+class ProgressWoker(context: Context, parameters: WorkParameters) : 
+  CoroutineWoker(context, parameters) {
+ 
+  companion object {
+    const val Progress = "Progress"
+    private const val delay Duration = 1L
+  }
+  
+  override suspend fun doWork() : Result {
+    val firstUpdate = workDataOf(Progress to 0)
+    val lastUpdate = workDataOf(Progress to 100)
+    setProgress(firstUPdate)
+    delay(delayDuration)
+    setProgress(lastUpdate)
+    return Result.success()
+  }
+}
+```
+
+## Observing Progress
+You can use the getworkInfoBy...() or getWorkInfoBy...LiveData() methods, and get  reference to WorkInfo.
+Here is an example which uses the getWorkInfoByIdLiveData API
+```
+WorkManager.getInstance(applicationContext)
+  // request is teh WorkRequest id
+  .getWorkInfoByIdLiveData(requestId)
+  .observe(observer, Observer { workInfo: WorkInfo? -> 
+    if(workInfo != null) {
+      val progress = workInfo.progress
+      val value = progress.getInt(Progress, 0)
+      // Do something with progress information
+    }
+  })
+```
+
+# Chaining Work 
+WorkManager allows you to create and enqueue a chain of work that specifies multiple dependent tasks, and defines what order they should run in . This is particularly useful when you need to run several tasks in a particular order
+
+To createa chain of work, you can use WorkManager.beginWith(OneTimeWorkRequest) or WorkManager.beginWith(List<OneTimeWorkREquest>), which returns an instance of WorkContinuation.
+  
+A WorkContinuation can then be used to add dependent OneTimeWorkREquets using WorkContinuation.Then(OneTimeWorkREquest) or WorkContinuation.Then(Lost<OneTimeWorkREquest>).
+  
+Every invocation of the WorkContinuation.then(...) returns a new instance of WorkContinuation. If you add a list of OneTimWorkRequests, these requests can potentially WorkContinuation. If you add a List of OneTimeWorkREquets, these requests can potenially run in parallel. 
+  
+Finally, you can use the WorkContinuation.enqueue() method to enqueue() yoiur chain of WorkContinuations
+  
+Lets look at an example where an applicatioon runs image filters on 3 differen images (potentially in parallel), then compresses those images together, and then uploads them.
+```
+WorkManger.getInstance(myContext)
+  // Candidates ro run in parallel
+  .beginWith(listOf(filter1, filter2, filter3))
+  // Dependent work (only runs after all previous work in chain)
+  .then(compress)
+  .then(upload)
+  .enqueue()
+```
+
+## Input Mergers
+When using chains of OneTimeWorkRequest the output of parent OneTimeWorkRequests are passed in as inputs to the children. So in the above example, the output of filter1, filter2 an filter 3 would be passed in as inputs to the compress request. 
+
+In order to manage inputs from multiple parent OneTimeWorkREquets, WorkManager uses InputMergers
+
+There are two different types of Inputmergers provided by WorkManager
+- OverwritingInputMerger attempts to add all keys from all input to the output. In case of conflicts, it overwrites theh previously-set keys. 
+- ArrayCreatingInputMerger attempts to merge the inputs, creating arrays when necessary
+
+For teh above example, given we want to preserve the outputs from all image filters, we should use an ArrayCreatingInputMerger. 
+```
+val compress: OntTimeWorkRequest = OneTimeWorkRequestBuilder<CompressWorker>()
+  .setInputMerger(ArrayCreatingInputMerger::class)
+  .setConstraintst(onconstraints)
+  .build()
+```
+
+## Chaining and Work Statuses
+There are a couple of things to keep in mind when creating chains of OneTimeWorkREquets
+- Dependent OneTimeWorkREquests are only unblocked(transition to ENQUEUED), when all its parent OneTimeWorkRequests are successsful(that is, they return a Result.success()().
+- When any parent OneTimeWorkREquest fails(returns a Result.failure(), then all dependent OneTimeWorkREquest are also marked as FAILED. 
+- When any parent OneTimeWorkREquest is cancelled, all dependent OneTimeWorkRequests are also marked as CANCELLED. 
+
+
