@@ -29,3 +29,52 @@ WorkManager is inteneded for work that is deferrable- that is not required to ru
 - Periodicallly syncing application data with a server
 
 WorkManager is not intended for in-process backgroudn work that can safely be terminated if the app process goes away or for twork that requires immediate execution. Please review the background process guide to see which solution meets your needds.
+
+
+## Getting started with Workmanager
+
+Add the following dependicies
+```
+  def work_version = "2.4.0"
+    // Kotlin + coroutines
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+```
+
+Work is defined using the Worker class. The doWork() method is run synchronously on a background thread provided by WorkManager. To create some work for WorkManager to run, extend the Worker class and override the doWork().
+
+```
+class uploadWorker(appContext: Context, workerParams: WorkerParamaeters): Worker(appContext, workerParams) {
+  override fun doWork(): Result {
+    // Do the work here in this case upload the image
+    uploadImages()
+    
+    // indicate whether the owrk finished succesfully with the Result
+    return Result.sucess()
+  }
+
+```
+
+The Result returned from doWork() informs the Workmanaager service whether the work succeeded and, in the case of failure, whether or not the work should be retried
+- Result.success(): the work finished successfully
+- Result.failure(): The work failed
+- Result.retry(): the work failed and should be tried at another time according to its retry policy
+
+## Create a WorkRequest
+Once Your work is defined it must be scheduled with the WorkManager service in order to run. WorkManager offers a lot of flexibility in how you schedule your work. You can schedule it to run periodically overa interval of time, or you can schedule it ot run only one time. 
+
+However you choose to schedule the work, you will always use a WorkRequestWhile a Worker defines the unit of work, a WorkRequest(and its subclasses) define how and when it should be run. In the simplest case, you can use a OneTimeRequest. 
+```
+val uploadWorkRequest: WorkRequest = OneTimeRequestBuiulder<UploadWorker>().build()
+```
+
+## Submit the WorkRequest to WorkManager using the enqueue() method.
+```
+WorkManager
+  .getInstance(myContext)
+  .enqueue(uploadWorkRequest)
+```
+
+The exact time that the worker is going to be executed depends on the constraints that are used in your WorkRequest and on system optimizations. WorkManager is designed to give the best behavior under these restrictions.
+
+## Next Steps
+WorkRequest can also includ additional information, such as the constrainst under which the work should run, input to the work, adleay and backoff policy for retrying work. In 
