@@ -1,35 +1,3 @@
-# WorkManager
-WorkManager is an API that makes it easy to schedule deferrable, asynchronous tasks that are expected to run even if the app exits or the device restarts. The WorkManager API is a suitable and recommended replacement for all previous Android backgroun scheduling APIs(Job Scheduler). Work Manager incorporates the features of its predecessors in a modern, consistent API that works back to API level 14 while also being conscious of batter life. 
-
-## Work Constraints
-Declaratively dfine the optimal conditions for your work to run using Work Constraints. For example, run only when the device is on Wi-Fi, when the device idle, or when it has sufficient storage space. 
-
-## Robust Scheduling 
-WorkManager allows you to schedule owrk to run one-time or repeatedly using flexible scheduling windows. Work can be tagged and named as well, allowign you to schedule unique, replaceable, work and monitor or cancel groups of work together. Scheduled work is sotred in an interannlly managedSQLite database and WorkManagaer takes care of ensuring that this work persists and is recheduled across device reboots. In addition, WorkManager adheres to power-saving features an best practices like Doze Mode, so you don't have to worry about it. 
-
-## Flexibility Retry Policy
-Sometimes work fails. WorkManager offers flexible retry policies, including a configurable exponential backoff policy
-
-## Work Chaining
-For complex related work, chain individual work tast toether usinga fluent, natural interface tath allows you to control which pieces run sequentially and which run in parallel. For each work task you can define  input and output data for that work. When chaining work tegether, WorkManager automatically passess output data from one work task to the next. 
-
-```
-WorkManager.getInstnac(...) 
-  .beginWith(listOf(workA, workB)
-  .then(workC)
-  .enqueue()
-```
-
-## Build-in Threading Interoperability
-WorkManager integrates seamlessly with RXJava and Coroutines and provides the flexibility to plug in your own asynchronous APis. 
-
-## Use WorkManager for Deferrable and Reliable Work
-WorkManager is inteneded for work that is deferrable- that is not required to run immediately and reuqired to run reliable even if the app exits or the device restarts
-- Sendign Logs or analytics to backend services
-- Periodicallly syncing application data with a server
-
-WorkManager is not intended for in-process backgroudn work that can safely be terminated if the app process goes away or for twork that requires immediate execution. Please review the background process guide to see which solution meets your needds.
-
 
 ## Getting started with Workmanager
 
@@ -54,34 +22,6 @@ class uploadWorker(appContext: Context, workerParams: WorkerParamaeters): Worker
 
 ```
 
-The Result returned from doWork() informs the Workmanaager service whether the work succeeded and, in the case of failure, whether or not the work should be retried
-- Result.success(): the work finished successfully
-- Result.failure(): The work failed
-- Result.retry(): the work failed and should be tried at another time according to its retry policy
-
-## Create a WorkRequest
-Once Your work is defined it must be scheduled with the WorkManager service in order to run. WorkManager offers a lot of flexibility in how you schedule your work. You can schedule it to run periodically overa interval of time, or you can schedule it ot run only one time. 
-
-However you choose to schedule the work, you will always use a WorkRequestWhile a Worker defines the unit of work, a WorkRequest(and its subclasses) define how and when it should be run. In the simplest case, you can use a OneTimeRequest. 
-```
-val uploadWorkRequest: WorkRequest = OneTimeRequestBuiulder<UploadWorker>().build()
-```
-
-## Submit the WorkRequest to WorkManager using the enqueue() method.
-```
-WorkManager
-  .getInstance(myContext)
-  .enqueue(uploadWorkRequest)
-```
-
-The exact time that the worker is going to be executed depends on the constraints that are used in your WorkRequest and on system optimizations. WorkManager is designed to give the best behavior under these restrictions.
-
-## Next Steps
-WorkRequest can also includ additional information, such as the constrainst under which the work should run, input to the work, adleay and backoff policy for retrying work. In 
-
-# Define work request
-## Overrivew
-Work is defined in WorkManager via a WorkRequest. In order to schedule any work with WorkManager you must first create a WorkRequest object and then enqueue it. 
 
 ```
 val myWorkRequest = ..
