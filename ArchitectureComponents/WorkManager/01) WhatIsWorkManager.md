@@ -2,7 +2,6 @@
 
 WorkManager is an API that makes it easy to schedule deferrable, asynchronous tasks that are expected to run even if the app exits or the device restarts. The WorkManager API is a suitable and recommeneded replacement for all previous Android background scheduling APIs. WorkManager incoropartes the features of its predecessors in a modern, consistent API that works back to API level 14 while also being conscious of batter life. 
 
-
 ## Key Features
 ### Work Constraints
 Declaratively define the optimal conditionns for your work to run using Work Constraints. For example only run when device is connected to WiFi. 
