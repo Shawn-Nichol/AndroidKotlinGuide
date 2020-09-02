@@ -119,3 +119,85 @@ Android provides three ways for apps to send broadcast
 - The local BrodcastManager.sendBroadcast method sends brodcasts to receiversthat are in the same app as the sender. If you don't need to send broadcasts across apps, use local broadcasts. The implementation is much more efficient(no interprocess communication needed) and you don't need to worry about any security issues related to other apps being able to receive or send your broadcasts. 
 
 How to send a braodcast by creating an Intent
+```
+Intent().also { intent ->
+intent.setAction("com.example.broadcast.MY_NOTIFICATION")
+sendBroadcast(intent)
+```
+
+The Broadcast message is wrpped in an Intent object. The intent's action string must provide the app's Java package name systanx and uniquley identify the broadcast evetn. you can attach additional inofrmation to the intent with putExtra(String, Bundle). You can also limit a broadcast to a set of apps in the same organization by calling setPackage(String) on the intent
+
+Note: Alothough intents are used for both sending broadcast and starting activites with startActivity(intent) these actions are completely unrelated. Broadcast receivers can't see or capture intents used to start an activity likewise, when you broadcast an intent you can't find or start an activity.
+
+
+# Resetictin broadcast with permissions
+Permissions allow you to restrict broadcasts to the set of apps that hold certain permissions. You can enforce restrictions on either the sender or receiver of a broadcast. 
+
+Sending with permissions
+When you call sendBroadcast(intent, String) or sendOrderedBroadcast(intent, String, BroadcastReceiver, Handler, int, String, Bundle), you can specify a permission parameter. Only  receivers who have requested that permission with the tag in their manifest (and subsequently been granated the permission if it is dangerous) can receive the broadcast. For example, the following code sends a broadcast
+```
+sendBroadcast(Intent("com.example.NOTIFY"). Manifest.permissions.SEND_SMS)
+```
+To receive the broadcast, the receving app must request the permission as show. 
+```
+<uses-permission android:name="android.permission.SEND_SMS"/>
+```
+you can specify either an existing system permission like SEND_SMS or define a custom permission withe <permission> element . For information on permissions and security in general.
+  
+### Receiving with permissions
+If you specify a permission parameter when registering a broadcast receiver (Either iwth registerREceiver(BroadcastReceiver, IntentFilter, Stirng, Handler) or in <receiver> tag in your manifest), then only broadcasters who have requested the permission with <uses-permission> tag in their manifest (and susequently been granted the permission if it is dangerous) can send an Intent to the receiver. 
+  
+  ```
+  <receiver android:name=".MyBroadcastReceiver"
+      android:permission="android.permission.SEND_SMS>
+      <intent-filter>
+        <action android:name="android.intent.action.AIRPLANE_MODE"/>
+      </intent-filter>
+    </receiver>
+  ```
+  
+  or your receiving app has a context-registered receiver as shown below
+  ```
+  val filter = IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+  registerReceiver(receiver, filter, Manifest.permission.SEND_SMS, null)
+  ```
+Then to be able send broadcasts to those receivers, the sending app must request the permission as shown
+```
+<uses_permission android:name="android.permission.SEND_SMS"/>
+```
+
+## Security considerations and best practices
+Here are some security considerations and best practices for sending the receving broadcast
+- If you don't need to send the broadcastManager which is available in the Support Library. The LocalBroadcastManager is much more efficient (no interprocess communication needed) and allows you to avoid thingk about any security issues related to other apps being able to receive or send your broadcasts. Local Broadcasts can be used as general prupose pub/sub event bus in your app without any overheads of systme wide broadcasts. 
+
+- If many apps have registered to reeive the same broadcast in tehir manifest, it can cuase the system to laucn a lot of apps, causing a sustantial impact on both device performance and user experince. To aviod this prefer using context registration over manifest declaration. Sometimes, the android system itself enforces the use of context-registered receivers. For example, the cCONNECTIVITY_ACTION broadcast is delivered only ot context-registered receivers
+- Do not boradcast sensitive infomratino using an implicit itnetn. The finormation can be ready by any app that register's to recieve the broadcast. There are three ways to contol who can receive your broadcast. 
+  - YOu can specify a permission when sending a broadcast
+  - In android 4.0 and higher, you can specify a package with setPackage(string) when sending a  broadcast. The system restricts broadcast to the set of of apps that matcht he package. 
+  - You can send local broadcast with LocalBroadcastManager
+- When you register a receiver, any app can send potentially maliciou sbroadcasts to your app's receiver. There are three ways to limit the broadcast taht your app receives
+- you can specify  a permissino when registering  a broadcast receiver
+- For manifest-declared receivers, you can set the android:exported attrbibute to false in the manifest. The receiver does not receive broadcasts from sources outside of the app. 
+- You can limit yourself to only local broadcasts with LocalBroadcastManager.
+- The namespace for broadcast actions is global. Make sure that actions names and other strings are written in a namespace you own, or else you may inadvertenly conflict with other apss. 
+- Becuase a receiver's onReceive(context, Intent) method runs on the mainthread, it should execute and return quickly. If you need to perform long running work be careful about spawning threads or starting background services becuase the system can kill the entire process after onReceive() returns For information see Effect on process state to perform long running work, we recommend
+
+  - Calling goAsync() in your receiver's onReceive() method and passing the BroadcastReceiver. PendginResult to a backgroun thread. This keeps the broadcast active after  retruning from onReceive(). However even with this approach the system expects you to finish with the broadcast very quickly. If does allow you to move work to another thread to avoid glitching the main thread. 
+  - Scheduling a job with JobScheduler.
+- Don't start activites from broadcast reeviers becuase the user experience is jarring; especially if there is more than one reeiver. Inastead, consider displaying a notification. 
+
+
+# Implicit Broadcast exceptions
+As par of the Android 8 background Execution limits, apps that target the API level 26 or higher can no longer register broadcast receivers for implicit broadcast in their manifest. However, several broadcasts are currently exempted from these limitations. Apps can continue to register listeners for the following broadcast no matter what API level the app target. 
+
+Note Even though these implicit broadcast still work in the background, you should avoid registering listeners for them. 
+
+ACTION_LOCKED_BOOT_COMPLETED, ACTION_BOOT_COMPLETED
+Exempted becuase thes broadcasts are only sent only once, at first boot, and many apps need to receive this broadcast to schedule jobs, alarms and so forth
+
+  ACTION_USER_INITIALIZE, android.intent.action.USER_ADDED, android.intent.action.USER_REMOVED
+  These broadcasts are protected by privileged permissions, so most normal apps cannot reeive them anyway
+  
+  android.intent.action.TIME_SET, ACTION_TIMEZONE_CHAGNED, ACTION_NEXT_ALARM_CLOCK_CHANGED
+  Clocks apps may need to reeive these broadcasts to updatea alarms when the time, timezone or alarms are changed. 
+  
