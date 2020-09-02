@@ -45,3 +45,44 @@ The existing work becomes a prerequisite to the new work. If the existing work b
 - APPEND_OR_REPLACE function similarly to APPEND, except that it is not dependent on prerequisite work status. If the existing work is CANCELLED or FAILED the new work still runs. 
 
 For Periodic work, you provide an ExistingPeriodicWorkPolicy, which support 2 options REPLACE and KEEP. These options function the same as their ExistingWorkPolicy ocunterparts. 
+
+
+## Chaining  Work
+WorkManager allows you to create and enqueu a chain of work that specifies multiple dependent tasks, and defines what order they should run in. This is particularly useful when you need to run several tasks in a particular order
+
+To create a chain of work, use WorkManager.beginWith(OneTimeWorkRequest) or WorkManager.beginWith(List<OneTimeWorkREquest>), which return an instance of WorkContinuation.
+  
+A WorkContinuation can then be used to add dependent OnTimeWorkRequests using WorkContinuation.then(OneTimeWorkREqueset or
+WorkContinuation.then(List<OneTimeWorkREquest>).
+  
+Every invocation of the WorkContainuation.then(...), reutnrs a new instance of WorkContinuation. If you add a List of OneTimeWorkREquets, these requests can potentially run in parallel. 
+```
+WorkManager.getInstance(myContext)
+  // Candidates ro run in parallel
+  .beginWith(listOf(filter1, filter2, filter3))
+  // Dependent work(only runs after all previous work in chain .
+  .then(compress)
+  .then(upload)
+  .enqueue()
+
+```
+
+## Input Mergers
+When using chains of OneTimeWorkRequests, the output of parent OnteTimeWorkREquests are passed in as inputs to the children. So in teh above example, the outputs of filter1, filter2 and filter3 would be passed in as inputs to the compress request.
+
+In order to manage inputs from multiple parent OneTimeWorkRequests, WorkManager uses InputMergers. There are two types of inputMergers provided by WorkManager
+- OverwritingInputMerger attemtps to add all keys from all inputs to the oupt. In case of conflicts, it overwrites the previously-set keys. 
+- ArrayCreatingInputMerger attempts to merge the inputs, creating arrays when necessary.
+
+```
+val compress: OneTimeWorkRequest = OneTimeWorkRequestBuilder<CompressWork>()
+  .setInputMerger(ArrayCreatingInputMerger::class)
+  .setConstratins(constraints)
+  .build()
+```
+
+## Chaining and Work Status
+There are a couple of things to keep in mind when creating chains of OneTimeWorkRequests
+- Dependent OneTimeWorkRequests are only unblocked when all its parent OneTimeWorkRequests are successfull. 
+- When any parent OneTimeWorkRequest fails, then all dependent OneTimeWorkRequests also fail
+- When any parent OneTimeWorkRequest is cancelled, all dependent OneTimeWorkRequests are also marked as CANCELLED.
