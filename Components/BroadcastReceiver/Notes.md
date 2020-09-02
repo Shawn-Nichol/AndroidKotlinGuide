@@ -69,8 +69,53 @@ registerReceiver(br, filter)
 ```
 Note to register for local broadcast, call LocalBroadcastManger.registerReceiver(BroadcastReceiver, IntentFilter)
 
-Context-registered recievers receive broadcasts as long as their registering context is valid. For an example, if you register withinan Activity context, you receive broadcasts as long as the activity is not destoryed. If you register with teh Applicationcontext, you receive broadcastas as longa s the app is running. 
 
-3) To stop receiving broadcasts, call unregisterReceiver(android.content.BroadcastReceiver). Be sure to unregister teh receiver when you no longer need it or the context is no longer valid. 
 
-Be mindful of where you register and unregister teh receiver, for example, if you register a receiver in onResume(), you should unregister it in onPause() to prevent registering it multiple times (if you don't want to receive broadcats when paused, and this can cut down on unnecessary system overhead). Do  not unregister in onSaveInstanceSTate(Bundle) becuase this isnt' called if the user moves back in the history stack
+## Effects on procces state. 
+The state of your broadcastReceiver (whether it is running or not) affects the state o fits containing process, which can in turn affect it liklihood of being killed by the system. For example, when a process executesa receiver (that is, currently running the code in its onReceive() methdod), it is considered to be a foregorund process. The system keeps the process running except under cases of extrreme memory pressure. 
+
+However, once your code returns from onReceive(), the BroadcastReciever i sno longer active. The receiver's host process becomes only as important as the other app components that are running in it. If that process hosts only a manifest-declared receiver (a common case for apps that the user has never or not recently interacted with), then upon returning from onReceive(), the system considers its process to be a low-priority process and may kill it to make resources available for other more important processes. 
+
+For this reason, you should not start long running background threads from a broadcast receiver. After onReceive(), the system can kill the process at any time oto reclaim memory , and in doing so, it terminates the spawned thread runningin the process. To avoid this, you should either call goAsync() if you want a little more time to process the broadcast in a backgrounthread) or schedule a JobService from the receiver using the JobScheduler,so the sytme knows that the process continues to perfrom active work.
+
+The following snippet shows a broadcastReceiver that uses goAsync() to flag that it needs more time to finish after onReceive(*) is complete. This is especially useful if the work yhou want to complete in your onReceive9) is long enough to cuase the UI thread to miss a frame(>16ms), making it better suited for a background thread.
+
+```
+private const val TAG = "MyBroadcastReceiver"
+
+class MyBroadcastReceiver : BroadcastReceiver() {
+  override fun onReceive(context: Context, intent: Intent) {
+    val pendingResult: PendingResult = goAsync()
+    val asynTask = Task(pendingResult, intent)
+    asyncTask.execut()
+    
+    private class Task(
+      private val pendingResult: PendingResult, 
+      private val intent: Intent
+      ) : AsyncTask<String, Int, String>() {
+        override fun do InBackground(vararg params: String?): String {
+          val sb = StringBuilder9)
+          sb.append("Action: ${intent.actin}\n")
+          sb.append("URI: ${intent.toUri(Intent.URI_INTENT_SHCEME)}/n")
+          return toString().also { log ->
+            Log.d(TAG, log)
+          }
+        }
+        
+        override fun onPostExecute(result: String?) {
+          super.onPostExecute(result)
+          // Must call finsih() so the BroadcastReceiver can by recycled.
+          pendingREsult.finish()
+        }
+      }
+  }
+}
+```
+
+## Sending a Broadcast
+Android provides three ways for apps to send broadcast
+- THe sendORderBroadcast(Intent, String) method sends broadcasts to one receiver at a time. AS each receiver executes in turn, it can propagate a result to the next receiverr ,or it can completely abort the broadcast so that it won't be passed to other receivers. The order receivers run in can be controlled iwth the android:priority attribute of the matching intent-filter; receivers with the sam priortiy will be run in an arbitrary order 
+- The sendBraodcast(intent) method sends broadcasts to all receivers in an undefined order. This is called a NOrmal Broadcast. This is more efficeint, but means that receivers cannot read results from other receivers, propagate data received from the broadcast or abort the broadcast
+- The local BrodcastManager.sendBroadcast method sends brodcasts to receiversthat are in the same app as the sender. If you don't need to send broadcasts across apps, use local broadcasts. The implementation is much more efficient(no interprocess communication needed) and you don't need to worry about any security issues related to other apps being able to receive or send your broadcasts. 
+
+How to send a braodcast by creating an Intent
