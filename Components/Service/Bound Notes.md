@@ -1,14 +1,15 @@
-A boudn service is the server in a client-server interface. It allows componets to bind to the service, send requets, receive reponses, and perform interprocess communication IPC. A bound service typically live only while it serves another application component and does not run in the background indefinitely. 
+# Bound service
+A boudn service is the server in a client-server interface. It allows componets to bind to the service, send requets, receive responses, and perform interprocess communication IPC. A bound service typically lives only while it serves another application component and does not run in the background indefinitely. 
 
 ## The basics
-A bound service is an implementation of the service class that allows other application to bind to it and interact with it. To provide binding for a service, you must implement the onBind() callbck method. This method returns an IBinder object that defines the prograrmming interface that clients can use to interact with the service. 
+A bound service is an implementation of the service class that allows other application to bind to it and interact with it. To provide binding for a service, you must implement the onBind() callback method. This method returns an IBinder object that defines the prograrmming interface that clients can use to interact with the service. 
 
 ## Building to a started service. 
-You can create a service that is both bound and started. You can call a service by calling startService(), which allows the service to run and you ca allow a client to bind to the service by calling bindService()
+You can create a service that is both bound and started. You can call a service by calling startService(), which allows the service to run and you can allow a client to bind to the service by calling bindService()
 
-A service that is started and boudn must be explicitly stopped by calling stopSelf() or stopService. .
+A service that is started and bound must be explicitly stopped by calling stopSelf() or stopService.
 
-Sometime is necessary to implement both onBind() and onStartCommand(). For example, a music player might find it useful to allow its service to run indefinitely and also provide binding. This way, an activity can start the service to play some music and the music cotinues to play even if the  user leaves the application. Then when the user returns to the application, the activity can bind to the service to regain control of  playback. 
+Sometimes its necessary to implement both onBind() and onStartCommand(). For example, a music player might find it useful to allow its service to run indefinitely and also provide binding. This way, an activity can start the service to play some music and the music cotinues to play even if the  user leaves the application. Then when the user returns to the application, the activity can bind to the service to regain control of playback. 
 
 A client binds to the service by calling bindService(). When it does, it must provide an implementation of ServiceConnection, which monitors the connection with the service The reutrn value of bindService() indicates whether the request service exists and whether the client is permitted access to it. When the Android system creates the connection between the client and service, it calls onServiceConnected() on the ServiceConnection. The onServiceConnected() method includes an IBinder argument, which the client then uses to communicate with the bound service. 
 
@@ -145,6 +146,7 @@ The binding is asynchronous, and bindSErvice() returns immediately without retur
 Onlyl activites,servicdes, and content providers can bind to a service you can't bind to a service from a broadcast receiver. 
 
 To bind to a service form your client, follow these steps;
+
 1) Implement ServiceConnection
 Your implementation must override two callback methods
 
@@ -157,7 +159,7 @@ The Android system calls this when the connection to the service is unexpectedly
 2) call bindService(), passing the ServiceConnection implementation. 
 Note: If the method returns false, your client does not have a valid connection ot the service  However your client should still call unBindService() otherwise your client will keep the service from shutting dow when it is idle
 
-3)When the system calls your onServiceConnected() callback method, you can begin making calls to the service, using the methods defined by the interface
+3) When the system calls your onServiceConnected() callback method, you can begin making calls to the service, using the methods defined by the interface
 
 4) To disconnect form the service, call unbindService()
 
