@@ -28,6 +28,7 @@ To declare a broadcast receiver in the manifest, perform the following steps
     <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
   <intent filterer>
 </receiver>
+```
 Intent filters specify the broadcast actions your receiver subscribes to. 
 
 2) Subclass BroadcastREceiver and implement onRecieve(Context, Intent). The broadcast receiver in the following example logs and displays the contents of the broadcast.
@@ -101,7 +102,23 @@ class MyBraodcastReceiver : BroadcastReceiver() {
     }
   }
 }
+
 ```
 
+## Sending Broadcasts
+Android provides three ways for apps to send broadcsts:
 
+- The sendOrderedBroadcast(intent,String) methods edns broadcasts to one receiver at a time.As each receiver executes in turn, it can propagate a result to the next receiver, or it can completely abort the broadcast so that it won't be passed to other receivers. The order receivers run in can be controlled with the android: priority attribute of the matching intent-filter; receivers with the same priority will be run in an arbitrary order
 
+- The sendBroadcast(Intent) method sends broadcasts to all receivers in an undefine dorder. This is called a normal Broadcast. This is mroe efficient, but means that receivers cannot read results from other receivers, propagate data received from the broadcast, or abort the broadcast
+
+- The LocalBroadcastManager.sendBroadcast meethod sends broadcasts to receivers that are in the sam app as the sender. If you don't need to send broadcasts across apps, use local broadcasts. The implementation is much more efficient (no interporcess communication needed) and you don't need to worry about any security issues related to other apps being abole to receive or send yoru broadcasts. 
+
+The following code snippet demonstartes how to send a broadcast by creating an intent can calling sendBraodcast(intent)
+```
+Intent().also { intent -> 
+  intent.setAction("com.example.broadcast.MY_NOTIFICATION") 
+  intent.putExttra("data", "notice me senpai!")
+  sendBroadcast(intent)
+```
+The braodcast message is wrapped in an Intent object. The intent's action string must provide the app's Java package name systnax and uniquely idenityf the broadcast event. You can attach additional information to the intent with putExtrar(Stirng, Bundle). You can alos limit a broadcast to a set of apps in the same organization by calling setPackage(String) on the intent. 
