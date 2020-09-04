@@ -122,3 +122,24 @@ Intent().also { intent ->
   sendBroadcast(intent)
 ```
 The braodcast message is wrapped in an Intent object. The intent's action string must provide the app's Java package name systnax and uniquely idenityf the broadcast event. You can attach additional information to the intent with putExtrar(Stirng, Bundle). You can alos limit a broadcast to a set of apps in the same organization by calling setPackage(String) on the intent. 
+
+
+## Restricting broadcasts with permissions
+Permissions allow you to restrict broadcast to the set of apps that hold certain permissions. You can enforce restrictions on either the sender or receiver of a broadcast.
+
+## Sending with permissions
+When you call sendBroadcast(Intent, String) or sendORderedBroadcast(Inent, String, BroadcastReceiver, Handler, int, String, Bundle), you cna specify a permission parameter. ONly receivers who have requested that permission with the tag in their manifest (and subsequently been granted the permission if it is dangerous) can receive the broadcast. For example, the following code sends a broadcast
+```
+sendBroadcast(Intent("com.example.NOTIFY"), Manifest.permission.SEND_SMS)
+```
+To receive the broadcast, the receing app must request the permission as shown below
+```
+<uses-permission android:name="android .permission.SEND_SMS"/>
+
+```
+You can specify either an existing system permission like SEND_SMS or define a custom permission with the <permission> element. For information on permissions and security in general, see the System Permissions. 
+  
+Note: Current permission  are registered when the app is installed. The app that defines the custom permission must be installed befoare the app that uses it. 
+
+### Receiving with permissions
+If you specify a permission parametere when registering a broadcast receiver (
