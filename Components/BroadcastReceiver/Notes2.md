@@ -142,4 +142,41 @@ You can specify either an existing system permission like SEND_SMS or define a c
 Note: Current permission  are registered when the app is installed. The app that defines the custom permission must be installed befoare the app that uses it. 
 
 ### Receiving with permissions
-If you specify a permission parametere when registering a broadcast receiver (
+If you specify a permissio nparameter when registering a broadcast receiver (either iwht registerReceiver(BroadcastReceiver, IntentFilter, Stinrg, Hanlder) or in <reciver> tag in you manifest), then only broadcasters who have requesteed the permission iwth the <uses-permission> tag in thier manifest (and subsequently been granted the permission if it is dangerous) can send an Intent to the receiver. 
+  
+Receiving app has a manifest-ceclared receiver 
+```
+<receiver android:name=".MyBroadastReceiver"
+  android:permission="android.permission.SEND_SMS">
+  
+  <intent-filter>
+    <action android:name='android.intent.action.AIRPLANE_MODE"/>
+  </intent-filter>
+</receiver>
+```
+
+receivign app has a context-registered receiver
+```
+val filter = IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+registerReceiver(receiver, filter, Manifest.permission.SEND_SMS, null)
+```
+
+Then to be able to send a broadcast to those receivers, the sending app must request the permission.
+```
+<uses-permission android:name="android.permission.SEND_SMS"/>
+```
+
+## Security considerations and best practices
+- if you don't need to send a broadcast to components outside of your app, then send and receive local broadcasts with the LocalBroadcastManager which is available in the Support Library. The LocalBroadcastManager is much more efficient (no interprocess communicatino needed) and allows you to avoid thingking about any security issues related to other apps being able to receive or send your broadcasts. local Broadcats can be used as general purpose pub/sub event bus in your app without any over heads of system wide broadcasts. 
+
+- If many apps have registered to receive the sam broadcast in their manifest, it can cause the system to launch a lot of apps, causing a substaintial impact on both device perfromance an user experince. To avoid this, prefer using context registration over manifest declaration. Sometimes, the Android system itself enforces the use of context-reegistered receivers. For example, the CONNECTIVITYY_ACTION broadcast is delivered only to context-registered receivers
+- Do not broadcast sensitvie information using a implicit itnent the information can be read by any app that registers to receive the broadcast. There are three ways to control who can receive your broadcast.
+  - You can specify a permission when sednign a broadcast
+  - Android 4.0 and higher, you can specify a package with setPackage(String) when sending a broadcast. The system restirticts the broadcast to the set of apps that match the package. 
+  - You can limit yourself toonly local broadcasts with LocalBroadcastManager. 
+  
+  The namespace of broadcast actions is global. Make sure that action names and other strings are written in a namespace you won, or else you may inadvertenly conflict with other apps. 
+  - Because a receiver's onReceive(Context, Intent) method runs on the main thread, it should execute and return quickly. If you need to perfrom long running owrk, be careful about spawningin threads or starting background services becuase the system can kill the entire process after onReceive() returns. For more information, see Effecton process state to perfrom long running work, we recommend:
+    - Calling goAsync() in your receiver's onReceive() method and passing the BroadcastReceiver. PendingResult to a background thread. This keeps the broadcast active after returning from onRecieve(). However, even with this approach the sytem expects you to finish with the broadcast very quickly. It does allow you to move work to another thread to avoid glitching the main thread. 
+    - Scheduling a job with the JobScheduler
+  - Do not start activites from broadcast receivers becuase the user experince i sjarring; especially if there is more than one receiver. Instead consider displaying a notification. 
