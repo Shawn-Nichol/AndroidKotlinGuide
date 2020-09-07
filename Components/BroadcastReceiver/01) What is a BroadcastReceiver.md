@@ -5,6 +5,8 @@ Apps can register to receive specific broadcast when a broadcast is sent, the sy
 
 For a complete list of system broadcast actions, see BROADCAST_ACTIONS.TXT in the Android SKD. Each broadacast has a constant filed associated with it. For example, the value of the constant ACTION_AIRPLANE_MODE_CHANGED  is android.intent.action.AIRPLANE_MODE
 
+## Restrictions
+Permission all you to restrict  broadcast to the sest of apps that hold certain permissions. You can enforce restrictions on either the sender or the receiver of a broadcast. 
 
 ## Security considerations and best practices.
 - If you don't need to send a broadcast to components outside of your app, then send and receive local broadcasts with the LocalBroadcastManager wich is available in the Support Library. THe LocalBroadcastManager is much more efficient (no interprocess communication needed) and allows you to avoid thinking about any security issues related to other apps being able to receive or send your broadcasts. Local Broadcasts can be used as a general purpose pub/sub event bus in your app without any over heads of system wide broadcasts. 
