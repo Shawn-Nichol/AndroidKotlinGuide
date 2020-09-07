@@ -87,3 +87,28 @@ class MyBraodcastReceiver : BroadcastReceiver() {
   }
 }
 ```
+
+
+# Receiving with Permissions
+If you specify a permission paramater when registering a broadcast receiver (either with registerReceiver(BroadcastReciever, IntentFilter, String, Handler) or in tag in your manifest), then nonly broadcasters who have requested the permission with the tag in tehir manifest can send an Intent to the receiver. 
+
+Receving app has a manifest-declared receiver
+```
+<receiver android:name=".MyBroadcastReceiver"
+    android:permission="android.permission.SEND_SMS">
+    
+    <intent-filter>
+      <action android:name="android.intent.action.AIRPLANE_MODE"/>
+    </intent-filter>
+</reciever>
+```
+
+The receiving app has a context registered receiver. 
+```
+val filter = IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED)
+registerReciever(reciever, filter, Manfest.permission.SENS_SMS, null)
+```
+Then to be able to send a broadcast to those recievers, the sending app must request the permission. 
+```
+<uses-permission android:name="android.permission.SEND_SMS"/>
+```
