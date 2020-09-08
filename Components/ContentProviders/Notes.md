@@ -91,3 +91,130 @@ Note: The Uri and Uri.Builder classes contain convenience methods for constructi
 
 
 ## Retrieveing data form the provider
+This section describes how to retrieve data from a provider, using the User Dictionary Proider as an example.
+
+To retrieve data from a provider, follow these basic steps.
+1) request the read access permission for the provider
+2) Define the code that sends a query to the provider
+
+### Requesting read access permission
+To retrieve data from a provider, your application needs "read access permission" for the provider. You can't request this permission at run-time; instead, you have to specify that you need this permission in your manifest, using the <uses-permission> element and the exact permission name defined by the provider. When you specify this element in your manifest, you are in effect "requesting" this permission for your application. When users install your application, they implicitly grant this request
+  
+To find the exact name of the read access permission for th provider you're using, as well as the names for other access permissions used by the provider, lookk in the providers documentatioin.
+  
+The role of permissions in accessing providers is described in more detail in the section Content provider permissions
+  
+The User Dictionary Provider defines the permissino and.permission.READ_USER_DICTIONARY in its manifest file, aos an application that wants to read from the provider must request this permission.
+  
+### Constructin the query
+The next step in retrieving data from a provider is to construct a query. This first snippet deines some variables for accessing the User Dicitonary Provider. 
+```
+// A "progjection" defines the columns that will be returned for each ro
+private val mProjection: Array<String> = arrayOf(
+  UserDictionary.Words._ID // Contact class constant for the _ID column name
+  UserDicitionary.Words.WORD, // Contact class constant for the word column name
+  UserDicitonary.Words.LOCALE // Contract class constant for the locale column name
+)
+
+// Defines a string to constain the section clause
+private var selectionClause: String? = null
+
+// Declares an array to contain selection arguments
+private lateinit var selectionArgs: Array<String>
+```
+
+The next snippt shows how to use Content Resolver.query(), using the User Dictionary Provider as an example. A provider client query is similar to an SQL query, and it contains a set of columns to return, a set of selections criteria, and a sort order. 
+
+The set of columns that the query should return is called a projection(the variable mProjection).
+
+The expression that specifies the rows to retrieve is split into a selcection clause and selection arguments. The selection clause is combination of locial and Boolean expressions, column names, and values (the variable mSelectionClause). If you specify the replaeable parameter ? instead of a value, the query method retrieves the value from the selection arguments array (the variable mSelectionArgs).
+
+In the next snippet, if the user doesn't enter a word, the selection clase is set to null, and the query returns all the words in the provider. If the users enters a word, the selection clause is set to UserDictionary.Words.WORD + " = ?"
+and the first element of selection argumetns array is set to the word the user enters. 
+```
+/*
+ *  This delcares string array to contain the selection arguments.
+ */
+ private lateinit var selectionArgs: Array<String>
+ 
+ // Gets a word from the UI
+ searchString = searchWord.text.toString()
+ 
+ // Remember to insert code here to check for invalid or malicious input
+ 
+ // IF the wor is the empty string, gets everything
+ selectionArgs = searchString?.takeIf {it.isNotEmpty() }?.let {
+  selectionClause = "${UserDictionary.Words.WORD} = ?"
+  arrayOf(it)
+ } ?: run {
+  selectionClause = null
+  emptyArray<String>()
+  
+  // Does a query against the table and returns a Cursor object
+  mCursort = contentResolver.query {
+    UserDictionary.Words.CONTENT_URI,  // The content URI of the words table
+    projection,                       // The columns to return for each row
+    selectionClause,                  // Either null, or the word the user entered
+    selectionArgs,                    // Either empty, or the string the user entered
+    sortOrder                         // The sort order for the returned rows
+)
+
+// some providers return null if an error occurs, others throw an exception 
+when(mCursor?.count) {
+  null -> {
+    /*
+     * Insert code here to hanlde the error. Be sure not use the cursor!
+     * You may want to call android.util.Log.e() to log this error.
+     */
+  } 0 -> {
+    /*
+     * Insert code here to notify the user that the serach was unsuccessful. This ins't rnecessarily an error. 
+     * You may want to offer the user the option to insert a new row, or re-type the search term.
+     */
+  } else {
+    // Insert code here to do something with the results
+    
+  }
+}
+```
+
+This query is analogous to the SQL staement
+```
+SELECT _ID, word, locale FROM words WHERE word = <userinput> ORDER BY  word ASC;
+```
+
+in this SQL statement, the actual column names are used instead of contract class constrants
+
+### Protecting against malicious input
+If the data managed by the content provider is an SQL database, including external untrusted data into raw SQL statemetns can lead to sQL injection
+Consider this selection clause
+
+```
+// Constructs a selection clause by concatenating the user's input to the column name
+var selectionClause = "var = $mUserInput"
+```
+
+If you do this, you're allowing the user to concatenate malicious SQl onto your SQL statement. Fore example, the user could enter "nothing: DROP TABLE;" for mUserInput, which would result in the selection clause var = nothing; DROP TABLE * ; ". Since the selectin clasue is treated a s an SQL stement, this might cause the provider to erase all of the tables in teh underlying SQLite database (unless the provider is et up to catch SQL injection attempts).
+
+To avoid this problem, use a selection clause that uses? as a replaceable parametere and a separate array of selection arguments. When you do this the user input is bound directly to the query rather than being interpreted as part of an SQL statement. Becuase it's not eated as SQL, the user input can't inject malicious  SQL. Instead of using concatenation to include the user input, use this selection clause;
+
+```
+// constructs a selcetino cluase with a replacelable paramaeter
+var selectionClause = "var = ?"
+```
+
+setup The array of selection arguemtns
+```
+// Defines a mutable list to contain the selectionarguments
+var selectionArgs: MutabeList<String> = mutableListOf()
+```
+
+Put a value in the selection arguemtns array
+```
+selectionArgs += userInput
+```
+
+A selection clause that uses ? as a replaceable parametere and a array of selection argumetns arraay are preferred way to specify a selection, even if the provider isn't based on an SQLdatabase
+
+### Dsiplaying query results
+The contentResolver.quer() client method
