@@ -217,4 +217,130 @@ selectionArgs += userInput
 A selection clause that uses ? as a replaceable parametere and a array of selection argumetns arraay are preferred way to specify a selection, even if the provider isn't based on an SQLdatabase
 
 ### Dsiplaying query results
-The contentResolver.quer() client method
+The contentResolver.quer() client method always returns a Cursor containing the columns specified by the query's projection for the rows that match the quer's selection criteria. ACursor object provides random read access to the rows and columns it contains. Using Cursor methods, you can iterate over the rows in the results, determine the data type of each column, get the data out of a column, and examine other properties of the results. Some Cursor implementations autotmatically update the object when the providers data changes, or trigger methods in an observer object when the Cursor changes, or both. 
+
+Note: Provider may restrict access to columns based on the nature of the object making the query. Fore example, the Contacts Provider restricts access for some columns to sync adapters, so it won't return them to an activity or service.
+
+If no rows match the selection criteria, the provider returns a Cursor object for which Cursor.getCount() is 0 ( an empty cursor)
+
+If an internal error occurs, the results of the query depend on the particular provider. It may choose to return null, or it may throw an Exception. 
+
+Since a Cursor is a list of rows a good way to display the contents of a Cursor is to link it ti a ListView via a SimpleCursorAdapter
+
+The following snippet continues the code from the previous snippet. It creataes a SimpleCursorAdapter obejct containing the Cursor retrieved by the query, and sets this object to be the adapter for a ListView.
+
+```
+// Defines a list of columns to retrieve from the Cursor and load into an ouput ro
+val wordListColumns : Array<String> = arrayOf(
+  UserDictionary.Words.WORD, // Contactclass constant continaing the word column name
+  UserDictionary.Words.LOCALE // Contract class constant continaing the locale column name
+)
+
+// Defines a list of View IDs will reeive the Cursor columns for eacch row
+val wordListITems = intArrayOf(R.id.dictWord, R.id.locale)
+
+// Creates a new Simple Cursor Adapter
+cursorAdapter = SimpleCursorAdapter (
+  applicationContet, // The applications Context boject
+  R.layout.word.listrow, // A layout in XML for one row in the ListView
+  mCursor, // The result from thw query
+  wordListColumns, // A string array of columnnames in the cursor
+  wordListITems, // An Integer array of view IDs in the row layout
+  0, // Flags(usually non nare needed)
+)
+
+// Sets the adapter for the ListView
+worList.setADapter(cursorAdapter)
+```
+Note: To back a ListView with a Cursor, the cursor must contain a column named ID  becuase of this, the query shown previously retrieves the ID column for the ListView doesn't display it. This restrictionalso explains why most prpviders have ID column for each of their tables. 
+
+### Getting data from query results
+Rather than simply displaying query results, you can use them for other tasks. For example, you can retrieve spellings from the user dictionary and then look them up in other providers. To do this, you iterate over the rows in teh Cursor:
+```
+/*
+ * Only executes if the cursor is valid. The UserDictionary Profider returns null if an internal error occurs. Other providers may throw an Exception instead of returning null. 
+ */
+ mCursor?.apply {
+  // Determine the column indeex of the column named "word"
+  val index: Int = getColumnIndex(UserDictionary.Words.WORD)
+  
+  /*
+   * Moves to the next row in the cursor. Before the first movement in the cursor, the "row pointer" is -1 and if you try to retrieve data at that poistion you 
+   * will get an exception.
+   while(moveToNext()) {
+    // Gets the value form the column.
+    newWord = getString(index)
+    
+    // Insert code here to process the retrieved word
+    ...
+    
+    // end of while loop
+    
+   }
+ }
+```
+
+Cusor implementations contain several "get" methods for rretrieving different types of data from the object. For example, the previous snippet uses getString(). They also have a getType() method that returns a vlaue indicating the data types of the column.
+
+## Content provider permissions
+A provider's application can specify permissions that other applications must have in order to access the providers data. These permissions ensure that the user knows what data an application willl try to access. Based on the provider's requiremnts, other applications request the permissions they need in order to access the provider. .End users see the requested permissions when they install the application. 
+
+If a provider's application doesn't specify any permissions, then other application shave no access to the provider's dataa. However, components in teh provider's application always have full read and wirte access, regardless of the specified permissions. 
+
+As noted previously, the User Dictionary PRovider requires the android.permission.READ_USER_DICTIONARY permission to retrieve data from it. The provider has the separate android.permission.WRITE_USER_DICTIONARY permissionf for inserting, updating or deleting data. 
+
+To get the permissions needed to access a provider, an application requests them with a <uses-pemrission> element in tits manifest file. When the Android Package Manager installs the applications, a user must approve all of the permissions the application requests. If the user approves allof th tem, Package Manager continues the installation; if the user doesn't approve them, Package Manager aborts the installation
+  
+  The following <uses-permission> element requests read access o the User Dictionary Provider.
+  ```
+  uses-permission android:name="android.permission.READ_USER_DITIONARY">
+  ```
+  
+  The impact of permissions on provider accessis explained in more detail in the Security and permissions guide. 
+  
+  ## Inserting, updating and deleting data
+  
+  In the same way that you retrieve data from a provider, you also use the interaction between a provider client and the provider's ContentProvider to modify data. You call a method of ContentResolver with arguments that are passed to the corresponding method of ContentProvider. The provider and proder client automatically handle security and inter-process communication. 
+  
+Inserting Data 
+In the same way that you retrieve data from a provider, you also use the interaction betweeen a provider client and the provider's ContentProvider to modify data. You call a method of ContentResolver with arguments that are passed to the corresponding methods of ContentProvider. The provider and provider client automatically handle security and inter-process communication
+
+### Inserting data
+To insert datat in to a provider, you call the ContentResolver.insert() method. This method inserts a new row into the provider and returns a contentURI rof that row. This snippet shows how to insert a new word into the User Ditioinary Proivder. 
+
+```
+// Defines a new URI object that receives the result of the insertioin 
+lateinit var newUri: Uri
+
+...
+
+// Defines an object to contain the new values oto insert
+val newValues = ContentValues().apply {
+  /*
+   *Sets the values of each column and inserts the word. The arguments to the "put" 
+   * method are column name" and value"
+   */
+   put(UserDictionary.Words.APP_id, "example.user")
+   put(UserDictionary.Words.LCOAL, "en_US")
+   put(UserDictionary.Words.WORD, "insert")
+   put(UserDictionary.Words.FREQUENCY, "100")
+}
+
+new Uri = contentResolver.insert(
+  UserDictionary.Words.CONTENT_URI, // The user dictionary content URI
+  newValues // The values to insert
+```
+The data for the new row goes into a single ContentValues object, which is similar in form to a one-row cursor. The columns in this boject don't need to have the same data type, and if you don't want to specify a value at all, you can set a column to null using ContentValues.putNull().
+
+The snippet doesn't add the ID column, becuase this column i s mainttained automatically. The provider assigns a unique value of ID to every row that is added. Providers usually use this value as the tables primary key. 
+
+The content URI returnred in newUri identifies the newly-added row, with the following format
+```
+content://user-dictionary/words/<id_value>
+```
+
+The<id_value> is the contents of ID for the new row. Most providers can detect this form of content URI automatically and then permor the requeste operation on the particular row. 
+
+To get the value of ID from the returned Uri, call ContentURis.parseID().
+
+### Updating data
