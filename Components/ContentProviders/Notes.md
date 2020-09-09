@@ -344,3 +344,158 @@ The<id_value> is the contents of ID for the new row. Most providers can detect t
 To get the value of ID from the returned Uri, call ContentURis.parseID().
 
 ### Updating data
+To updatea row, you can use a ContentValues object with the updated values just as you do with an insertion, and selection criteria just as you dow with a query. The client method you use is ContentResolver.update(). You only need to add values to the ContentValues object for columns you're updating. If you want to clear the contents of a column, set the value to null. 
+
+The following snippet changes all the rows whose locale has the language"en" to a have a local of null. The return value is the number of rows that were updated
+
+```
+// Defines an object to contain the updated values
+val updateValues = ContentValues().apply {
+  /*
+   *sets the updated value  and updates the selected words.
+   */
+   putNull(UserDictinoary.Words.LOCALE)
+}
+
+// Defines selection criteria for the rows you want to update
+val selectionClause: String = UserDictionary.Words.LOCALE + "LIKE ?" 
+val selectionArgs: Array<String> = arrayOf("en_%")
+
+// Defines a variable to contain the number of updated rows
+var rowsUPadted: Int = 0
+
+...
+
+rowsUpdated = contentResolver.update(
+  UserDictionary.Words.CONTENT_URI, // The user ditionary content URI
+  updateValues, // The columns to update
+  selectionClause, // the column to select on
+  selectArgs // the value to compare.
+)
+```
+
+You shoould also sanitize user input when you call ContentResoler.update(). To learn more about this, read the section Protecting against malicious input. 
+
+## Deleting data
+Deleting rows is similar to retrieving row data: you specify selection criteria for the rows you want to delete and the client method returns the number of deleted rows. 
+
+```
+// // Defines selection criteria for the rows you want to delete
+val selectionClause = "${UserDictionary.Words.lOCAL} LIKE ?"
+val selectionArgs: Array<String> = arrayOf("user")
+
+// Defines a variable to contain the number of rows delted
+var rowsDeleted: Int = 0
+
+...
+
+// Deletes the words that match the selection criteria
+rowsDeleted = contentResolver.delete(
+  UserDitionary.Words.CONTNET_URI, // The user dictionary content URI
+  selectionClause, // The column to select on
+  selectionArgs // the value to compare to
+)  
+```
+ You should also sanitize user input when ou call ContentResolver.delete().
+ 
+ ## Proivder Data Types
+ Content providers can offer many differen t data types. The User Dictionary Provider offers only text, but providders can also offer the following formats
+ - String
+ - Integer
+ - long
+ - floating piont
+ - double
+ 
+ Another data type that prviders often use is Binary LargeObject(BLOB) implemented as a 64KB bytes array. You can see the available data types by looking at the Cursor class "get"methods. 
+ 
+ The data type for each column in a provider is usually listed in its documentation. The datat types for the User Dictionary Provider are listed in the referrence documentation. The data types for the User Dictionary PRovider are listed in the reference documentation for its contaract class UserDictionary.Words(contract classes are described in the section Contract Classes). You can also determine the data type by calling Cursor.getType()
+ 
+ Providers alos maintain MIME data type information for each content URI they define. you can use the MIME type information to find out if your application can hadnle data that the provider offers, or to choose a type of handling based on the MIME type. You usually need the MIME type when you areworking with a provider that contains complex data structures or files. For example, the ContactsContract.Data table in the Contacts Provider uses MIME types to label the type of contact data stored in each row. To get the MIME type corresponding to a content URI, call ContentResolver.getType(). The section MIME type reference descibes the syntax of both standard and custom MIME types
+ 
+ ## Alternative forms of providers access
+ Three alternative forms of provider accesss are importanat in application development.
+ - Batch access: You can create a batch of access calls with mehods in the ContentProviderOperation class, and then apply them with ContentResolver.applyBatch()
+ - AsynChronous queries: you should do queries ina separate thread. One way todo this is to use a CursorLoader object. Theexamples in th eLoaders guid demonstrate how to do this. 
+ - Data access via intents: Although you can't send an intent directly to a prvoider, you can send an intent to the provider's application, which is usually the best-equipped to modify the providers data. 
+ 
+ Batch access and modification via intents are desribed in the following sections
+ 
+ ### Batch access
+ Batch access to a provider is useful for inserting a large number of rows, or for inserting rows in multiple tables in the same method call, or in general for performing a set of operations across process boundaries as a transcation(an atomicoperationo)
+ 
+ To access a provider in "batch mode", you create an array of ContentPRoviderOperation objects and then dispatch them to a content Provider with ContentResolver. applyBatch(). You pass the content provider's authority to this method, rather than a particular content URI. THis allows each ContentProicderOperation object in the aray to work against a different table. A call to ContentResolver.applyBatch() returns an array of results
+ 
+ The desctiption of the ContactsContract.RqwContacts contract class includes a code snippet that demonstrates batch insertion. The Contract Manager sample application contains an example of batch access in its contact adder.java source file
+ 
+ ### Data access via intents
+ Intents can provide indirect access to a content prvider. you allow the user to access data in a provider even if your application coesn't have access permissions,either by getting a result intent back from an application that has permissions, or by activiating an application that has permissions an d letting the user do work in it. 
+ 
+ ### Getting acces s with temporary permissions. 
+ 
+ You can access data in a content provider, even if you don't have the proper access permissions, by sending an intent to an application that does have the permissions and receiving back a result intent containing "URI" permissions. These are permissions for a specific content URI that last until the activity that receives them is finsihed. The application that has permanent permissions grants temporary permissions by setting a flag in the reuslt intent: 
+ 
+ - Read permission: FLAG_GRANT_READ_URI_PERMISSION
+ - Write permission: FLAG_GRANT_WRITE_URI_PERMISSION
+ 
+Note: These flags don't give general read or write access to the provider whose authority is contained in the content URI. THe access is only for th  URI itself
+ 
+When you send content URIs to another appp, include at least one of these flags. The flags provide the folllowing capabilities to any app that receives an intent and targets Android 11 
+
+A provider defines URI permissions for content URIs in its manifest, using the anrdorid:grantUriPErmission attribute of the <provider> element, as well as the <grant-uri-permission> child element of the <probicer> elemetn. THe URI permissions mechanism is explaned in more detail in the PErmissions overview guide.
+  
+For exlample, you can retrieve data for a contact in the Ctonacts Provider, even if you don't have the READ_CONTACTS permission.  You might want to do this in an application that sends e-greetings to a contact on their birthday. Instead of requesting Read_contacts, which gives you access to all of the user's contacts and all of their information, you prefer to let the user control which contacts are used by your application. To do this, you use the following process;
+
+1) Your application sends an intent containging the action ACTION_PICK and the "contacts" MIME type CONTENT_ITEM_TYPE, using the method startActivityForREsult().
+2)Becuase this intent matches the intent filter for the People app's selections' activity, the activity ewill come to the foreground. 
+3) In the selectionactivity, the user selects a contact to update. When this happens, the selection activity calls setResult(resultcode, intent) to set up an intent to give back to your application. The intent contains the content URI of the contact the user selected, and the "extras" flags FLAG_GRANT_READ_URI_PPERMISSION. These flags grant URI permission to your app to read data for the contact pointed to by the contnet URI> THe selection activity then calls finish() to retun control to your application
+4)Your activity retuns to the foreground, and the system calls your activity's onActivityResult() method. This method receives the result intent created by the selection activity in the Peopel app
+5) With the content URI from the result intent, you can read the contact's data from the Contacts Provider, even though you didn't' request permananet read access permission to the provider in tyour manifest. You can then get the contact's birthday infromation or their email addresss and then send the e-greeting. 
+
+### Using another application 
+Asimple way to allwo the user to modify data to which you don't have access permission is to activate an application that has permissions and let the user do the work there. 
+
+For example, the Calendar application accepts an ACTION_INSERT intent, which allows ou to activate the application's insert UI. YOu can pass "extras" data in the intent, which athe application uses to pre-populate the UI. Becuase recurring events have a complex syntax, the preferred way of inserting events in to the Calendar provider is to acitvate the Calendar app with an ACTION_ISNERT and then let the user insert the even there. 
+
+### Displaying data using a helper app
+If your application does have access permissions, you still may want to use an intent to dipsplay data in another application. For example, the Calendar application accepts an ACTION_VIEW intent, which displays a particular date or event. THis allows you to display calendar information without having to create your own UI. To learn more about this feature, see the Calendar PRovider guid. 
+
+The application to which you send th eintent doesn't have to be the application associated with the provider. Fore example, you can retieve a contact from the Contact Provider, then send an ACTION_VIEW intent contianing the content URI for the contat's image to an image viewer. 
+
+## contract classes
+A contract class defines constants that help applications work with the content URIs, column names, intent actions, and other features of a conetent prvoider. COntact classes are not included automatically with a provider; the provider developer has define them and then make them available to other developers. Many of the providers included with the Android platform have corresponding contaract classes in teh package android.provider. 
+
+For example, the User Dictioanry PRovider has a contaract class UserDictionary containgin content URI and column name constants. The content URI for the "words" table is dfined in the constant UserDictionary.Words.CONTENT_URI. The UserDictionary.Words class also contains column name constants, which are used in teh example snippets in this guide. For example a query projection can be defined as.
+
+```
+val progjection : Array<Stirng> =  arrayOf (
+  UserDictionary.Words._ID
+  UserDictionary.Words.WORD
+  UserDictionary.Words.LOCALE
+  )
+```
+Anotehr contract class is ConstactsContract for the Contacts Provider. The reference documentation for this class includes example code snippets. One of its subclasses, ContactContracts.Intetns. Insert, is a contract class that contains constants for intents and intent data. 
+
+
+## MIME TYpe reference
+Content providers can return standard MIME media types. or custom MIME type strings, or both
+MIME types have the fomrat
+```
+type/subtype
+````
+
+For example, the well-known MIME type text/html has the tex type and the html subtype. If the prvoider returns this type of a URI, it means taht a query using that URI will return text containing HTML tags.
+
+Custom MIME type strings, also called "bendor-specific"MIME types have more complex type and subtype values. 
+```
+vnd.android.cursor.dir
+```
+for multipel rows, 
+```
+vnd.android.cursor.item
+```
+for a single row. 
+
+The subtype is provider -specific. The android built-in providers usually have a simple subtype. For example, when the contacts applicationcreates a row for a telephone number, it sets the following MIME type in the row
+```
+vnd.android.cursor.item/phone_v2
+```
