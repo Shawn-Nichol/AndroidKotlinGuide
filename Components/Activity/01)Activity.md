@@ -44,3 +44,9 @@ AndroidManifest.xml
     </activity>
 </application
 ```
+
+## Four States
+- Active: If an activity is in the foreground of the screen. This is usually the activity that the user is currently interacting with. 
+- Visible: If an activity has lost focus but is still presneted to the user, it is visible. It is possible if a new non-full-sized or tranparent activity has focus on top of your activity, another activity has higher position in multi-window mode, or the activity itself is not focusable in current windowing mode. Such activity is completely alive. 
+- Hidden or stopped: If an activity is completely obscured by another activity, It still retains all state and member information, however, it is no longer visible to the user. 
+- The system can drop the activity from memory by either asking it to finish, or simply killing the process, making it destroyed. When it is displayed again to the user, it must be completely restarted and restored to its previous state. 
