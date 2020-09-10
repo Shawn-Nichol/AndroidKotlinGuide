@@ -28,9 +28,9 @@ override fun onStart() {
 next the activity will enter the onResume()
 
 ### onResume
-The app comes to the foreground, and then the system invokes onResume(). The state in which the app interacts with the user. The app stays in this state until something happens to take focus away from the app. Such as event might be fore instance, receiving a phone call, the uer's navigationg to another activity or the device screen's runging off. 
+The app comes to the foreground, and then the system invokes onResume(). The state in which the app interacts with the user. The app stays in this state until something happens to take focus away from the app. Such as event might be fore instance, receiving a phone call, the user navigationg to another activity or the device screen's turning off. 
 
-When an intteruptive even occurs the activity enters the paused state, and the system invokes the onPause() callback. If the system returns to the onResumed state fomr the puased state, the system once again calls onResume() method. For this reason , you should implement onResume() to initialize componets that you release during onPause(), and perfrom any other initializations that must occur each time the activity enter the resume state. 
+When an interuptive event occurs the activity enters the paused state, and the system invokes the onPause() callback. If the system returns to the onResumed state from the paused state, the system once again calls onResume() method. For this reason , you should implement onResume() to initialize componets that you released during onPause(), and perfrom any other initializations that must occur each time the activity enters the resume state. 
 ```
 override fun onResume() {
 
@@ -38,17 +38,17 @@ override fun onResume() {
 ```
 
 ### onPause
-When the activity leaves the foreground it will enter the onPause() state. Use onPause() to adjust operations that hsould not continue (or should continue in moderation) while the Activity is in the Paused state, and that you expect to resume shortly. 
+When the activity leaves the foreground it will enter the onPause() state. Use onPause() to adjust operations that sould not continue (or should continue in moderation) while the Activity is in the Paused state, and that you expect to resume shortly. 
 
-onPause can also be used to realease system resources, handles to sensors or any resource that may affect battery life while your activity is paused and the user does not need them. 
+onPause can also be used to release system resources, handles to sensors or any resource that may affect battery life while your activity is paused and the user does not need them. 
 
 ```
 override fun onPause()
 ```
 
-onPause execution is very brief, and does not provider enougth time to perfrom save operartions. You should use onStop(). 
+onPause execution is very brief, and does not provider enough time to perfrom save operartions. You should use onStop(). 
 
-Completion of the onPause() method does not mean that the activity leaves the pause state. Rather, the activity remains in this state untileither the activity resumes or beomces completely invisble to the user. If the activity resumes, the system once agian invokes the onResume() callback. 
+Completion of the onPause() method does not mean that the activity leaves the pause state. Rather, the activity remains in this state until either the activity resumes or beomces completely invisble to the user. If the activity resumes, the system once agian invokes the onResume() callback. 
 
 ### onStop
 When your activity is no longer visible to the user, it has entered the stopped state, and thes system invokes the onstop() callback. The app should release or adjust resources that are not needed while the app is not visible to the user. FOr example, your app might pause animations or switch from fine-grained to coarse-grained location updates. Using onStop() instead of onPuase() ensures that UI--related work continues, 
@@ -97,7 +97,7 @@ override fun onSaveInstnaceState(outState: Bundle?) {
 ```
 onSavedInstanceState isn't called when the user explicitly closes the acctivit or in other when finish() is called. 
 
-### restore activty UI stae
+### restore activty UI state
 When an activity is recreated after being destroyed, you can recover the saved data instance state from the ubnlde that the system passes to your activity. Both in onCreate and onReseotreInstanceState() callbacks. Because onCreate method is calle dwhether the system is creating a new instance of your activity or recreating a previous one, you must check whether the state bundle is null before you atttempt to read it. If it is null, then the system is creatinga new instance of the activity, instead of restoring a previous one that was destoryed. 
 ```
 override fun onCreate(savedInstanceState: Bundle?) {
