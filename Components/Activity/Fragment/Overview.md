@@ -53,3 +53,84 @@ To provide a layout for a fragment, you must implement the onCreateView() callba
 Note: If your fragment is a subclass of ListFragment, the default implementations retursn a ListView from onCreateView() so you don't need to implement it. 
 
 To return a layout from onCreateView(), you can inflate it from a layout resource defined in XML. To help lyou do so, onCreateView(), you can inflate it from a layout resource defined in XML. To help you do so, onCreateView provides a LayoutINfalter object. 
+```
+class MyFragment : Fragment() {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    saveInstanceStateBundle?
+  ): View {
+    // Inflate the layout for this fragment
+    return inflater.inflate(R.layout.my_layout, container, false)
+  }
+}
+```
+The container parameter passed to onCreateView() is the parent ViewGroup(forom the Activity's layout) in which your fragment layout is inserted. The savedInstanceState parametere is a Bundle that provides data about the previous instance fo the fragment, if the fragment is being resumed(restoring state is discussed more in the section about Handling the Fragment Lifeccycle)
+
+The inflate() method takes three arguments
+- The resource ID of the layout
+- The ViewGroup to be the parent  of the inflated layout. Passing the container is important in order for the sytem to apply layout parameters to the root view of the inflaled layout, specified by the parent view  in which it's going. 
+- A boolean indicating whether the inflated layout should be attached to the ViewGroup (the second parameter) during inflation. In this case, this is false becuase the system is already inserting the inflated layout into the container passing true would create a redundant view group in the final layout.
+
+## Adding a fragment to an Activity
+Usually, a fragment continbutes a portion of the UI to the host activity, which is embedded as a part of the activit's overall view hierarchy. There are two ways you can add a fragment to the activity layout. 
+
+- Declare the fragment inside the activity's layout file. 
+In this case, you can specify layout properties for the fragment as if it were a vieew. For example, here's the layout file for an activity with two fragmetns:
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <fragment android:name="com.example.news.ArticleListFragment"
+            android:id="@+id/list"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    <fragment android:name="com.example.news.ArticleReaderFragment"
+            android:id="@+id/viewer"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+</LinearLayout>
+```
+The android:name attribute in the <fragment> specifies the Gragment class to instantiate in the layout. 
+  
+When the system creates this activity layout, it instantiates each fragment specified in the layout and calls the onCreateView() method for each one, to retrieve each fragment's layout. The system inserts the View returned bythe fragment directly in place of the <fragment> element. 
+  
+Note Each fragment requires a unique identifier that the system can use to restore the fragment if the activity is restarted ( and which you can use to capture the fragment ot perform transactions, such as remove it). there are two ways to provide an ID for a fragment
+- android:id attribute with a unique ID.
+- android:tage attribute witha unique string. 
+
+### programically add the fragmento an existing ViewGroup
+At any time while your actiivty is running, you can add fragments to your activity layout. You simply need to specify a ViewGroup in which to place the fragment. 
+
+To make fragment  transactions in your activity (such as add, remoe or replace a fragment), you must use APIs from FragmentTransaction. You can get an innstance of FragmentTransaction from your FragmentAcitvity like this. 
+```
+val fragmentManager = supportFragmentManager
+val fragmentTransaction = fragmentManager.beginTransaction()
+```
+
+You can then add a fragment using the add() mehtdo, specifying the fragment to add and the view in which to insert it
+```
+val fragment = MyFragment()
+fragmentTransaction.add(R.id.fragment_container, fragment)
+fragmentTrasaction.commit()
+```
+
+The firs arguemtn passed to add() is the ViewGroup in which the fragment should be placed, specified by resource ID, and the second parametere is the fragment to add. Once you've made your changes with FragmentTrasactions, you must call commit() for the changes to take effect. 
+
+## Managing Framgnets
+To Manage the fragments in your activity, you need to use FragmentManager. To get it, call getSupportFragmentManager() from your activity. 
+
+Some things that you can do with FragmentManager include
+- Getfragments that exist in the activty, with findFragmentById()(for fragments that provide a UI in the activity layout) or findFragmentByTAg() for fragments that do or don't provide a UI.
+- Pop fragments off the back stack, with popBackStack() (simulating a Back command by the user).
+- Register a listener for changes to the back stack, with addOnBackStackChagnedListener().
+
+For more information about these methods an others, refere to the FragmentManager class documentatoin. 
+
+As demonstartated in teh previous section, you can also use FragmentManager to open a FragmentTransaction, which allows you to perfrom transactions, such as add and remove fragments. 
+
+## Performing Fragment trasactions. 
