@@ -1,4 +1,8 @@
 # Create an Options Menu
+There are three steps in order to create an options menu. 
+1) Create a menu xml file.
+2) Load the option menu with onCreateOptionMenu()
+3) Handle option menu clicks()
 
 ## 1) XML Menu file
 Create an XML menu file in the res/menu dirctory. There are three elements avaialbe
