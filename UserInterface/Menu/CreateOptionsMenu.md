@@ -45,7 +45,7 @@ An optional, ivisible container for <item> elements. It allows ou to categorize 
 
 ```
 
-# 2) Load options menu
+## 2) Load options menu
 To specify the options menu for an activity override onCreaeteOptionsMenu() fragments provide their own onCreateOptionsMenu() callback. In this in this mehtod you can inflate your resource  designed in XML into the menu provider. If an Activity and Fragment declare items for the options menu, they are combined in the UI. The activity's items appear first, followed by those of each fragemnt in order in which each fragment is added to the activity. 
 
 
@@ -82,7 +82,7 @@ override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 }
 ```
 
-## Update menu items
+#### Update menu items
 After the system calls onCreateOptionsMenu(), it retains an instance of the Menu you populated and will not call onCreateOptionsMenu() again. If you want to modify the menu you during the activity lifecycle, you can do so in teh onPrpareOptionsMenu(). This method passes the Menu object as it currently exists so you can modify it, such as add, remove or disable items. 
 
 onPrepareOptionsMenu
@@ -96,35 +96,30 @@ override fun onPrepareOptionsMenu(menu: Menu) {
   menu.add(null, "menu_item_new, NONE, New Menu)
 }
 ```
+## 3) Handle click events
+When the user selects an item from the option menu (including action items in the app bar), the system calls your activity's onOptionItemSelected(). This method passes the MenuItem selected. You can identify the item by calling getItemId(), which returns the unique ID for the menu item, you can match the ID against known menu items to perform the appropriate action. 
 
+```
+override fun onOptionItemSelected(item: MenuItem): Boolean {
+    return when (item.itemId) {
+        R.id.item_1 -> {
+            methodOne()
+            true
+        }
+        R.id.item_2 -> {
+            methodTwo()
+            true
+        }
+        else -> super.onItemSelected(item)
+    }
+}
+```
+When you successfully handle a menu item, return true. If you don't handle the menu item, call the superclass implementation of onOptionsItemSelected(), the default implementations returns false. 
 
-
-
-
-
-
-
-
-
-
-
-
-# Handle click events
-When the user selects an item from the options menu(including actino items in the app bar) the system calls your activity's onOptionsItemSelected() method. THis method passes the MenuItem selected. you can identify the item by calling getItemId(), which returns the unique ID for the menu item(Defined by the Android: id attrbiute in the menu resource or with an integer given to the add emethod. You can match this ID against known menu items to perform the appropriate action for example. 
-
-
-example
-
-When you successfully hanlde a menu item, return true. If you dont' handle the menu item, you should call teh superclass implementation of onOptionsItemSelected() the default implementations returns false. 
-
-If your activity includes fragments, the system first call onoptionsItmeSelected() for the activity then for each fragment unitl one returns treu or all fragments have been called. 
+If you are using an activity and a fragment, the system first callonOptionItemSelected() for the activity then for each frragment until one returns true or all graments have been called. 
 
 Note: Android 3.0 lets you call onClick in the menu XML file to call a method. 
 
 Tip: If your application contains multiple activites and some of them provide the same options menu, consider creating an activity that implements nothing except the onCreateOptionsMenu() and opOptionsItemSelected(). then extend this class for each activit that should share the same optionis menu. This way, you can manage one set of code for hadling menu actions and each descendant class inherits the menu behaviors. If you want to aadd menu items to one of the desendant activites, override onCreateOptioinsMneu() in that activity. Call super.onCreateOptionsMneu(menu) so the orignal menu items are created, then add new menu items with menu.add(). You can also override the super class's behavior for individual menu items. 
 
 
-# Changing menu Items at runtime
-After the system calls onCreateOPtioinsMen(), it retains an instance of the Menu you populate and will not call onCreateOptioinsMen() again unless the menu is invalidated for some reason. However, you should use onCreateOPtionsMenu() only to create the initial menu state and not make changes during the activity lifecycle. 
-
-If you want to modify the options menu based on events that occur during the activity lifecycle, you can do so in the onPrepareOPtionsMen(). This method passes you the Menu object as it currently exists so you can modify it, such as add, remove or disable items( Fragments also provide an onPrepareOPtioinsMenu()
