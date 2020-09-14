@@ -47,3 +47,56 @@ ViewModelProvider resturns an existing ViewModel if one exists, or it creates a 
 ```
 val viewModel = ViewModelProvider(this).get(MyViewModel::class.java)
 ```
+
+# ViewModelFactory
+A ViewModel factory is used to create ViewModel and pass in data. 
+
+## 1) Create a ViewModelFactory
+Create a ViewModelFacotory class, and pass in the starting data. 
+```
+class MyFragmentViewModelFacotry(private val number: Int) : ViewModelFacotry) {
+  override fun<T : ViewModel?> create(modelClass: Class<T>): T {
+    if(modelClass.isAssignableFrom(MyFragmentViewModel::class.java)) {
+      return MyFragmentViewModel(number) as T
+    }
+    throw IllegalArgumentException("Unknown ViewModel class")
+  } 
+}
+```
+
+## 2) Create a ViewModel class
+Create a new ViewModel class, all data and methods you want to be called from the fragment need to public
+
+onClear()
+is called when the ViewModel is no longer needed and will be destroyed. 
+```
+class ViewModel(savedCounter: Int) : ViewModel() {
+  var counter = savedCounter
+  
+  // runs on startup
+  init {
+    
+  }
+  
+  override fun onClear() {
+    super.onClear()
+  }
+  
+  fun counterUp() {
+    counter++
+  }
+  
+  fun counterDown() {
+    counter--
+  }
+  
+}
+```
+
+## 3) Start ViewModel
+Create a ViewModelFactory object and passing in the desired arguments. Add The ViewModelFactory object as an argument for the ViewModelProvider. 
+```
+val viewModelFactory: MyViewModelFactory = MyViewModelFactory(8)
+val viewModel =  ViewModelProvider(this, viewModelFactory).get(MyViewModel::class.java)
+```
+```
