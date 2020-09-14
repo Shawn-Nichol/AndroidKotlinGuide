@@ -199,3 +199,107 @@ class MyFragment : fragment() {
   }
 }
 ```
+The observe() method passes teh LifecycleOwner associated with the fragment's view as the first arguemtn. doing sodenotes that this observer is bound to the Lifecycle object associated with the owner
+- If the Lifecycle object is not ina active state, then the observer isn't called even if the value changes.  
+- After the Lifecycle object is destroyed, the observer is automatically removed. 
+
+The fact that LiveData objects are lifecycle-aware means that you can share them between multiple activities, fragments, and services. To keep the example simple, you ca implement the LiveData class as a Singleton as follows. 
+
+```
+class StockLiveData(symbol: String) : LiveData<BigDcimal>() {
+  private val stockManager: StockManager = StockManager(symbol)
+  
+  private val listener = { price: BigDecimal -> 
+    value = price
+  }
+  
+  override fun onActive() {
+    stockManager.requestPriceUpdates(listener)
+  }
+  
+  override fun onInactive() {
+    stockManager.removeUpdates(listener)
+  }
+  
+  companion object {
+    private lateinit var sInstnce: StockLiveData
+    
+    @Mainthread
+    fun get(symbol: String): StockLiveData {
+      sInstance = if(::sInstanace.isInitialized) sInstance else StockLiveData(symbol)
+      return sInstnace
+    }
+  }
+}
+
+class MyFragment : Fragment() {
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    StockLiveData.get(symbol).observe(viewLifecycleOwner, Observer<BigDecimal>
+    // Update the UI
+    })
+  }
+}
+```
+Multiple fragments and activities can observe teh MyPRiceListener instance. LiveData only connets to the systmeservice if one or more of them is visible and active. 
+
+
+## Transform LiveData
+You may want to make changes to the value stored in a LiveData object beofre dispatching it to the observers, or you may need to return a different LiveData instnace based on the value of another one. The Lifecycle package provides the Transformation class which includes helpp methods that support these scenarios
+
+Transformation.map()
+Applies a function on the value stored in the LiveData Object, and propagates the result downstream. 
+
+```
+userLiveData: LiveData<User> = UserLiveData()
+val UserName: LiveData<string> = Transformations.map(userLiveData) {
+  user -> "${user.name} ${user.lastname}"
+}
+```
+Transformation.switchmap()
+Similar to map(), applies a function to the value stored in the LiveData object and unwraps and dispatches the resul downstream. The function passed to switchMap() must return a LiveData object, as illustrated by the following examp.e. 
+
+```
+private fun getUser(id: Sttring): LiveData<User> {
+  ...
+}
+  val userId: LiveData<String> = ...
+  val user = Transformation.switchMap(userId) { id-> getUser(id) }
+```
+
+You can use transformation methods to carry information across the observer's lifecycle. The transformations aren't calculated unless an observer is watching the return LiveDAta object. Because the transforamtions are calculated lazily, lifecycle-related behavior is implicitly passed down without reuiring additional explicit calls oor dpeendencies. If you think you need a Lifecycle object inside a Veiw ogject, transormation is proably a better solultion. For example ssume that you havea  UI component that accepts an addres and returnts the postal code for that address. For example assume that you have a UI componet that accepts an address and returns the postal code for that address.
+```
+class MyViewModel(private val repository: PostalCodeRepository) : ViewModel() {
+  private fun getPostalCode(address: String) : LiveData<String> {
+    return respository.getPostCode(address)
+  }
+}
+```
+
+The UI component then needs to unregister from teh previous LiveData object an register to the new innstance each time it calls getPostalCode(). In addition, if the UI component is recreated, it triggers another call to the repository.getPostCode() method instead of using the previous call's result. 
+
+```
+class MyViewModel(private val respository: PostalCodeRepository) : ViewModel {
+  private val addressInput = MutableLiveData<String>()
+  val postalCode: LiveData<String> = Transofrmations.switchMap(addressInput) {
+    address -> respository.getPostCode(address) }
+    
+    private fun setInput(address: String) {
+      addressInput.value = address
+    }
+}
+```
+
+In this case, the postalCode field is defined as a transformation of the addressInput. As long as your app has an active observer associated with the postalCode field, the field's value is recalculated and retrieved whenever addressInput changes. 
+
+This mechanism allows lower levels of the app to create LiveData objects that are laily calculated on demant. A ViewModel object can easily obtain references to LiveData objects an dthen define transformation rules on top of them. 
+
+## Create new tranformatoins
+There are a dozen different specific transformation that may be useful in your app, buthey aren't provided by default. To implement your own transofrmation you can use the MecdiatorLiveData class, which listens to other LiveData objects and processes events emitted by them. Mediaor LiveData correctly propagates its state to the source LiveDAta object. To learn more about this pattern, see the reference documentation of the Transformations class. 
+
+## merge multiple LiveData sources
+MediatorLiveData is a subclass of LiveData that allows you to merge multiple LiveData sources. Observers of MediatorLiveData are then triggered whever any of the orignial LiveData source object change
+
+For example, if you have a liveDaat object in you UI that can be updated fro a locacl database or a network, then you can cadd the following scource o the MediatorLivedata object
+ - A liveData object associated with the data stored in the database. 
+ - A liveData object associated with the data accessed fomr the network. 
