@@ -130,18 +130,14 @@ class StockLiveData(symbol: String) : LiveData<BigDecimal>() {
   }
 }
 ```
+The implementation of the pice listener in this example includes the following methods.
+- The onActive() method is called when the LiveData object has an active observer. This means you need to start observing the stock price updates from this method. 
 
+- The onInactive() method is called when the LiveData objec doesn't have any active observers. Since no observers are listening, there is no reason to stay connected to the StockManager service.
 
+- The setValue(T) method updates the value of the LiveData instance and notifies any active observers about the change.
 
-# HERE
-The implementation of the price listener inthis example include the folowing important methods
-- The onActive(0 methods is called when the LiveData object has an active  observer. This means you need to start observing the stock price updates from this method. 
-
-- The onInactive(0 method is calle dhwen the LiveData object doesn't have any active observers. Since no observers are listening, there is o reason to stay connected to the StockManager service
-
-- The setValue(T) method updates teh value of the LiveData instance and notifies any active observers about the change
-
-YOu can use the StockLiveData class as follows
+You can use the Stock LiveData class as follows.
 ```
 public class MyFragment : Fragment() {
   override fun onViewCreated(view:View, savedInstanceState: Bundle?) {
@@ -154,12 +150,11 @@ public class MyFragment : Fragment() {
   }
 }
 ```
+The observe() method pass the LifecycleOwner associated with the fragment's view as the first argument. Doing so denote that this observer is bound to the lifecycle object associated with the owner, meaning.
+- If the Lifecycle object is not in an active state, then the observer isn't called even if the value changes. 
+- After the Lifecycle object is destroyed, the observer is automatically removed. 
 
-The observe() method passes teh LifecycleOwner associated with the fragment's viwe as the first argument. Doing so denotes that this observer is bound to the lifecycle object associated with the owner, meaning
-- If the lifecycle object is not in an active state, then the observer isn't called even if the value changes. 
-- After the Lifecycle object is destoyed, the observer is automatically removed. 
-
-The fact that LiveData objects are lifcycle-aware means that you can share them between multiple activites, fragments, and services. To keep the eample simple, you can implement the LiveData clasa as  a singleton
+The fact that LiveData objects are Lifecycle-aware means that you can share them between multiple activites, fragments, and services. To keep the example simple, you can implemen the LiveData class as a a signleton.
 
 ```
 classs stockLiveData(symbol: String) : LiveData<BigDecimal>() {
@@ -198,12 +193,11 @@ class MyFragment : fragment() {
   }
 }
 ```
-The observe() method passes teh LifecycleOwner associated with the fragment's view as the first arguemtn. doing sodenotes that this observer is bound to the Lifecycle object associated with the owner
-- If the Lifecycle object is not ina active state, then the observer isn't called even if the value changes.  
-- After the Lifecycle object is destroyed, the observer is automatically removed. 
+The observe() method passes the LifecycleOwner associated with the fragment's view as the first arguemnt. Doing so denotes that this observer is bound to the Lifecycle object associated with the owner. 
+- If the Lifecycle object is not in a active state, then the observer isn't called even if the value changes. 
+- After the Lifecycle boject is destoyed, the observer is automatically removed. 
 
-The fact that LiveData objects are lifecycle-aware means that you can share them between multiple activities, fragments, and services. To keep the example simple, you ca implement the LiveData class as a Singleton as follows. 
-
+The fact that LiveData objects are lifecycle-aware means that you can share them between multiple activites, fragments and servies. To keep the example simple, you can implement the LiveData class as a Singleto as follows. 
 ```
 class StockLiveData(symbol: String) : LiveData<BigDcimal>() {
   private val stockManager: StockManager = StockManager(symbol)
@@ -244,7 +238,7 @@ Multiple fragments and activities can observe teh MyPRiceListener instance. Live
 
 
 ## Transform LiveData
-You may want to make changes to the value stored in a LiveData object beofre dispatching it to the observers, or you may need to return a different LiveData instnace based on the value of another one. The Lifecycle package provides the Transformation class which includes helpp methods that support these scenarios
+You may want to makes changes to the value stored in a LiveData object before dispatching it to the observers, or you may need to return a different LiveData instance based on the value of another one. The Lifecycle package provides the Transiformation class which includes help methos that support these scenarios. 
 
 Transformation.map()
 Applies a function on the value stored in the LiveData Object, and propagates the result downstream. 
@@ -256,7 +250,7 @@ val UserName: LiveData<string> = Transformations.map(userLiveData) {
 }
 ```
 Transformation.switchmap()
-Similar to map(), applies a function to the value stored in the LiveData object and unwraps and dispatches the resul downstream. The function passed to switchMap() must return a LiveData object, as illustrated by the following examp.e. 
+Similar to map(), applies a function to the value stored in the LiveData object and unwraps and dispatches the result downstream. The function passed to switchMap() must return a LiveData object, as illustrated by the following examp.e. 
 
 ```
 private fun getUser(id: Sttring): LiveData<User> {
