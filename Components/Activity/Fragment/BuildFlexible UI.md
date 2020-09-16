@@ -50,3 +50,10 @@ class MainActivity : FragmentActivity() {
 ```
 
 Becuase the fragment has been added to the FrameLayout contianer at runtime instead of defining it in the activitys layout with a <fragment element-the activity can remove the fragment and replace it with a different one. 
+
+# Replace One Fragment with another
+The procedure to replace a fragment is imilar to adding one, but require the replace() method instead of add().
+
+Keep in mind that when you perfrom fragment transactions, such as replace or remove one, its often appropriate to allow the user to navigate backward and "undo" the change. To allow the user to navigate backward throught the gragment transactions, you must call addToBackStack() before you commit the FragmentTransaction. 
+
+Note: When you remove or replace a fragment and add the transaction ot the back stack, the fragment that is removed is stopped (not destoryed). If the user navigates back to restore the fragment, it restarts. If you do not add the transaction to the back stack, then the fragment i destoyed when removed or replaced. 
