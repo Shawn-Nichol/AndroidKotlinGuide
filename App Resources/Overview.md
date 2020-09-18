@@ -1,0 +1,2 @@
+# App Resources overview. 
+Resources are the additional files and static content that your code uses, such as bitmaps, layout definitions, users interface strings, animation instructions and more. You should always externalize app resources such as images ans string from your code, so that you can maintain them independently. You should also provide alternative resources for specific device configurations, by grouping them in specially-named resource directories. At runtime, Android uses. 
