@@ -113,6 +113,7 @@ The  <uses-feature elements allows you to declare hardware and software features
 Each successive platform version often adds new APIs not available in the previos version. To indicate the mimimum version with which your app is compatible, your manifest must include the <uses-sdk> tag and its minSdkVersion attribute. 
 
 However, beware that attributes in the <uses-skd> eleemnt are overridden by corresponding properties in teh build.gradle file. So if you're using android Studio, you must specify the minSdkVersion and targetSdkVersion values there. 
+  
 ```
 android {
   defaultConfig {
@@ -124,7 +125,72 @@ android {
     // Specifies the API level used to test the app.
     targetSdkVersion 28
 
-    ...
   }
 }
 ```
+
+## File conventions
+### Elements
+Only the <manifest> and <application> elements are requrired. They each must occur only once. Most of the other elements can occur zero or more times. However, some of them ust be present to make the manifest file useful. All o fthe values are set through attributes, not as character data within an element. 
+  
+Elements at the same level are  generally not ordered. For example, the <activity>, <provider>, and <service> elemetns can be placed in any order. There are two key exceptions to this rule. 
+  
+- <activity-alias> element must follow the <activity> for which it is an alias. 
+- <application> element must be the last element inside the <manifest> element. 
+  
+### Attributes
+Techincally, all attributes are optional. However, many attributes must be specified so that an element can accomplish its purpose. For truly optional attributes, the reference documentation indicates the default values. 
+
+Except for some attributes of the root, <manifest> element, all attribute names begin with an android: prefix. For example, andoidr: always RetainTaskState. Becuase the prefix is univeral, the documentatioin generally omits it when referring to attributes by name. 
+  
+## Multiple values. 
+If more than one value can be specified, the element is almost always repeated, rather than multiple values being listed within a single element. For example, an intent filter can list several actions: 
+```
+<intnet-filter ...> 
+  <action android:name="android.intent.action.EDIT"/>
+  <action android:name="android.intent.action.INSERT"/>
+  <action android: name="android.intent.action.DELETE"/>
+</intent-filter>
+```
+
+### Resource values
+Some attributes have values that are displayed to users, such as the title for an activity or your app icon. The value for these attributes might differ based on the user's language or other device configurations (such as to provide a different icon size based on the device's pixel density), so the values should be set from a a resource or theme, instead of hard-coded into the manifest file. The actual value can then change based on alternative resources that you provide for different device configurations. 
+
+Resources are expressed as values with the following format
+```
+"@[package:]type/name
+```
+
+You can omit the package name if the resource is provided by your app including if it is provided by a library dependency, becuase library resources are merged into yours). The only other valid package naem is android, when you want to use a reosurce from the Android framework. 
+
+The type is a type of resource, such as string or drawable, and the name is the name that identifies the specific resource. 
+```
+<activity android:icon="@drawable/smallPic"...>
+```
+
+<action> adds an action to an intent filter
+<activity> Declares an activity component.
+<activity-alias> Declares an alias for an activity
+<category> Adds a category name to an intent filter.
+<compatible-screens> Specifies each screen configurations with which the application is compatible. 
+  <data> Adds a data specification to an intent filter. 
+<grant-uri-permission> Specifies the subsests of app data that the parent content provider has permission to access. 
+<instrumentation> Declares an Instrumentation class that enables you to monitor an application's interaction with the system.
+<intent-filter> Specifies the types of intents that an activity,service or broadcast receiver can respond to. 
+<manifest> The root eleemtn of the AndroidManifest.xml
+<meta-data> A name-value pair for an item of additional, arbitrary data that can be supplied ot the parent component.
+<path-permission> Defines the path and required permissions for a specific subset of data within a content provider. 
+<permission> Declares a security permission that can be used to limit access to specific components or features of this or other applications. 
+<permission-group> Declares a name for a logical grouping of related permissions
+<permission-tree> Declares the base name for a tree of permissions
+<provider> Declares a content provider component
+<receiver> Declares a broadcast receiver component
+<service> Declares a service component.
+<supports-gl-texture> Declares a service component.
+<supports-screens> Declares the screen sizes your app supports and enables screen compatibility mode for screens larger than what your app supports. 
+<uses-configuration> Indicates specific input features the application requires
+<uses-feature> declares a single hardware or software feature that is used by the application. 
+<uses-library> Specifies a shared library that the application must be linked against.
+<uses_permission> Specifies a system permission that the user must grant in order for the app to operate correctly. 
+<Uses-permission-sdk-23> Specifies that an app wants a particular permission, but only if the app is installed on a device running Android 6.0 (API level 23)
+<uses-sdk> Lets you express an application's compatibility with one or more versioin sof the Android platform, by means of an API level integer. 
