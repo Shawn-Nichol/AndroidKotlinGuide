@@ -6,7 +6,7 @@ Note the system require a unique identifier that the system can use to restore t
 - android:tag
 
 ## Declare in a layout
-You can specify the layout provoerties for the fragment as if it were a view. The <fragment> element specifies the fragment to instantiate in the layout. When the system creates the activity layout, it instantiates each fragment specified in the layout and calls the onCreateView() method for each one, to retrieve each fragment's layout. The system inserts the View returned by the fragment directly in place of the fragment element. 
+You can specify the layout properties for the fragment as if it were a view. The <fragment> element specifies the fragment to instantiate in the layout. When the system creates the activity layout, it instantiates each fragment specified in the layout and calls the onCreateView() method for each one, to retrieve each fragment's layout. The system inserts the View returned by the fragment directly in place of the fragment element. 
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -30,32 +30,29 @@ You can specify the layout provoerties for the fragment as if it were a view. Th
 ## Progragmically
 At any time while your activity is running, you can add fragments to your activity layout. You simply need to specify a ViewGroup in which to place the fragment. 
 
-To make fragment transaction in your activity (add, remove, replace), you must use APIs from FragmentTransaction.
+### 1) create a fragmetn object
+```
+val myFragment = MyFragment()
+```
 
+### 2) FragmentManager
+get the FragmentManager. 
 ```
 val fragmentManager = supportFragmentManager
-val fragmentTransaction = fragmentManager.beginTransaction()
 ```
 
-You can add a fragment using add(), the first argument is the container the fragment will go in, the second argument is the fragment. You must call commit to complete the transaction. 
+### 3) Create a FragmentTransaction
+You can add, replace, or remove a fragment, The first argument in a fragment transaction is the container for the fragment, the second argument is the fragment. You must call commit to complete the transaction. 
 ```
 val fragment = MyFragment()
 fragmentTransaction.add(R.id.fragment_containter, fragment)
 fragmentTransaction.commit()
 ```
 
+### 4) Adding User Interface
+To provide a layout for a fragment, you must implement the onCreateView() callback methods, which the Android system calls when it's time for the fragment to draw its layout. The implementation of this method must return a View that is the root of your fragment's layout. 
 
-## Managing Fragments
-TO manage the fragment in your activity, you need to use FragmentManager. To get FragmentManager, call getSupportFragmentManager() from your activity. 
-- GetFragments that exist in the activity, whith findFragmentById()  of findFragmentByTag().
-- Pop Fragments off the back stack, with popBackStack().
-- Register a listener for changes to the back stack, with addOnBackStackChagnedListener()
-
-
-## Adding User Interface
-A fragment is usually used as part of an activity's user interface contributes its own layout to the activity. To provide a lyoaut for a fragment, you must implement the onCreateView() callback methods, which the Android system calls when it's time for the fragment to draw its layout. The implementation of this method must return a View that is the root of your fragment's layout. 
-
-To return a layout from onCreateView(), you can inflate it from a layout resource defined in XML. The container parameter passed to onCreateView() is teh parent ViewGroup(from the Activity layout) in which your fragment layout is inserted.
+To return a layout from onCreateView(), you can inflate it from a layout resource defined in XML. The container parameter passed to onCreateView() is the parent ViewGroup(from the Activity layout) in which your fragment layout is inserted.
 
 The inflate method takes three arguments
 - The resource ID
@@ -75,7 +72,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-## Adding items to the App Bar
+## Menu Items
 Your fragments can constribute menu items to the activity's OptionsMenu by implementing onCreateOptionsMenu(). In order for this method to recieve calls, however, you must call setHasOptionsMenu(). 
 
 Any items that you then add to the options Menu from the fragment are appended to the existing menu items. The fragment also receives callbacks to onOptionsItemSelected() when a menu itme is selected. You can registera  view in your fragment layout to provide a context menu by calling registerForContextMenu(). When the user opens the menu, the fragment receives a call to onCreateContextMenu(). When the use rselectes an item, the fragment receives a call to onContextItemSelected(). 
@@ -83,14 +80,3 @@ Any items that you then add to the options Menu from the fragment are appended t
 Note: The activity is first to recieve the respective callback when the user selects a menu item. if the activity's  implementation of the on-item-selected callback does not handle the selected item, then the event is passed to the fragment's callback. This is true for the options menu and context menu. 
 
 
-## Communicating with the activity
-Although a fragment is an independent object it is directly tied to the activity that called it. 
-
-Specifically, the fragment can access the FragmentActivity instance with getActivity() and easily perfrom tasks such as find view in the activity layout.
-```
-val listView: View? = activity?.findViewById(R.id.list)
-```
-Likewise, your activity can call methods in the fragment by acquiring a reference to the Fragment from FragmentManager, using findFragmentById() or findFragmentByTAg().
-```
-val fragment = supportFragmentManager.findFragmentByID(R.id.my_fragmnet) as MyFragment
-```
