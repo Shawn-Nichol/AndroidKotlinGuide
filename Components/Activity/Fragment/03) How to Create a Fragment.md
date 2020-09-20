@@ -28,7 +28,7 @@ You can specify the layout properties for the fragment as if it were a view. The
 ```
 
 ## Progragmically
-At any time while your activity is running, you can add fragments to your activity layout. You simply need to specify a ViewGroup in which to place the fragment. 
+There are four steps to adding a fragment to the activity. 
 
 ### 1) create a fragmetn object
 ```
