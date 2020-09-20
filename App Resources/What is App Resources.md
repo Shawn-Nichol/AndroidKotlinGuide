@@ -1,8 +1,6 @@
-# App Resources overview. 
+# App Resources. 
 Resources are the additional files and static content that your code uses, such as bitmaps, layout definitions, user interface strings, animation instructions, and more. 
-YOu should always externalize app resources such as images and string sfrom your code, so that you can maintina them independently. You should also provide alternative resources for specific device configurations, by grouping them in specially named resources directories. At runtime, Andoid uses the appropriate resource based on the current configuration. For exmample, you might want to pfovide a different UI layout depending on the screen size or different strings depending on the language setting. 
-
-Once you externalize your app resources, you can access them using resource IDs that are generated in your projects's R classs. This document shows you how to group your resources in your Android progject and provide alternative resources for specific device configurations, and then access them from your app code or other xml files. 
+You should always externalize app resources such as images and string sfrom your code, so that you can maintain them independently. You should also provide alternative resources for specific device configurations, by grouping them in specially named resources directories. At runtime, Andoid uses the appropriate resource based on the current configuration. For exmample, you might want to provide a different UI layout depending on the screen size or different strings depending on the language. Once you externalize your app resources, you can access them using resource IDs that are generated in your projects's R class. T
 
 ## Grouping resource types. 
 You should place each type of resource in a specific subdirectory of your progject's res/ directory 
@@ -36,7 +34,7 @@ Becuase each resource is defined with its own XML element, you can name the file
 xml/ Arbitrary XML files that can be read at runtime by calling Resources.getXML(). Various XML configuration files must be saved here, such as a searchable configuration. 
 font/ Font files with extensions such as .ttf, otf, or .ttc, or XML files that include a <font-family> element. 
   
-The resouces that you save in the subdirectories defined arre "default resources. That is, these ressources define the default design and content for your app. However, different types of Android-powered devices might call for different types of resources. For example, if a device has a larger than normal screen, then you should provide different layout resources that take advantage of different string resources that translate the text in your user interafce. To provide these different resources for different device configurations, you need to provide alternative resources, in addition to your default resources. 
+The resouces that you save in the subdirectories defined are "default resources. That is, these ressources define the default design and content for your app. However, different types of Android-powered devices might call for different types of resources. For example, if a device has a larger than normal screen, then you should provide different layout resources that take advantage of different string resources that translate the text in your user interafce. To provide these different resources for different device configurations, you need to provide alternative resources, in addition to your default resources. 
 
 ## Providing alternative resources
 Almost every app should provide alternative resoources to support specific device configurations. For instance, you should include alternative drawable resources for different screen densities and alternative string resources for different languages. At runtime, Android detects the current device configuration and loads the appropriate resources for your app. 
@@ -81,9 +79,9 @@ Note: Not all resources offer a mechanism by which you can create an alias to an
 For exmaple, imagine ou have an app icon, icon.png and need unique version of it for a didferent locales. However, two locales, English-Canadain and French-Canadian, need to use the same version. You might assume that you need to copy the same image inot the reource direcotry for both English and French, but it's not true. Instead, you can save the image that's used for both as icon_ca.png and put it in the default res/drawable/ directory. Then create an icon.xml file in res/drawable-en-rCA/ and res/drawable-fr-rCA/ that refers to the icon_ca.png resource using the <bitmap> element. This allows you to store just one veresion of the PNG file and two small XML files that point to it
   
 ## Accessing your app resources
-Once you provide a resource in your application, you can apply it by referencing its resource ID. All resource iDs are defined in you progject's R class, which the aapt tool automatically generates. 
+Once you provide a resource in your application, you can apply it by referencing its resource ID. All resource iDs are defined in you progject's R class, which the apt tool automatically generates. 
 
-When your application is compiled, aapt generates the R class, which contains resource IDs for all the resources in your res/ directory. For each type of resource, there is an R subclass, and for each resource of that type, there is  static integer. This integer is the resource ID that you can use to retrieve your resource. 
+When your application is compiled, apt generates the R class, which contains resource IDs for all the resources in your res/ directory. For each type of resource, there is an R subclass, and for each resource of that type, there is  static integer. This integer is the resource ID that you can use to retrieve your resource. 
 
 Although the R class is where resource IDs are specified you should never need to look there to discover a resource ID. A resource ID is always composed of:
 - The resource type: each resource is grouped into a "type", such as string, drawable, and layout.
@@ -97,7 +95,7 @@ There are two ways you can access a resource
 You can use a resource in code by passing the resource ID as a method parameter. For example, you can set an ImageView to use the res/drawable/myimage.png resource using setImageResource(). You can also retrieve indivdiual resources uing methods in Resources, which you can get an instance of with getReources().
 
 ## Accesssing resources from XML
-You can define values for some XML aatributes ane elements using a reference to an existing resource. You will often do this wen creating layout files, to supply string and images for your widgets. 
+You can define values for some XML aatributes and elements using a reference to an existing resource. You will often do this when creating layout files, to supply string and images for your widgets. 
 
 
   
