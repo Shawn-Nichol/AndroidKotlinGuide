@@ -47,3 +47,15 @@ To drive the UI, our data model needs tohold the following data elements.
 
 We use a UserProvileViewModel, based on the ViewModel architecture component, to keep this information. 
 
+A ViewModel object provides the data for a specific UI component, such as a fragment or activity, and contains data-hanlding business logic to  communicate with the  model. For example, the ViewModel can call other components to load the data, and it can foward user requests to modify the data. The ViewModel doesn't know about UI components, so it isn't affected by confiuration changes, such as recreating an activity whenrotating the device. 
+
+We've now defined the following files  
+- user_provile.xml.: The UI layout definitino for the screen 
+- UserProfileFragmetn: The UI controller that displays the data. 
+- UserProfileViewMOdel: The class that prepares the data for viewing in the UserProfileFragment and reacts to user interactions. 
+
+The followoing code snippets show the starting contents for these files. The layout files is moitted for simplicity. 
+
+Now that we have these code modules, how do we connect them? After all, when the user filed is set in the UserProfileViewModel class, we need a way to ifnorm the UI. 
+
+To obtain the user, our VIewModel needs to access the fragment arguments. We can either pass them from the fragment or better, useing the savedState module we can make our ViewModel read the arguemtn directly. 
