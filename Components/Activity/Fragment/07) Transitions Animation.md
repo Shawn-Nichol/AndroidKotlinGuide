@@ -1,5 +1,7 @@
-# Transistions
-You can use transistions to define enter and exit effects. These transisions can be defined in XML resource files.
+# Transitions
+There are two steps in creating a fragment transition
+
+## 1) You can use transistions to define enter and exit effects. Define these transistion in an XML file.
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <transitionManager xmlns:android="http://schemas.android.com/apk/res/android">
@@ -8,6 +10,7 @@ You can use transistions to define enter and exit effects. These transisions can
 </transitionManager>
 ```
 
+## 2) Transition added to Transaction
 Once the transitions is defined apply them by calling setEnterTransition() on the entering fragment setExitTransition() on the exiting fragment, passing in your inflated transition resources by their resource ID. 
 
 ```
