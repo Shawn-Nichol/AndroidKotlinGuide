@@ -51,3 +51,9 @@ Lets cretae a suspend function that allows us to update the show Completed prope
 
 Edit9) can thow an IOExceptioin if an error was encoutnered whilie reading or writing to disk. If any other error happens tin the tranform block it will be thwon by edit()
 At this point, the app should compile but the functionality we just created in UserPRefernces REpository is not used. 
+
+
+# Migrating from sharedPreferences
+To be able to migrate it to DataStore, we need to update the dataStore builder to pass in a sharedPrerferencesMigration to the list of migrations. DataStore willl be able to migrate from sharedPReferences to DataStore automatically, for us. Migrations are run befoere any data access can occur in DAtatStore. This means that your migration must have succeeded before DataStore.data emits any values and before DataStore.edit() can update data. 
+
+Note Keys are only migrated from SharedPrreferences once, so you shouldd discontinue using the old SharedPRefferences once the code is migrated to dataStore. 
