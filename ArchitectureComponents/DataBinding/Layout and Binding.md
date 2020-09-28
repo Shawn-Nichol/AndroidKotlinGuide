@@ -1,6 +1,6 @@
 # Layout and Binding expressions
 
-The expression language allows you to write expressions that handle events dispatched by the views. The data binding library automatically generates the classes required to bind the views in the layout with your data bojects. 
+The expression language allows you to write expressions that handle events dispatched by the views. The data binding library automatically generates the classes required to bind the views in the layout with your data objects. 
 
 Data bidning layout files start with a root tag of layout followed by data element and view root element. 
 
