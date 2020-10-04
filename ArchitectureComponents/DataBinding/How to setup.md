@@ -4,10 +4,15 @@
 Enable data binding in the build.gradle file
 
 ```
+android {
+    ...
+    
     // Enables data binding.
     dataBinding {
         enabled = true
     }
+    
+}
 ```
 
 ## Activity file
