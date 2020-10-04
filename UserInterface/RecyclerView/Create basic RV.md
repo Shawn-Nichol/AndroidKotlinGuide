@@ -28,11 +28,13 @@ A container is where is the View that will display RecyclerView in an Activity o
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        app:layoutManager="LinearLayoutManager" />
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/list_item"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 To reduce code in the Activity or Fragment you can asign the layout manager in the container. 
+Tools: listItem will populate the preview window with the listItem, now you can preview your recyclerview. 
 
 ## 3) Create item display
 The item display is an xml file saved in layout, it is the view design for each item in the recyclerview. 
@@ -94,6 +96,8 @@ onBindViewHolder, updates the contents of the RecyclerViewHolder.itemVIew to ref
 override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
   val item = dataSet[position]
   holder.tv.text = item.toString()
+  // Image can be displayed with the following
+  // holder.image.setImageResource(R.drawable.mydrawable)
 }
 ```
 
