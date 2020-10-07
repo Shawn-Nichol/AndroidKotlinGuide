@@ -53,7 +53,7 @@ Create a new class that extends RecyclerView.ItemDecoration() well passing the c
 
 CustomItemDecorats allows you to set the spacing of the lineDecortor and use different colors depending on parameters, you can also display an image over the recycler view when a certain position in the RecyclerView is hit. 
 ```
-class CustomItemDecoration(context: Context, private val redDivider: Drawable) {
+class CustomItemDecoration(context: Context, private val redDivider: Drawable) : RecyclerView.ItemDecoration() {
 
   // If you aren't passing the drawable in the constructor, make sure include the not null operator. 
   private val blackDivider: Drawable = Context.getDrawable(context, R.drawable.rv_divider_black)!!
@@ -168,3 +168,12 @@ override fun getItemOffsets( rect: Rect, view: View, parent: RecyclerView, s: Re
 
 ```
 
+Add the customItemDecoration to the RecyclerView. 
+```
+val rv = findViewById<RecyclerView>(R.id.recycler_view)
+rv.applly {
+  ...
+  val itemDecoration = CustomItemCecoration(context, context,getDrawable(R.drawable.ic_my_line)!!)
+  addItemDecoration(itemDecoration)
+}
+```
