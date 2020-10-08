@@ -1,0 +1,38 @@
+# How to Implement DiffUtil in a RecyclerView
+
+
+Adapter class
+```
+// Extend the ListAdapter
+//    @Type of list, RecyclerViewAdapterClass>(
+//    @The class that extends ViewHolder(RV Adapter)
+//    The DiffUtil class in the Adapter. 
+class RVAdapter() : ListAdapter<User, RVAdapter.Viewholder>(MyDiffCallback())
+
+
+
+    class MyDiffCallback : DiffUtil.ItemCallback<User>() {
+        val TAG = "PracRecyclerView"
+
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+            // Compare items if false load new list. 
+            return oldItem.name == newItem.name
+        }
+
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+            // Compare contents, if false load new list
+            return oldItem == newItem
+        }
+    }
+
+```
+
+In an Activity or Fragment call Adapter.submitList() to pass the list to DiffUtil, a new list will need to be submited in order for the DiffUtil to compare lists. If you use LiveData you post he new list to LiveData and observer will submit the list. 
+```
+viewModel.usersList?.observe(this, Observer {
+    it?.let {
+        Log.i(TAG, "userListObserver, List submitted $it")
+        mAdapter.submitList(it)
+    }
+})
+```
