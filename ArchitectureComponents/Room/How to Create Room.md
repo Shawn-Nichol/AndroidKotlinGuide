@@ -1,4 +1,20 @@
 
+## 1) Add dependency
+```
+dependencies {
+  def room_version = "2.2.5"
+
+  implementation "androidx.room:room-runtime:$room_version"
+  kapt "androidx.room:room-compiler:$room_version"
+
+  // optional - Kotlin Extensions and Coroutines support for Room
+  implementation "androidx.room:room-ktx:$room_version"
+
+  // optional - Test helpers
+  testImplementation "androidx.room:room-testing:$room_version"
+```
+}
+
 ## 1) Create an Entity
 Create a new kotlin class, This class descibes the Entity Which represents the SQLite table, Each property in the class represents a column in the table. Room will use these properites to create the tabel and instantiate obejcts from rows in the database. 
 
@@ -130,4 +146,9 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     repository.insert(word)
   }
 }
+```
+In order to use ViewModelScope you will need to add the following dependency
+```
+    // ViewModel scope
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.archLifecycleVersion"
 ```
