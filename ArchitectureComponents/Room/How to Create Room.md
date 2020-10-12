@@ -1,6 +1,9 @@
 
 ## 1) Add dependency
 ```
+// Top of build.gradle file
+apply plugin: 'kotlin-kapt'
+
 dependencies {
   def room_version = "2.2.5"
 
