@@ -44,6 +44,90 @@ interface WordDao {
   suspend fun deleteAll()
 }
 
+```
 
 ## 3) Database
+```
+// Annotates class to be a RoomDatabase with table (entity).
+// @Database: Use the parameters to declare the entities that belong in the database and set the version number. 
+@Database(entities = arrayOf(Word::class), version = 1 exportSchema = false)
+abastract class WordRoomDatabase : RoomDatabase() {
+
+    // Database exposes the DAOs through an abstact getter, for each DAO
+    abastract fun wordDao(): WordDao
+    
+    // Populate the database
+    private class WordDatabaseCallback(
+      private val scope: CoroutineScope
+    ) : RoomDatabase.Callback() {
+      override fun onOpen(db: SupportSQLiteDatabase) {
+        super.onOpen(db)
+        INSTANCE?.let { database -> 
+          scope.launch {
+            var wordDao = database.wordDao()
+            
+            // Delete all content
+            wordDao.deleteAll()
+            
+            // Add sample words.
+            var word = Word("Hello")
+            wordDao.insert(word)
+            word = Word("World!")
+            wordDao.insert(word)
+
+            word = Word("TODO!")
+            wordDao.insert(word)
+          }
+        }
+      }
+    }
+    
+    companion object {
+      // Singleton prevents mutlipele instances of database opening at the same time. 
+      @Volatile
+      private var INSTNACE: WordRoomDatabase? = null
+      
+      fun getDatabase(context: Context): WordRoomDatabase {
+        val tempInstnace = INSTANCE
+        if(tempInstnace != null) {
+            return tempInstance
+        }
+        synchronized(this) {
+          val instnace  = Room.databaseBuilder(
+            context.applicationContext,
+            WordRoomDatabase::class.java
+            "word_database"
+          ).build()
+        INSTANCE = instance
+        return instnace
+        }
+      }
+    }
+}
+```
+
+## 4) ViweModel
+```
+class MyViewModel(application: Application) : AndroidViewModel(application) {
+  // Reference to word reposioty. 
+  private val reposiory: WordReposioty
+  
+  // using liveData and caching what getAlphabetizeedWords returns has several benefits
+  // - observer will only update the UI when the data actually changes
+  // - repository is completely separated from teh UI through the ViewModel. 
+  val allWords: LiveData<List<Word>>
+  
+  init {
+    val wordsDao = WordRoomDatabase.getDatabase(application).wordDao()
+    reposiotory = WordRespository(wordDao)
+    allWords = Repository.allWords
+  }
+  
+  /**
+   * Launching a new coroutine to insert the data in a non-blocking way
+   */
+   fun insert(word: Word) = viewModelScope.launch(Dispatchers.IO) {
+    repository.insert(word)
+  }
+}
 ```
