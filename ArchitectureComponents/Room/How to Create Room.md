@@ -15,7 +15,7 @@ dependencies {
 ```
 }
 
-## 1) Create an Entity
+## 2) Create an Entity
 Create a new kotlin class, This class descibes the Entity Which represents the SQLite table, Each property in the class represents a column in the table. Room will use these properites to create the tabel and instantiate obejcts from rows in the database. 
 
 
@@ -30,7 +30,7 @@ PrimaryKey can autogenerate "@PrimaryKey(autoGenerate = true) val id: Int"
 data class Word(@PrimaryKey @ColumnInfo(name = "word") val word: String)
 ```
 
-## 2) Create a DAO
+## 3) Create a DAO
 In the Data Access Object you specify SQL queries and associate them with method calls. The compiler checks the SQL and generates queries from convenience annotation for common queris, such as @Insert
 
 Room has coroutines support, allowing queries to be annotated with the suspend modifier and then called form a coroutine or from another suspension function
@@ -62,7 +62,7 @@ interface WordDao {
 
 ```
 
-## 3) Database
+## 4) Database
 ```
 // Annotates class to be a RoomDatabase with table (entity).
 // @Database: Use the parameters to declare the entities that belong in the database and set the version number. 
@@ -122,7 +122,7 @@ abastract class WordRoomDatabase : RoomDatabase() {
 }
 ```
 
-## 4) ViweModel
+## 5) ViweModel
 ```
 class MyViewModel(application: Application) : AndroidViewModel(application) {
   // Reference to word reposioty. 
