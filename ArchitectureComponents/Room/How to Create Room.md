@@ -114,7 +114,7 @@ abastract class WordRoomDatabase : RoomDatabase() {
         synchronized(this) {
           val instnace  = Room.databaseBuilder(
             context.applicationContext,
-            WordRoomDatabase::class.java
+            WordRoomDatabase::class.java,
             "word_database"
            ).addCallback(WordDatabaseCallback(scope)).build()
         INSTANCE = instance
@@ -124,6 +124,20 @@ abastract class WordRoomDatabase : RoomDatabase() {
     }
 }
 ```
+
+## Reposiotry
+
+```
+class WordRepository(private val playerDao: PlayerDao) {
+  val allWords: LiveData<List<Word>>
+  
+  suspend fun insert(player: Player) {
+    playerDao.insert(player)
+  }
+}
+
+```
+
 
 ## 5) ViweModel
 ```
