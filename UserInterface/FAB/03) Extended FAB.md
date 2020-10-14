@@ -11,8 +11,8 @@ Add a coordinator layout to the layout file, this will be the parent of the FAB.
     android:layout_height="match_parent">
 ```
 
-3) ADD Extended FAB to layout
-layout_extneded doens't appear to work here. 
+## 3) ADD Extended FAB to layout
+Note that extended FAB doesn't use the same XML  tags as a regualr FAB
 ```
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/my_fab"
