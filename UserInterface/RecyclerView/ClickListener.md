@@ -1,50 +1,82 @@
+# How to add Click Listener to the RecyclerView
 
+
+## 1) Add OnItemClickListener to RVAdapter
+Add interface to the adapter constructor.
 ```
-// add interface to the Adapter constructor
-class RVAdapter(private val listener: OnItemClickListener) : ListAdapter<User, RVAdapter.VIewHolder>(MyDiffCallback()) {
+class RVAdapter(private val listener: OnItemClickListner) : ListAdapter<User, RVAdapter.ViewHolder>(MyDiffCallback()) {
+  ...
+}
+```
 
-  ... 
-  // Add inner to the front of the ViewHolder class. 
-  inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view),
-    view.OnClickListener {
+## 2) Update ViewHolder class
+Make the class an inner class, and extend View.onClickListner
+```
+inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view), 
+  View.onClickListner
+```
+
+Initialize the the click listner
+```
+init {
+  view.setOnClickListner(this)
+}
+```
+implement the mehtods required for View.onClickListener
+```
+override fun onClick(0o: View?) {
+  if(adapterPosition != RecyclerView.NO_POSITION) {
+    listener.onItemClick(adapterPosition)
+  }
+}
+```
+THe ViewHolder class will look this
+```
+inner class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view),
+  View.OnClickListener {
+  
+    ...
     
-        inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view),
-        View.OnClickListener {
-        val userName: TextView = view.findViewById(R.id.item_name)
-        val userAlbum: TextView = view.findViewById(R.id.item_album)
-        var userImage: ImageView = view.findViewById(R.id.item_image)
-
-        init {
-            // Initialize the clicklistener on the view
-            view.setOnClickListener(this)
-        }
-
-        // You could run the click here, but the adapter should only be responsible for the RecyclerView actions. 
-        override fun onClick(v: View?) {
-            Log.i(TAG, "viewHolder onClick")
+    init {
+      view.setOnClickListener(this)
+    }
+    
+            override fun onClick(p0: View?) {
             if(adapterPosition != RecyclerView.NO_POSITION) {
                 listener.onItemClick(adapterPosition)
             }
-        }
-    }
-    
-    ...
-    
-    // Add interface to the bottom of the adapter and the function that it will run in the activity or fragment. 
-    interface OnItemClickListener {
-      fun onItemClick(position: Int)
+}
+```
 
-    }
+
+## 3) ADD interface to RVAdapter
+Add interface to the bootom of the adapter and the call the function that it will run in the activity or fragment. 
+```
+interface OnItemClickListener {
+  fun onItemClick(position: Int)
+
 }
 
-// Implement the interface in the RecyclerView. 
-class MainActivity : AppCompatActivity()((, RVAdapter.OnItemClickListener {
+## Implement the interface in the Activity or Fragment
+class MyFragment : Fragment(), RVAdapter.OnItemClickListner {
+  
+  private lateinit var rvAdapter = RVAdapter
   ...
   
+  override fun onCreateView( ... ) {
+    
+      rvAdapter = RVAdapter(this)
+  }
+}
+
+```
+
+## 4) Implement Click method
+Override the method name that was set in the RVAdapter OnItemClickListener
     // the method the interface will call from the RVAdapter. 
     override fun onItemClick(position: Int) {
-      val editList: MutableList<User>? = viewModel.usersList?.value as MutableList<User>?
-      Log.i(TAG, "position clicked${editList?.get(position)}")
+      
+      ...
     }
 }
 ```
