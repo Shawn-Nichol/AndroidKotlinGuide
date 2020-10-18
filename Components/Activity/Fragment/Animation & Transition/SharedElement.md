@@ -7,8 +7,10 @@ android:transitionName="transition_name"
 
 ## 2) FragmentTransaction
 In the fragment transaction use the addSharedElement(sharedElement, name)
+
+addSharedElement
 sharedElement: A view in a disappearing Fragment to match with a View in a appearing fragment
-name: String the transitionName for a view in an appearing Fragment to match to the shared element. 
+name: String, the transitionName for a view in an appearing Fragment to match to the shared element. 
 ```
 ft.addToBackStack(null)
   .addSharedElemenet(startingView, "transition_name")
@@ -27,7 +29,13 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-## 4) Transition file
+## 4.a) Transistion
+setSharedEleemtnTransition in the onCreate() of the second fragment
+```
+setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move))
+```
+
+## 4.b) Custom Transition file
 Create the transistion file, there are number
 ```
 <?xml version="1.0" encoding="utf-8"?>
