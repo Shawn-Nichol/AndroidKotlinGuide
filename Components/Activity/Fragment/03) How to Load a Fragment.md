@@ -1,4 +1,4 @@
-# Adding a fragment to an activity
+# How to load a Fragment
 Usually, a fragment contributes a portion of the UI to the host activity, which is embedded as part of the activity's overall view hierarchy. There are two ways ou can add a fragment to the activity layout. 
 
 Note the system require a unique identifier that the system can use to restore the fragment if the activity is restatred. There are two ways to provide an id
@@ -30,7 +30,7 @@ You can specify the layout properties for the fragment as if it were a view. The
 ## Progragmically
 There are four steps to adding a fragment to the activity. 
 
-### 1) create a fragmetn object
+### 1) create a fragment object
 ```
 val myFragment = MyFragment()
 ```
@@ -71,6 +71,23 @@ class MyFragment : Fragment() {
   }
 }
 ```
+
+## onCreateView
+Load the fragment with layout
+
+```
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val v: View = inflater.inflate(R.layout.fragment_one, container, false)
+
+        return v.rootView
+    }
+```
+
+
 
 ## Menu Items
 Your fragments can constribute menu items to the activity's OptionsMenu by implementing onCreateOptionsMenu(). In order for this method to recieve calls, however, you must call setHasOptionsMenu(). 
