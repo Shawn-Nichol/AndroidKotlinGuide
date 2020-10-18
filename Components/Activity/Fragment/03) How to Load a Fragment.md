@@ -45,8 +45,12 @@ val fragmentManager = supportFragmentManager
 You can add, replace, or remove a fragment, The first argument in a fragment transaction is the container for the fragment, the second argument is the fragment. You must call commit to complete the transaction. 
 ```
 val fragment = MyFragment()
-fragmentTransaction.add(R.id.fragment_containter, fragment)
-fragmentTransaction.commit()
+
+val fragmentManger = supportFragment
+fragmentManager.beginTransaction.apply {
+    add(R.id.fragment_containter, fragment)
+    commit()
+}
 ```
 
 ### 4) Adding User Interface
@@ -66,8 +70,9 @@ class MyFragment : Fragment() {
     container: ViewGroup?,
     saveInstanceStateBundle?
   ): View {
-    // Inflate the layout for this fragment
-    return inflater.inflate(R.layout.my_layout, container, false)
+        val v: View = inflater.inflate(R.layout.fragment_one, container, false)
+        
+        return v.rootView
   }
 }
 ```
