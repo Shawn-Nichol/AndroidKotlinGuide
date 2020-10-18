@@ -1,4 +1,4 @@
-## Saving UI States
+## What is Saving UI States
 Preserving and restoring an activity's UI states in a timely fashinon across sytem-initiated activity or application destruction is a crucial part of the user experince. In these cases the users expects the UI state to remain the same, but the system destorys the activty and any state stored in it. 
 
 To brdige the gap between user expectation and system behavior use a combination of ViewModel objects, the onSaveInstanceSTate() methods and or local storage top ersist the UI state across such application and activity instance transitions deciding how to combine these options depends on the complexity of your UI data, use cases for ayour app, and consideration of speed of retrieval versus memory usage. 
