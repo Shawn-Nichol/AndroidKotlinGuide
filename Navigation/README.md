@@ -4,8 +4,8 @@ Navigation refers to the interaction that allows users to navigate across, into 
 The Navigation component consists of three key parts tha are descibed below. 
 
 1. Navigation graph
-2. NavHos
-3. NavController:  
+2. NavHost
+3. NavController 
 
 As you navigate through your app, you tell the NavController that you want to navigate either along a specific path in your navigation graph or directly to a specific destination. The NavContoller then shows the appropriate destination in the NavHost. 
 
