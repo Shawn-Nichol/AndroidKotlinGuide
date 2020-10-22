@@ -1,4 +1,4 @@
-## add Dependencies
+## Add Dependencies
 
 ```
 dependencies {
@@ -23,21 +23,21 @@ dependencies {
 ## Create a Navigation graph
 Navigation occurs between your app's destinations that is anywhere in your app to which users can navigate. These destinations are connect via actions. 
 
-NavGraph shows a visual representation of a nvigation graph for a sample app contianing six destination connected by five actions. Each destination is represented by a preview thumbnail, and connecting actions are represented by arrows that show how users can navigate form one destination to another. 
+NavGraph shows a visual representation of the the apps destinations and actions. Each destination is represented by a preview thumbnail, and connecting actions are represented by arrows that show how users can navigate from one destination to another. 
 
-Destination: Are differen contents areas in your app
+Destination: Are different contents areas in your app
 Actions: are logical connections between your destinations that represent paths that users can take. 
 
 To add navigation graph to your project do the following.
-1. In the progjec tiwndow, right-click on the res directory and select New > Android Resource File. The New Resource File dailog appears
+1. Right-click res directory, select New > Android Resource File. The New Resource File dailog appears.
 
-2. Type a name in the File name fiels, such as nav_graph
+2. Give the file a name, such as nav_graph
 
 When you add your first navigation graph, android studio creates a navigation resource directory within the res directory. This directory contains your navigation graph resource file
 
 
 ## Navigation Editor. 
-After adding a graph, Android stuido opens the graph in the navigation Editor. In the Navigation Editor, you can viually edit naviagtion graphs or directly edit the underlying XML.
+After adding a graph, Android stuido opens the graph in the navigation Editor. In the Navigation Editor, you can visually edit naviagtion graphs or directly edit the underlying XML.
 
 Destination panel: Lists your navigation host and all destinations currently in the Graph Editor. 
 
@@ -53,7 +53,7 @@ Attributes: Shows attributes for the currently-selected item in the navigation g
 </navigation>
 ```
 
-The navigation element i sthe root element of a navigation graph. As you add destinations and connecting action to your graph, you can see the corresponding <destination> and <action> elements here as child elements. If you have nested graphs, they appear as child <navigation> elements. 
+The navigation element is the root element of a navigation graph. As you add destinations and connecting action to your graph, you can see the corresponding <destination> and <action> elements here as child elements. If you have nested graphs, they appear as child <navigation> elements. 
 
 ## Adding a NavHostFragment via XML
 The XML shows NavHostFragment
@@ -91,9 +91,11 @@ The XML shows NavHostFragment
 ```
 
 Note the following
-- The android: name attribute contains the class name of your NavHost implementation
-- The app:navGraph attribute assocaites the NavHostFragment with a navigation graph. The navigation graph specifies all of the destinations in this NavhostFragment to which users can navigate. 
-- Teh app:defaultNavHost="true" attrbiute ensures that your NavHostFragment intercepts the system back button. Note that only one NaveHost can be the default. If you have mutltiple hosts in the same layout (two pane laouts, for example), be sure to specify only one default NavHost
+- android:name attribute contains the class name of your NavHost implementation
+
+- app:navGraph attribute assocaites the NavHostFragment with a navigation graph. The navigation graph specifies all of the destinations in this NavhostFragment to which users can navigate. 
+
+- app:defaultNavHost="true" attrbiute ensures that your NavHostFragment intercepts the system back button. Note that only one NaveHost can be the default. If you have mutltiple hosts in the same layout (two pane laouts, for example), be sure to specify only one default NavHost
 
 You can also use the LayoutEditor to add a NavHostFragment to an activity by doin the following
 
@@ -137,8 +139,8 @@ Click on a destination to select it and note ht following attribute in the attri
 </navigation>
 ```
 
-## Designate a screen as the start destination
-The start destination i sthe first screen users see hwen opening your app, and its the last screnn users wee ehen exiting  your app. The navigation editor uses a house icon to indicate the start destination. 
+## Start Destination
+The start destination is the first screen users see when opening your app, and its the last screen users see when exiting your app. The navigation editor uses a house icon to indicate the start destination. 
 
 Once you have all of your destination in place, you can choose a start destination by doing the following
 
