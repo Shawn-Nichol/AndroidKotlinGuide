@@ -128,3 +128,40 @@ Let's apply this to our library module sample, which has the same actions define
 
 </navigation>
 ```
+
+
+
+## Create a Navigation graph
+Navigation occurs between your app's destinations that is anywhere in your app to which users can navigate. These destinations are connect via actions. 
+
+NavGraph shows a visual representation of the the apps destinations and actions. Each destination is represented by a preview thumbnail, and connecting actions are represented by arrows that show how users can navigate from one destination to another. 
+
+Destination: Are different contents areas in your app
+Actions: are logical connections between your destinations that represent paths that users can take. 
+
+To add navigation graph to your project do the following.
+1. Right-click res directory, select New > Android Resource File. The New Resource File dailog appears.
+
+2. Give the file a name, such as nav_graph
+
+When you add your first navigation graph, android studio creates a navigation resource directory within the res directory. This directory contains your navigation graph resource file
+
+
+## Navigation Editor. 
+After adding a graph, Android stuido opens the graph in the navigation Editor. In the Navigation Editor, you can visually edit naviagtion graphs or directly edit the underlying XML.
+
+Destination panel: Lists your navigation host and all destinations currently in the Graph Editor. 
+
+Graph Editor Contains a visual representation of your navigation graph. You can switch between Design view and underlying XML representation in the TextView. 
+
+Attributes: Shows attributes for the currently-selected item in the navigation graph. 
+```
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/nav_graph">
+
+</navigation>
+```
+
+The navigation element is the root element of a navigation graph. As you add destinations and connecting action to your graph, you can see the corresponding <destination> and <action> elements here as child elements. If you have nested graphs, they appear as child <navigation> elements. 
