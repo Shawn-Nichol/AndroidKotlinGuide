@@ -1,0 +1,41 @@
+## GLobal actions
+Any destination in your app that cna be reached through more than one path should have a corresponding global action defined to navigate to that destination. Global actions can be used to navigate to a destination from anywhere. 
+
+Let's apply this to our library module sample, which has the same actions defined in both ethe win and game over destinatinos. you should extract these common actions to a single global action and reference them from both destiations.
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   android:id="@+id/in_game_nav_graph"
+   app:startDestination="@id/in_game">
+
+   <!-- Action back to destination which launched into this in_game_nav_graph-->
+   <action android:id="@+id/action_pop_out_of_game"
+                       app:popUpTo="@id/in_game_nav_graph"
+                       app:popUpToInclusive="true" />
+
+   <fragment
+       android:id="@+id/in_game"
+       android:name="com.example.android.gamemodule.InGame"
+       android:label="Game">
+       <action
+           android:id="@+id/action_in_game_to_resultsWinner"
+           app:destination="@id/results_winner" />
+       <action
+           android:id="@+id/action_in_game_to_gameOver"
+           app:destination="@id/game_over" />
+   </fragment>
+
+   <fragment
+       android:id="@+id/results_winner"
+       android:name="com.example.android.gamemodule.ResultsWinner" />
+
+   <fragment
+       android:id="@+id/game_over"
+       android:name="com.example.android.gamemodule.GameOver"
+       android:label="fragment_game_over"
+       tools:layout="@layout/fragment_game_over" />
+
+</navigation>
+```
