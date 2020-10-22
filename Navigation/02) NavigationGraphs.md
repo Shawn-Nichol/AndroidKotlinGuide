@@ -1,7 +1,8 @@
 # Navigation Graph 
 Navigation Graph shows a visual representation of the apps destinations and actions. Each destination is represented by a preview thumbnail and connection actions are represeented by an arrows that show how users can navigate from one destination to another. 
 
-Destination: Are different contents areas in your app
+Destination: Are different contents areas in your app.
+
 Actions: are logical connections between your destinations that represent paths that users can take. 
 
 
