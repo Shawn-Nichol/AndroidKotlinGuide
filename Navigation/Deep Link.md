@@ -1,10 +1,11 @@
 # Deep link
 The navigation component lets you create two different types of deep links: Explicit and implicit. 
 
-## Create an explicit deep link
-An explicit deep link is a single instance of a deep link that uses a PendingIntent to take users to a pspecific location within your app. You might surface an explicit deep link as  part of a notification or an app widget. 
 
-When a user opens your app via an explicit deep link, the task back stack is cleared and replaced with the deep link destination,. When nesting graphs, the start destination from each level of nesting that is, the start destination from each <navigation> element in the hierarchy is alos added to the stack. This means that when a user presses the back button from a deep link destinationn, they navigate back up the  navigation stack just as though they entered your app from its entry pint. 
+## Explicit DeepLink
+An explicit deep link is a single instance of a deep link that uses a PendingIntent to take users to a specific location within your app. You might use an explicit deep link as  part of a notification or an app widget. 
+
+When a user opens your app via an explicit deep link, the task back stack is cleared and replaced with the deep link destination,. When nesting graphs, the start destination from each level of nesting that is, the start destination from each <navigation> element in the hierarchy is also added to the stack. This means that when a user presses the back button from a deep link destinationn, they navigate back up the  navigation stack just as though they entered your app from its entry pint. 
 
 You can use the NavDeepLink Builder class to construct a pendingIntent, as shown in the example below note that if the provided context is not an activity, the constructor uses PackageManager.getLaunchIntentForPackage() as the default activity to launch, if avaiable.
 
@@ -19,18 +20,18 @@ val pendingIntent = navDeepLiinkBuilder(context)
 If you have an existing NavController, you can also create a deep link vai NavController.createDeepLink()
 
 
-## Create an implicit deep link
-An implicit deep link is a URI that refers to a specific destination in an app. When a URI is invoked for example, when a user clicks a link Android can then open your app to the corresponding destination.
+## Implicit deep link
+An implicit deep link is a URI that refers to a specific destination in an app. A URI is invoked, when a user clicks a link, Android can then open your app to the corresponding destination.
 
-When triggering an implicit dep link, the state of the back stack depends on whether the implicit Intent was launched with the Intent.FLAG_ACTIVITY_NEW_TASK
-- If the flag is set, the task back stack is cleared and replaced with the deep link destination. As with explicit deep linking, when nesting graphs, the start destination from each level of nesting - That is, the start destination from each <navigation> eleemtn in the hierarchy is also added to the stack. This means that when a users presses the back button from a deep link destinatin, they navigate back up the navigation stack just as though they entered your app form its entry point. 
+When triggering an implicit deep link, the state of the back stack depends on whether the implicit Intent was launched with the Intent.FLAG_ACTIVITY_NEW_TASK
+- If the flag is set, the task back stack is cleared and replaced with the deep link destination. As with explicit deep linking, when nesting graphs, the start destination from each level of nesting - That is, the start destination from each <navigation> element in the hierarchy is also added to the stack. This means that when a users presses the back button from a deep link destination, they navigate back up the navigation stack just as though they entered your app from its entry point. 
 
-- If the flag is not set, you remain on the task stack ofthe previous app where th eimplicit deep link was triggered. In this case, the back button takes you back to the previous app, while the UP button starts your app's task on the hierarchical patent destinatino within your navigation graph.
+- If the flag is not set, you remain on the task stack of the previous app where the implicit deep link was triggered. In this case, the back button takes you back to the previous app, while the UP button starts your app's task on the hierarchical patent destination within your navigation graph.
 
 You can use the Navigation Editor to create an implicit deeep link to a destination as follows:
 1. In the design tab of the Navigation Editor, select the destination for the ddep link. 
 
-2. Clikc + in the Deep Links section of the Atttributes panel
+2. + in the Deep Links section of the Atttributes panel
 
 3. In the add deep link dialog that appears, enter a URI
 Note the following:
@@ -55,7 +56,10 @@ Note the following:
 deepLink app:uri="https://wwww.google.com"/>
 ```
 
-To enable implicit deep linking, you must also make additions to your app's manifest.xmlm file add a single <nav-graph> element to an activit that point to an existing navigation graph, as shown in the folllwoing example. 
+
+## Update Manifest
+To enable implicit deep linking, you must also make additions to your app's manifest.xmlm file add a single <nav-graph> element to an activity that point to an existing navigation graph, as shown in the folllwoing example. 
+
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -75,6 +79,5 @@ To enable implicit deep linking, you must also make additions to your app's mani
 </manifest>
 
 ```
-
-When building your project, the Navigation component replaces the <nav-grpah> elemetn with generated <intent-filter> element to match all of the deep links in the navigation graph. 
+When building your project, the Navigation component replaces the <nav-graph> element with generated <intent-filter> element to match all of the deep links in the navigation graph. 
 
