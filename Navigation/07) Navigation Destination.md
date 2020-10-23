@@ -1,86 +1,29 @@
 # Navigation to a destination
 
-Navigation to a destination is done using a NavController, an object that manages app navigation within a NavHost. Each NavHost has its own corresponding NavController. NavController provides a few different ways to navigate to a destination, which are further describe in the section below. 
-
-To retrieve the NavController for a fragment, activity, or view use on the following methods. 
+Navigating to a destination is done using a NavController, an object that manages app navigation within a NavHost. Each NavHost has its own corresponding NavController.To retrieve the NavController for a fragment, activity, or view. 
 
 Kotlin
 - Fragment.findNavController()
 - Navigtion.findNavController(Activity, @IdRes int viewId)
 - Navigation.findNavController(view)
 
-After you've retrieved a NavController, you can call one of the overloads of navigate() to navigate between destinations. Each overload provides support for various navigation scenarios, as described in the followign sections.
-
-## Use Safe Args to navigate with type-saftey
-The recommend way to navigate between destinations is to use the SafeArgs gradle plugin. This plugin generates simple object and builder classses that enable type-safe navigation between destinations. Safe Argss is recommended both for navigating as well as possing data between destinations. 
-
-To Add SAfe Args to your project include  the following classpath in your top level build.gradle file
-```
-buildscript {
-    repositories {
-        google()
-    }
-    dependencies {
-        def nav_version = "2.3.1"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
-    }
-}
-```
-
-You must also apply one of two avaiable plugins
-
-To generate java and mixed Kotlin
-```
-apply plugin: "androidx.navigation.safeargs"
-```
-
-To generate koltin
-```
-apply plugin: "androidx.navigation.safeargs.kotlin"
-```
-
-YOu must have android.useAndroidX=true in your gradle.properties file as per Migrating to AndroidX.
-
-After enabling Safe Args, your generated code contains classes and methods for each action you've defined as well as classes that correspond to each sending and receving destination. 
-
-Safe Args generates a class forr each destination where an action originates. The generated class name adds "Directions" to the originiating destinations class name. Fore example, if the orignating destinations is named SpecifyAmountFragment, the generated class is named SpecifyAmountFragmentDirections. 
-
-The generated class contains a staic method for each action defined in teh originating destinations. this method takes any defined action parameters as arguments and retunss a NavDirectiosn object that you ca pass directly to navigate(). 
-
-## Safe Args example
-As an example, assume we have a nvaigation grpah with a single action that connects tow destinationns, SpecifyAmountFragment and ConfirmationFragment. The Confirmationfragment takes a single float parameter that you provide as part of the action. 
-
-Safe Args generates a SpecifyAmountFragmentDirections class with a single emthod, actionSpeicfyAmountFragmentToConfirmationFragment(), and an inner class called ActionSpecifyAmountFragmentToConfimrmationFragment. The inner class is derived from NavDirections and storess the associated action ID and float parameter. The returned NavDirections obejct can then be passed directly to navigate(), as shown in the following example. 
-
-```
-Override fun onClick(v: View) {
-  val mount Float = ...
-  val action =
-    .actionSpecifyAmountFragmentToConfirmatoinFragment(amount)
-    v.findNavController().navigate(action)
-    
-    
-}
-```
-
-For more information on passing data between destinatioons with Safe Args, see Use Safe Args to pass data with type safety
-
+After retriveing the NavController, you can call one of the overloads of navigate() to navigate between destinations. 
 
 ## Navigate using ID
-navigate(int) takes the resource ID or either an action or a destination. The following code snipet shows how to navigate to the ViewTransactionsFragment
+navigate(int) takes the resource ID or either an action or a destination.
 ```
 view.TransactionButton.setOnClickListner { view -> 
   view.findNavController().navigate(R.id.viewTransactionsAction)
 ```
 
-For buttons, you can also use the Naviagtion class's creteNavigateOnClickListener() convenience method to navigate to a destination, as shown in the following example.
+For buttons, you can also use the Naviagtion class's createNavigateOnClickListener() convenience method to navigate to a destination, as shown in the following example.
 
 ```
 button.setOnClickListener(Navigation.createNavigatieOnClickListener(R.id.next_fragment, null)
 ```
 
 ## Provide navigation options to actions
-When you define an action in the navigation graph, Navigation generats a corresponding NavAction class, which contains the configurations defined for that action, including the following
+When you define an action in the navigation graph, Navigation generates a corresponding NavAction class, which contains the configurations defined for that action, including the following
 
 - Destination: The resource ID of the target destination.
 - Default arguments: An android.os.Bundle containing default values for the target destination, if supplied. 
@@ -122,7 +65,7 @@ Example consisting of two screens along with an action to navigate from one to t
     </fragment>
 </navigation>
 ```
-When the navigation graph is inflated, these actions are parsed, and correspondign NavAction objects are generated with the configurations defined in the graph. For example, action_b_to_a is defined as navigation from destination b to destination a. The action includes animations along with popTo behavior that removes all destinations from the backstack. All of these settings are captured as NavOptions and are attached to the NavAction.
+When the navigation graph is inflated, these actions are parsed, and corresponding NavAction objects are generated with the configurations defined in the graph. For example, action_b_to_a is defined as navigation from destination b to destination a. The action includes animations along with popTo behavior that removes all destinations from the backstack. All of these settings are captured as NavOptions and are attached to the NavAction.
 
 To follow this NavAction, use NavController.navigate(), passing the ID of the action, as shown
 ```
@@ -130,7 +73,7 @@ findNavController().navigate(R.id.action_b_to_a)
 ```
 
 ## Navigate using DeepLinkRequest
-You can use navigate(NavDeepLinkRequest) to navigate directly to an implicit deep link destination, as shown in the following example.
+You can use navigate(NavDeepLinkRequest) to navigate directly to an implicit deep link destination.
 ```
 val request = NavDeepLinkRequest.Builder
   .fromUri("android-app://androidx.navigation.app/provile".toUri())
@@ -140,7 +83,7 @@ findNavControler().navigate(request)
 ```
 In addition to Uri, NavDeepLinkRequest also supports deep links with actions and MIME types. To add an action to the request, use fromAction() or setAction(). To add a MIME type to a request, use from MimeType() or setMimeType(). 
 
-For a NavDeepLinkRequest to properlly match an implicit deep link destination, the URI action, and MIME type must all match the NavdeepLink in the destination. URIs must match the patteren, the actions must be an exact match and the MIME types must be related. 
+For a NavDeepLinkRequest to properly match an implicit deep link destination, the URI action, and MIME type must all match the NavdeepLink in the destination. URIs must match the patteren, the actions must be an exact match and the MIME types must be related. 
 
 Unlike navigation using action or destination IDs, you can navigate to any deep link in your graph, regarcless of whether the destination is visible. You can navigate to a destination on the current graph or a destination on a completely differen graph. 
 
