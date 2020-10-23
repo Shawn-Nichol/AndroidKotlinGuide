@@ -1,18 +1,18 @@
 # Nested Navigation graphs
-A series of destinations can be grouped into a nested graph within a parent navigation graph called the root graph. Nested grpahs are useful to organize and reuse sections of your app's UI, such as a self--contained lgoing flow. 
+A series of destinations can be grouped into a nested graph within a parent navigation graph called the root graph. Nested graphs are useful to organize and re-use sections of your app's UI, such as a self-contained loing flow. 
 
 The nested graph encapsulates its destinations. As with a root graph, a nested graph must have a destiantion identified as the start destinations. Destinations outside of the nested graph, such as those on the root graph, access the nested graph only through its start destination 
 
 To group destinations into a nested graph, do the following. 
 1. In the Navigation editor, press and hold the shift key, and click on the destinations you want to include in the nested graph. 
 
-2. Right-click to open the context menu, and select Move to Nested Graph > new Graph. The destinations are enclused in a nested graph
+2. Right-click to open the context menu, and select Move to Nested Graph > new Graph. The destinations are enclosed in a nested graph
 
 3. Click the nested graph. The following attributes apear in the attributes panel
 - Type, which contains Nested graph
 - ID which contains a system-assigned ID for the nested graph. This ID is used to reference the nested graph from your code. 
 
-4. Double-click on the nested grpah to show its destinatinos. 
+4. Double-click on the nested graph to show its destinatinos. 
 5. Click the text tab to toggle to the XML view. A nested navigation graph has been added to the graph. This navigation graph has its own navigation elements, along with its ownID and a startDestiation attribute that points to the first destinatino in the nested graph. 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -65,7 +65,7 @@ view.findNavcontroller().navigate(R.id.action_mainfRagment_to_sendMoneyGraph)
 7. Back in the Design tab, you can return to the root graph by clicking Root. 
 
 ## Reference other navigation graphs with <include>
-Within a navigation graph, you can reference other graphs by using include. While this is functinally the same as using a nested graplh, include lets you use grpahs fromother project modules or from library progjects. 
+Within a navigation graph, you can reference other graphs by using include. While this is functionally the same as using a nested graph, include lets you use graphs from other project modules or from library progjects. 
 
 ```
 <!-- (root) nav_graph.xml -->
