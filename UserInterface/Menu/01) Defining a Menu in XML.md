@@ -8,10 +8,10 @@ Using a menu resource is a good practice for a few reasons.
 
 To define the menu, create an XML file inside your probject's res/menu// directory and build the menu with the following elements. 
 
-## <menu>
-Defines a Menu, which is a continaer ofr a menu items. A <menu> elememtn ust be the root node for th file and can hold one or more <item> and <group> elements. 
+## menu
+Defines a Menu, which is a contianer for menu items. A <menu> elememtn ust be the root node for th file and can hold one or more <item> and <group> elements. 
 
-## <item>
+## item
 Creates a MenuItem, which represents a single item in a menu. this element may conain a nested <menu. elememtn in order to dreate a submenu. The <item> element supports several attributes you can use to deinfe an item's appearance and behavior. THe items in the above menu include the following attributes
 
 android:id
@@ -27,7 +27,7 @@ android: showAsAction
 Specifies when and how this item should appear as an action item in the app bar. These are the most important attributes  you should use, but there are many more avaiable. For information about all the supported attributes, see the Menu Resource document. 
 
 
-## <group>
+## group
 An optional, invisible container for <item>elements. It allows you to categorize menu items so they share properites such as active state and visiblity.
 
 ```
