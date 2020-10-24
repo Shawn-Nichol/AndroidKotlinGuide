@@ -14,16 +14,16 @@ Defines a Menu, which is a contianer for menu items. A menu element must be the 
 ## item
 Creates a MenuItem, which represents a single item in a menu. this element may conain a nested <menu. elememtn in order to dreate a submenu. The <item> element supports several attributes you can use to deinfe an item's appearance and behavior. THe items in the above menu include the following attributes
 
-android:id
+android:id <br/>
 A resource ID that's unique to the item, which allows the application to recongize th eitem when the user selects it. 
 
-android:icon
+android:icon <br/>
 A reference to a drawable to use as the item's icon
 
-android:title
+android:title <br/>
 A reference to a stirng to use as the item's title. 
 
-android: showAsAction
+android: showAsAction <br/>
 Specifies when and how this item should appear as an action item in the app bar. These are the most important attributes  you should use, but there are many more avaiable. For information about all the supported attributes, see the Menu Resource document. 
 
 
@@ -43,7 +43,7 @@ An optional, invisible container for item elements. It allows you to categorize 
 </menu>
 
 ```
-You Can add a submenu to an item in any menu by adding a menu element as the child of an item Submenus are useful when your applicatioin has a lot of functions that can be organized into topics, like items in a PC application's menu bar (file, Edit, View, etc.)
+You can add a submenu to an item in any menu by adding a menu element as the child of an item Submenus are useful when your applicatioin has a lot of functions that can be organized into topics, like items in a PC application's menu bar (file, Edit, View, etc.)
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
