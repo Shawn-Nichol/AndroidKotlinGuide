@@ -1,23 +1,16 @@
-# Creating Contextual menus
-A contextual menu offers actions that affect a specific item or context frrame in the UI. You can provide a context menu for any view, but they are most often used for itemes in the ListView, GridView, or other view collectiosn in which the user can perform direct actions on each item. 
+# Create a floating context menu
+1. Register the View to which the context menu should be associated with by calling registerForContextMenu() and pass it the View. If Your activity uses a ListView or gridVIew and you want each item to provide the same context menu, register all items for a context menu by passing the ListView or GridView to registerForContextMenu(). 
+```
+registerContextMenu(binding.myView)
+```
 
-There are two ways to provide contextual actions
-
-- In a floating context menu.  A menu appears as a floating list of menu items when the user performs a long-click on a view that declars support for a context menu. Users can perform a contextual action on one item at a time. 
-
-- In the contextual action mode. this mode is a system implementation of ActionMdoe that displays a contextual action bar at the top of the screen with actions items that affect the selected items when this mode is active, users can perform an action on multiple items at once. 
-
-Android3.0 Contextual ActionMode, is the preferred techinque for displaying contextual actions when avaiable. If your app supports version lower than 3.0 then you should fall back to a floating context menu on those devices. 
-
-## Create a floating context menu
-1. Register the View to which the context menu should be associated by calling registerForContextMenu() and pass it the View. if Your activity uses a ListView or gridVIew and you want each item to provide the same context menu, register all items for a context menu by passing the ListView or GridView to registerForContextMenu(). 
 
 2. Implement the onCreateContextMenu() method in your Activity or fragment. When the registered view receives a long-click event, the system calls your onCreateContextMenu() method. This is where you define the menu items, usually by inflating a menu resource. 
 
 ```
 override onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo) {
   super.onCreateContextMenu(menu, v, menuInfo)
-  val infalter: MenuInflater = menuInflater
+  val infalter = MenuInflater(context)
   infalter.inflate(R.menu.context_menu, menu)
 }
 ```
