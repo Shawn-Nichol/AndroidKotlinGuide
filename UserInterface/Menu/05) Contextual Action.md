@@ -1,23 +1,20 @@
 # Using Contextual action mode
-The contextual action modeis system implementation of ActionMode that focuses user interaction toward performing contextual actions. When a user enables this mode by selectingan itme, a contextual action bar appears at the top of the screen to present actioins the user can perfrom on the curretnly selecte item. While this mode is enabled, the user can selecte multiple items, deselect items, and continue to navigate within the activity (as much as you're willing ot allow). The action mode is disabled and the dcontextual action bar disapppears when the user deselects all items, presses the BACK button, or selects the Done action on the left side of the bar. 
+I user can enable this mode by selecting an item usually with a long click, a contextual action bar appears at the top of the screen to present actions the user can perfrom on the currently selected item. While this mode is enabled, the user can select multiple items, deselect items, and continue to navigate within the activity. The action mode is disabled and the contextual action bar disapppears when the user deselects all items, presses the BACK button, or selects the Done action on the left side of the bar. 
 
-For views that provide contextual actions, you should usually invokke the contextual action mode upon one of th two events 
+For views that provide contextual actions, you should usually invoke the contextual action mode upon one of two events 
 
-- The users performs a long click
-- The user selects a checkbox or similar UI component within the view. 
+1. The users performs a long click
+2. The user selects a checkbox or similar UI component within the view. 
 
-How your application invokes the contextual actionmode anddefines the behavior for each action depends on your design. There are basically two designs: 
-- For contextual actions on indiviual arbitrarry ivews. 
-- For batch contextual actions on groups of itmes in a ListView or GridView(allowing the user to select multiple itmes and perform an action on them all). 
+How your application invokes the contextual actionmode and defines the behavior for each action depends on your design. There are basically two designs: 
+1. For contextual actions on indiviual arbitrarry views. 
+2. For batch contextual actions on groups of items in a ListView or GridView(allowing the user to select multiple itmes and perform an action on them all). 
 
-Enabling the ctextual action mode for indvidual views. 
-
+## Contextaul action mode for indvidual views. 
 If you want to invoke the contextual action mode only when the user selectes specific views. 
+
 1. Implmement the ActionMode.Callback interface. In its callback methods, you can specify the action for the contextual action bar, respond to click events on action items, and handle other lifecycle events for the action mode. 
-
-2. Call startActionMode() when you want to show the bar(such as when the user long-clicks the view)
-
-Implement the ActionMode.Callback interface. 
+ 
 ```
 private val actionModeCallback = object : ActionMode.Callback {
     // Called when the action mode is created; startActionMode() was called
@@ -52,22 +49,20 @@ private val actionModeCallback = object : ActionMode.Callback {
     }
 }
 ```
+Note:The mActionMode variable is set to null when the actionMode is destoryed. 
 
-Notice that these event callbacks are almost exactly the same as the callbacks for the options menu, expect each of these also pass the ActionMode object associated with the event. you can use ActionMode APIs to make various changes to the CAB, such as revise the title and subtitle with setTitle() and setSubtitle() useful to indicate how many items are selected. 
+2. Call startActionMode() to enable the contextual action mode when appropriate.  
 
-Also notice that the above sample sets the mActionMode variable null when the actionmode is destoryed. In the next step, you'll see how its initialized and how saving the member variable in your activity or fragment can be useful 
-
-2. Call startActionMode() to enable the contextual action mode when appropriate, such as in response to a long-click. 
-
-fragment
+Fragment
 ```
 fun myCAB() {
+    // Prevents the CAB from being created on additional clicks. 
     if(mAction != null) return 
+    // as casts the MainActivity so actionMode can be called. 
     mActionMode = (Activity as MainActivity?)!!.startSupportActionMode(actionModeCallback)
 }
 ```
 
-When you call startActionMode9), the system returns the ActionMode created. By saving this in a member variable,you can make changes to the contextual action bar in response to other events. In the avobe sample, the Actioinmode is used to ensur ehtat the Actionmode instance is not recreateed if it's already active, by chcking whether the member is null before startin the action mode. 
 
 
 ## Enabling batch contextual action in a ListView or GridView
