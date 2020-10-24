@@ -6,10 +6,9 @@ For views that provide contextual actions, you should usually invoke the context
 1. The users performs a long click
 2. The user selects a checkbox or similar UI component within the view. 
 
-How your application invokes the contextual actionmode and defines the behavior for each action depends on your design. There are basically two designs: 
+How your application invokes the contextual actionMode and defines the behavior for each action depends on your design. There are basically two designs: 
 1. For contextual actions on indiviual arbitrarry views. 
 2. For batch contextual actions on groups of items in a ListView or GridView(allowing the user to select multiple itmes and perform an action on them all). 
-
 ## Contextaul action mode for indvidual views. 
 If you want to invoke the contextual action mode only when the user selectes specific views. 
 
