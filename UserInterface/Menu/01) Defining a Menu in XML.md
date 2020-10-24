@@ -9,7 +9,7 @@ Using a menu resource is a good practice for a few reasons.
 To define the menu, create an XML file inside your probject's res/menu// directory and build the menu with the following elements. 
 
 ## menu
-Defines a Menu, which is a contianer for menu items. A <menu> elememtn ust be the root node for th file and can hold one or more <item> and <group> elements. 
+Defines a Menu, which is a contianer for menu items. A menu element must be the root node for the file and can hold one or more items and group elements. 
 
 ## item
 Creates a MenuItem, which represents a single item in a menu. this element may conain a nested <menu. elememtn in order to dreate a submenu. The <item> element supports several attributes you can use to deinfe an item's appearance and behavior. THe items in the above menu include the following attributes
@@ -28,7 +28,7 @@ Specifies when and how this item should appear as an action item in the app bar.
 
 
 ## group
-An optional, invisible container for <item>elements. It allows you to categorize menu items so they share properites such as active state and visiblity.
+An optional, invisible container for item elements. It allows you to categorize menu items so they share properites such as active state and visiblity.
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -43,7 +43,7 @@ An optional, invisible container for <item>elements. It allows you to categorize
 </menu>
 
 ```
-You Can add a submenu to an item in any menu by adding a <menu> element as the child of an <item> Submenus are useful when your applicatioin has a lot of functiosn that can be organized into topics, like items in a PC application's menu bar (file, Edit, View, etc.)
+You Can add a submenu to an item in any menu by adding a menu element as the child of an item Submenus are useful when your applicatioin has a lot of functions that can be organized into topics, like items in a PC application's menu bar (file, Edit, View, etc.)
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
