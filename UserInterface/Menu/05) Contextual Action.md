@@ -57,22 +57,14 @@ Notice that these event callbacks are almost exactly the same as the callbacks f
 
 Also notice that the above sample sets the mActionMode variable null when the actionmode is destoryed. In the next step, you'll see how its initialized and how saving the member variable in your activity or fragment can be useful 
 
-2. Call startActionMode() to enable the contextual action mode when appropriate, such as in response to a long-click on a view. 
+2. Call startActionMode() to enable the contextual action mode when appropriate, such as in response to a long-click. 
 
+fragment
 ```
-someView.setOnLongClickListener { view ->
-    // Called when the user long-clicks on someView
-    when (actionMode) {
-        null -> {
-            // Start the CAB using the ActionMode.Callback defined above
-            actionMode = activity?.startActionMode(actionModeCallback)
-            view.isSelected = true
-            true
-        }
-        else -> false
-    }
+fun myCAB() {
+    if(mAction != null) return 
+    mActionMode = (Activity as MainActivity?)!!.startSupportActionMode(actionModeCallback)
 }
-
 ```
 
 When you call startActionMode9), the system returns the ActionMode created. By saving this in a member variable,you can make changes to the contextual action bar in response to other events. In the avobe sample, the Actioinmode is used to ensur ehtat the Actionmode instance is not recreateed if it's already active, by chcking whether the member is null before startin the action mode. 
