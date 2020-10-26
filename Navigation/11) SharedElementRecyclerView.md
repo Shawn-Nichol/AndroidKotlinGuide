@@ -7,7 +7,7 @@ nav_graph
   ...
   
   <fragment
-    android:id="@+id/list_dest
+    android:id="@+id/list_fragment"
     android:label="list_fragment"
     tools:layout="@layout/list_fragment">
     
@@ -18,9 +18,9 @@ nav_graph
   </fragment>
   
     <fragment
-    android:id="@+id/list_dest
-    android:label="list_fragment"
-    tools:layout="@layout/list_fragment">    
+    android:id="@+id/item_details"
+    android:label="Item Details
+    tools:layout="@layout/item_details_fragment">    
   </fragment>
   ```
   
@@ -28,7 +28,7 @@ nav_graph
   In the details_fragment.xml set the transition name on view. 
   ```
           <TextView
-            android:id="@+id/tv_dest_two_item_details"
+            android:id="@+id/my_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             ...
@@ -45,9 +45,9 @@ override fun  onBindViewHolder(holder: ItemViewHolder, position: Int) {
   holder.tv.transitionName = item.toString()
   
   holder.tv.setOnClickListener {
-    val bundle: Bundle = bundleOf("rvPosition" to dataSet[position])
+    val action: NavDirections = ListFragmentDirections.actionListToDetails(5)
     val extras: FragmentNavigator.Extras = FragmentNavigatiorExtras(holder.tv to "rv_transition")
-    Naviation.findNavController(holder.tv).navigate(R.id.action_list_to_details, bundle, null, extras)
+    it.findViewNavController().navigate(action,extras)
   }
 }
 ```
@@ -71,7 +71,7 @@ PostPone the enter transition, the transition will run after all the views are b
 recyclerView.apply {
   ...
   
-  // Dleay transition on backpress
+  // Delay transition on backpress
   postponeEnterTransition()
   viewTreeObserver.addOnPreDrawListener {
     startPostponeEnterTransition()
