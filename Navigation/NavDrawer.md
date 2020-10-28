@@ -1,3 +1,6 @@
+# How to setup a Nav bar
+This insruction will show how to setup a NavDrawer that works with a NavGraph, all top level Destination will display the hambuger icon and other Destination will display the Up arrow. 
+
 ## Add dependency
 ```
 dependencies {
@@ -122,6 +125,14 @@ Set Toolbar as the action bar
 setSupportActionBar(myToolbar)
 ```
 
+AppbarConfiguration options for NaviationUI methods that interact with implementaions of app bar patterns
+@ topLevelDestinationIds: Set of destinations by id considreed at the top level, the upbutton will not display
+@ drawerLayout: The openable layout that should be toggeld from the navigation button. 
+```
+myAppBar = AppBarConfiguration(setOf(R.id.login_dest, R.id.fragmentMenuOne), myDrawerLayout)
+```
+
+
 Set up the action bar returned by `AppCompatActivity.getSupportActionbar()` for use with navConroller
 @navController: The NavController whose navigation actions will be reflected in the title of the action bar. 
 @param: Configuration Additional configuration options for customizing the behavior of the  ActionBar
@@ -130,7 +141,29 @@ setupActionBarWithNavController(navController, myAppBar
 ```
 
 
-## Hanldine Clicks
+Heres what it would look like in the main activity. 
+```
+lateinit var mDrawer: DrawerLayout
+
+
+class MainActivity : AppCopmatActivity() {
+
+    lateinit var mDrawer: DrawerLayout
+    lateinit var myAppBar: AppbarConfiguration
+    
+    fun onCreate(savedInstanceState: Bundle?) {
+      val navHostFragment: NavHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+      val navController = navHostFragment.navController
+      myToolbar.setupWithNavController(navController, myDrawerLayout)
+      setSupportActionBar(myToolbar)
+      myAppBar = AppBarConfiguration(setOf(R.id.login_dest, R.id.fragmentMenuOne), myDrawerLayout)
+      setupActionBarWithNavController(navController, myAppBar)
+  }
+}
+```
+
+
+## handole Clicks
 ```
 myNavView.setNavigationIemtSelectedListener { menuItem -> 
   when(menuItem.itemId) {
@@ -143,4 +176,15 @@ myNavView.setNavigationIemtSelectedListener { menuItem ->
     true
   }
   else -> false
+```
+
+## onSupportNaviagte() Handles Up button clicks.
+This method is called when ever the user choose to navigate up within the applications hierarchy.
+  
+@ return: true if Up navigation completed successfully and this Activity was finished, false otherwise.
+
+```
+override fun onSupportNavigateUp(): Boolean {
+    return findNavController(R.id.nav_host_fragment).navigateUp(myAppBar)
+}
 ```
