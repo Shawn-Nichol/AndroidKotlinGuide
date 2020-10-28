@@ -5,9 +5,8 @@ dependencies {
 }
 ```
 
-## Setup drawer resources
-
-drawer_menu
+## Setup the Drawer menu
+This the menu that will be displayed in the NavDrawer. 
 ```
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
@@ -44,7 +43,7 @@ You can create subheaders in groups
 ```
 
 ## SetupToolbar
-In order to slide navigation drawer over the ActionBar, you need to use the Toolbar widget
+In order to slide navigation drawer over the ActionBar, you need to use the Toolbar widget, add the tool bar widget to the main_activity.xml
 
 ```
 <androidx.appcompat.widget.Toolbar
@@ -55,15 +54,17 @@ In order to slide navigation drawer over the ActionBar, you need to use the Tool
 </androidx.appcompat.widget.Toolbar>
 ```
 
-To use the toolbar, make sure to be using a theme that doesn't include an action bar. 
+Note: To use the Toolbar, make sure use a theme that doesn't include an action bar. 
 
 
 ## Navigation Layout
+
+```
 <!-- This DrawerLayout has two children at the root  -->
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/myDrawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
@@ -75,24 +76,19 @@ To use the toolbar, make sure to be using a theme that doesn't include an action
 
         <!-- The ActionBar displayed at the top -->
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/my_toolbar"
+            android:id="@+id/myToolbar"
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:fitsSystemWindows="true"
         </androidx.appcompat.widget.Toolbar>
 
-        <!-- The main content view where fragments are loaded -->
-        <FrameLayout
-            android:id="@+id/flContent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+      
+        ... 
+        
     </LinearLayout>
 
-    <!-- The navigation drawer that comes from the left -->
-    <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nvView"
+        android:id="@+id/myNavView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -100,43 +96,51 @@ To use the toolbar, make sure to be using a theme that doesn't include an action
         app:menu="@menu/drawer_view" />
 </androidx.drawerlayout.widget.DrawerLayout>
 
-## Setup drawer in the activity
- public class MainActivity extends AppCompatActivity {
-    private DrawerLayout mDrawer;
-    private Toolbar toolbar;
-    private NavigationView nvDrawer;
+```
+Note: `android:layout_gravity` needs to be set to 'start'
 
-    // Make sure to be using androidx.appcompat.app.ActionBarDrawerToggle version.
-    private ActionBarDrawerToggle drawerToggle;
+## Setup drawer in the MainActivity.
+Because the view is yet to load the fragment view cannot be found, for the NavController to be properly set, the fragment view needs to be createded and onViewCreated() needs to be dispateched, which does not happend until the ACTIVITY__CREATED state. 
+```
+val navHostFragment: NavHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+```
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+Retrieve the NavController directly forn the NavHostFragment
+```
+val navController = navHostFragment.navController
+```
 
-        // Set a Toolbar to replace the ActionBar.
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        
-        // This will display an Up icon (<-), we will replace it with hamburger later
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+Setup a toolbar for use with a NavController
+@ navController: The NavController whose navigation actions will be reflected in the titlle of the Toolbar. 
+@ drawerLayout: The DrawerLayout that should be toggled from the Navigation button.
+```
+myToolbar.setupWithNavController(navController, myDrawerLayout)
+```
 
-        // Find our drawer view
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    }
+Set Toolbar as the action bar
+```
+setSupportActionBar(myToolbar)
+```
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
-        }
+Set up the action bar returned by `AppCompatActivity.getSupportActionbar()` for use with navConroller
+@navController: The NavController whose navigation actions will be reflected in the title of the action bar. 
+@param: Configuration Additional configuration options for customizing the behavior of the  ActionBar
+```
+setupActionBarWithNavController(navController, myAppBar
+```
 
-        return super.onOptionsItemSelected(item);
-    }
-}
 
-##
-Navigating between menu items. 
+## Hanldine Clicks
+```
+myNavView.setNavigationIemtSelectedListener { menuItem -> 
+  when(menuItem.itemId) {
+  R.id.nav_one
+    ...
+    true
+  }
+  R.id.nav_two
+    ...
+    true
+  }
+  else -> false
+```
