@@ -99,4 +99,98 @@ you can specify width and height with exact measurments, though you probaly won'
 
 - match_parent tells your view to become as big as its parent view group will allow. 
 
-In general specifying a layout width and height using absolute units such as pixels in not recommend. Instead, using relative measruements such as density-indpement pixel units(dp), wrap_content, or match_parent, is a better approach, becuase it helps ensure that your app will dsiplay properly across a variety of device screen sizes. The accepted meauremnt types are define in the aviable Resource do
+In general specifying a layout width and height using absolute units such as pixels in not recommend. Instead, using relative measruements such as density-indpement pixel units(dp), wrap_content, or match_parent, is a better approach, becuase it helps ensure that your app will dsiplay properly across a variety of device screen sizes. The accepted meauremnt types are define in the aviable Resource documentations
+
+https://developer.android.com/guide/topics/resources/available-resources#dimension
+
+
+## Layout Position
+The geometry of a view is that of a rectangle. A view has a location, expressed as a pair of left and top coordinates, an d tow dimensions, expressed as a width and height. The unit for location and dimesnions is the pixel. 
+
+it is possible to retrieve the location ov a view by invoking the mthods getLeft() and getTop(). Teh former returns the left, or X, correcinate of the rectangle repsresnting the view. The latter returns the top, or Y, coordinate of the rectagle representing the view. these methods both return the location ov the view relative to its parent. For instance, when `getLeft()` returns 20, that mean sthe view is located 20 pixels to the righ to fthe left edge of its direct parent. 
+
+In addtion, several convenince methods are offered to avoid unnececsssary computations, namely `getRight()` and `getBottom()`. These methods return the corrdinates of the right and bottom edges of the rectangle representing the view. For instance calling `getRight()` is similar to the follwoing computation `getLeft() + getWidth()`.
+
+
+## Size, Padding and Margins
+The size of a view is expressed with a width and height. View actually possess two pairs of widht and height values. 
+
+The first pair is known as the measured width and measured height. Thse dimensinos define how big a view wants to be within its paretn. The mearured dimensions can be obtained by calling `getMeasuredWidth()` and `getMeasuredHeight()`. 
+
+The second pair is simply known as width and height, or sometimes drawing width and drawing height. These dimensions define the actual size of the view on screen, at drawing time and after layoutl These values may, but do not have to, be different from the measured width and height. The width and height can be obtained by calling `getWidth()` and `getHeight()`.
+
+To measure its dimensions, a view takes inot account its padding. The padding is expressed in pixels for left, top, right and bottom parts of the view. Padding can be used to offset the vie by a specific number of pixels. For instance, a left padding of 2 will push the view's content by 2 pixels to the right of the left edge. Padding can be set using the `setPadding(int, int, int, int)` method and queried by calling `getPaddingLeft()`, `getPaddingTop()`, `getPaddingRight()` and `getPadddingBottom()`.
+
+Even though a veiw can define a padding, it does not provide any support for margins. however, view groups provide such as uspport. Refer to `ViewGroup` and `ViewGroup.MarginlayoutParams` for further information.
+
+## Common Layouts
+Each subclass of the `ViewGroup` class provides a unique way to display the view you nest within it. 
+
+LinearLayout: Alayout that organizes its children into a single horizontal or vertical row. It creates a scrollbar if the length of the window exceeds the length of the screen. 
+
+Relative Layout
+Enables you to specify the location of child objects relative to each other(child A to left of chilc B or to the parent aligend to the top of the parent. 
+
+Web View
+Displays web pages. 
+
+## Building Layouts with an adapter. 
+When the content for your layout is dynamic or not pre-determined, you can use a layout that subclasses `AdapterView` to populate the layout with views at runtime. A subclass of the `AdapterView` class uses an `Adapter` to bind data to its layout. The `Adapter` behaves as a middleman between the data source and the `AdapterView` layout the `Adapter` retreives the data (from a srouce such as an array or a database query) and converts each entry into a view that cna be added into the `AdapterView layout`. 
+
+ListView:
+Displays a scrolling single column list
+
+GridView:
+Displays a scolling grid of columns and rows. 
+
+## Filling an adapter view witth data
+You can populate an `AdapterView` such as `ListView` or `GridView` by binding the `AdapterView` instance to an Adapter, which retrieves data from an external source and creates a `View` that repsresnets each data entry. 
+
+Android provides serveral subclasses of `Adapter` that are useful for retrieving different kinds of data and buildng views for tan `AdapterView`. The two most common adaters are
+
+`ArrayAdapter`
+Use this adapter when your data source is an array. By default, `ArrayAdapter` creates a view for each array item by calling `toString()` on each item and placing the contents in a `TextView`
+
+For example, if you have an array of string you want to display in a `ListView`, initialize a new `ArrayAdapter` using a constructor to specify the layout for each string adn the string array
+```
+val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, myStringArray)
+```
+The arugmetns for this constructor are 
+  - Your app `Context`
+  - The layout that contains a `TextView` for each string in the array
+  - The string array
+  Then simply call `setAdapter()` on your `ListView`
+```
+val listView: ListView = findViewById(R.id.listview)
+listView.adapter = adapter
+```
+To customize the appearance of each item you can override the `toString()` method for the objects in your array. Or, to create a veiw for each item that's someting other than a `TextView` for example, if you want an `ImageView` for each array item), extend the `ArrarAdapter` class and override `getView()` to return the type of vie wyou want for each item.
+
+`SimpleCursorAdapter`
+Use this adapter when your data comes from a `Cursor`. When using `SimpleCursorAdapter`, you must specify a layout to use for each row in the `Cursor` and which columns in the `Cursor` should be inserted into which views of the layout. For example, if you want to create a list of people's names an dphone numbers, you can perform a query that returns a `Cursor` containg a row for each person and columsn for the name and numbers. You then create a string array specifying which columns from the `Cursor` you want in the layout for each result and an integer array specifying the corresponding views that each column should be placed. 
+```
+val fromColumns = arrayOf(ContactsContract.Data.DISPLAY_NAME,
+                          ContactsContract.CommonDataKinds.Phone.NUMBER)
+val toViews = intArrayOf(R.id.display_name, R.id.phone_number)
+```
+
+When you instantiate the `SimpleCursorAdapter`, pass the layout to use for each result, the `Cursor` containg the results, and these two arrays. 
+
+```
+val adapter = SimpleCursorAdapter(this,
+        R.layout.person_name_and_number, cursor, fromColumns, toViews, 0)
+val listView = getListView()
+listView.adapter = adapter
+```
+The `SimpleCursorAdapter` then creates a view for each row in the `Cursor` using the provided layout by inserting each `fromColumns` item into the corresponding `toViews` view.
+
+If, during the coruse of your app's life, you change the underlying data that is read by your adapter, you should call `notifyDataSetChanged()`. This will notify the attached view that the data has been changed and it should refresh itself. 
+
+## Handling click events
+
+You cna respond to click events on each item in an `AdapterView` by implementing the `AdapterView.OnItemClickListener` interface. 
+```
+listView.onItemclickListener = AdapterView.OnItemClickListener { parent, view, position, id -> 
+  // Do something
+}
+```
