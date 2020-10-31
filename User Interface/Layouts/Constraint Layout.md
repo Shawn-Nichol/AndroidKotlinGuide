@@ -85,3 +85,69 @@ Near the top of the attributes window si the view inspector, which includes cont
 You can control the margin for each view in attributes window by clicing the nubmer on the line that represents each constraint
 
 ## Control Linear groups with a chain. 
+A chian is a group ov views that are linked to each other with bi-directiona position constraints. The views within a chian can be distrbuted either vertically or horizontally. 
+
+Chains can be styled in one of the following ways. 
+1. Spread: The views are evently distrbuted
+2. Spread insdie: The first and last view are affixed to the constraints on each end of the chain and the rest are evenly distributed
+3. Weighted: When the chain is set to either spread or spread inside, you can fill the reminaing space by setting one or more views to match constraints `0dp`. By default the space is evenly distributed between each view that's set to match constraints, but you can assign a wieght of importance to each view using the `layout_cocnstraintHorizontal_weight` and `layout_constraintVertical_weight`  attrbitutes. If you're familiar with `layout_weight` in a linear layout, this works the same way. So the view with the highest weight value getes the most amount of space; views that have the same weight get the same amount of of space. 
+4. Packed: The views are packed together(after margins). You can then adjust the whole chain's bais by changing the chain's head view bias. 
+
+The chain's head view (the left-most view in a horizontal chain and the top=most view iin a vertical chain) defines the chain's sytle in XML. However you can toggle between spread, spread inside, and packed by selecting any view iin the chain and then clicking the chain button that appears below the view. 
+
+To create a chain, select all of the views to be included in the chain, right-click one of the views select Chains and then select either Center Horizontally or Center vertically. 
+
+Notes
+- A view can be a part of both a horizontal and a vertical chain, making it easy to build flexible grid layouts. 
+- A chain works properly only if each end of the chain is constrained to another object on the same axis, 
+- Althoughthe orientation of a chain is either viertical or horizontal, using one does not align the views in that direction. So be sure you include other constraints to achieve the proper position for each view in the chain such as alignement constraints. 
+
+## Automatically create constrains
+Instead of adding constraints to everfy view as you place them in the layout, you can move each view into the positions you desire, and then click Infer Constraints to automatcally create constraints. 
+
+Infer Constraints scans the layout to determine the most effective set of constraints fo all views. It makes a best effort to constrain the views to their current positions while allowing flexibillity. You might need to make some adjustments to be sure the layout reponds as you intend for different screen sizes and orientations. 
+
+Autoconnect to parent is a separate feature that you can enable. If enabled, when you add chilld views to a parent, this feature automtaclly creates two or more constratins fo each view as you add them to the layout but only when its appropriate to constrain the veiw to the parent layout. 
+
+autoconnect is diabled by default. Enable it by clicing Enbale Autoconnection to Parent in the Layout Editor toolbar. 
+
+## KeyFrame animations
+Within a ConstraintLayout, you can animate changes to the size and postion of elements by using ConstraintSet and TransitionManager. A `constraintSet` is a lightweight object that represents the constraints, margins, and padding of all child elements within a `constraintLayout`. When you apply a `ConstraintSet` to a displayed `ConstraintLayout`, the layout updates the constraints of all of its children. 
+
+TO build an animation using `ConstraintSet` from teh second keyframe file and apply it to the displayed `ConstraintLayout`.
+```
+// MainActivity
+
+fun onCreate(savedInstanceState: Bundle?) {
+    ...
+    constraintLayout = findViewById(R.id.constraint_layout)
+}
+
+fun animateTokeyFrameTwo() {
+    val constraintSet = ConstraintSet()
+    constraintSet.load(this, R.layout.keyframe_two)
+    TransitionManager.beginDelayedTransition()
+    constraintSet.applyTo(constraintLayout)
+}
+
+// layout/keyframe1.xml
+// Keyframe 1 contains the starting position for all elements in the animation as well as final colors and text sizes
+
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+```
