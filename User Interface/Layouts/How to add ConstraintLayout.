@@ -1,0 +1,32 @@
+# How to add a ConstraintLayout
+
+## Dependencies
+1. Ensure you have the maven.google.com repository added in th emodule-level build.gradle.
+```
+repositories {
+    google()
+}
+```
+
+2. Add the library as a dependency in the same build.gradle file.
+```
+dependencies {
+    implementation "androidx.constraintlayout:constraintlayout:2.0.3"
+}
+```
+
+## Add and remove constraints
+1. Drag a view in a `ConstraintLayout`, it displays a bounding box with square resizing handles on each corner and ciruclar constraint handles on each side. 
+
+2. Click the view to select it. 
+
+3. Drag a constaraint handle to the anchor point.
+
+Constraint Rules
+- Every view must have at least two constraints: One Horizontal and one Vertical. 
+- You can create constraints only between a constraint hanlde and an anchor point that share the same plane. So Vertical plane of a view can be only be connected to a another vertical plan.
+- Each constraint handle can be used for just one constraint, but you can create multiple constrants tothe same anchor point. 
+
+You can delete a constraint by doing any of the following
+- Click on a constraint to select it, and the press `Delete`
+- Press and hold `Control', and then click on a constraint anchor. Note that the constraint turns ret to indicate that you can click to delete it. 
