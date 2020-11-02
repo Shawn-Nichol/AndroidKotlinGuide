@@ -32,3 +32,5 @@ override fun onCreateView(...): View? {
     return binding.root
 }
 ```
+
+Note: ConstraintSet requires all child views have IDs.
