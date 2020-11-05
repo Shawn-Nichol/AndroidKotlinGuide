@@ -33,8 +33,6 @@ To create a fully customized ocmponent
 4. You will almost certainly want to overrid `onMeasure()` and are also likley to need to override onDraw() if you want the component to show something. While both have default behavior, the default onDraw() will do nothing and the default onMeasure() will alwasy set a size of 100X100 which is probalby not what you want. 
 5. Other `on...` methods may also be overridden as required. 
 
-## Extend onDraw() and onMeasure()
-
 ## Extend onDraw() and onMeausre()
 The onDraw() method delivers you a Canvas upon which you ca nimplement anything you want: 2D graphics, other standard or custom compoennts, styled text, or anything else you can think of. 
 
@@ -48,4 +46,30 @@ At a high level, implemenint `onMeasure() looks something like this.
 2. Your component's `onMeasure()` should calculate a measuremnt widht and height wich will be required to render the component. It should try and stay within the specifications passed in, although it can choose to exceed them (in this case, the parent can choose what to do, inclduing clipping, scrolling, throwing an exception, or asking the onMEasure() to try again, perhaps with differen measurement specifications). 
 3. Once the width and height are calculated, the setMeasuredDeimension(int width, int height) method must be calle diwth the calculated measurements. Failure to do this will result in an exception being thrown. 
 
-## Component Control 
+## Compound Controls
+If you don't want to create a completely customized omponent, but instead are looking to put together a reusable component that consists of a group of existing controls, then creating a Compound Component (or Compound Control) might fit the bill. In a nutshell, this brings together a number of more atomic controls into a logical group of items that can be treated as a single thing. For example, a Combo Box can be throught of as a combination of a single line EditText field and an adjacent button with an attached PopupList. If you press the button and select somethign from the list, it populates the EditText fild, but the user can also type something directly into the EditText  if they prefer. 
+
+In Android there are actually tow other Views readily available to do this `Spinner and `AutoCompleteTextView, but regardless, the concept of the Combo box makes an easy-to-understand 
+
+### Create a compound
+1. The usuall starting point is a layout of some kind, so create a class that extends a lyout. Perhaps in the case of a bombo box we might use a LinearLayout with horizontal orientation. Remember that other layouts can be nesteed inside, so the compound component can be arbitrarily complex and structured. Note that just like with an Activity, you can use either the declarative approach to creating the contained compoents, or you can nest them progamtically from your ocde. 
+
+2. In the constructor for th new class, take whateer parameters the superclass expects, and pass them through to the superclass constructor first. Then you can set up the other views to use within your new component; this is where you would create the EditText field and the PopupList. Note that you also might introduce your own attributes and parameters in to the XML that can be pulled out and used by your constructor. 
+
+3. You can also create listeners for events thrat your contained views might generate, for example a listener method for the list item click listener to update ht contents of the EditText if a list selection is made. 
+
+4. You might also create your own properties with accessors and modifiers, for example, allow the EditText value to be set initially in the component and query for its contents when needed. 
+5. In the case of extending a Layout, you don't need to override the `onDraw()` and `onMeasure() methods since the layout will have default behavior that will likely work just fine. However you can still override them if you need to. 
+
+6. You might override other `on...` methods, like `onKeyDown()`, to perhpas choose certain default values fromt he popup list of a combo box when a certain key is pressed. 
+
+To summarize the use of a Layout as the basis for a Custom Control has a number of advantages. 
+
+- You can specify the layout using hte delcarative XML files just like with an activity screen, or you can create views programmatically and nest them into the layout from your code. 
+
+- The `onDraw()` and `onMeasure()` mehtods (plus most of the other `on...` methods) will likely have suitable behavior so you don't have to override them. 
+
+- In the end, you can very quickly construct arbitrarily complex compound views and re-ues them as if they were a single component. 
+
+
+## Modifying an Exisitng View Type. 
