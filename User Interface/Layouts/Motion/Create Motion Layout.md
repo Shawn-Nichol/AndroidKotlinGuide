@@ -12,7 +12,9 @@ In the XML layout create a `MotionLayout`, you can convert a `ConstraintLayout` 
 
 
 ## 3) Create a MotionScene
-A `MotionScene is an XML resource file that contains all of the motion descriptions for the corresponding layout. To keep layout information separate from motion descriptions, each `MotionLayout` references a separate MotionScene. note that defintions in the MotionScene takes precendence over any similar definitions in the `MotionLayout`. 
+A `MotionScene` is an XML resource file that contains all of the motion descriptions for the corresponding layout. To keep layout information separate from motion descriptions, each `MotionLayout` references a separate MotionScene. 
+
+Note that defintions in the MotionScene takes precendence over any similar definitions in the `MotionLayout`. 
 
 `app:LayoutDescription` refereences a `MotionScene`.
 ```
@@ -20,10 +22,12 @@ A `MotionScene is an XML resource file that contains all of the motion descripti
 <MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
+    // Transistion specifies the motion action from beggining to end. 
     <Transition
         motion:constraintSetStart="@+id/start"
         motion:constraintSetEnd="@+id/end"
         motion:duration="1000">
+        // Handle user interactions. 
         <OnSwipe
             motion:touchAnchorId="@+id/button"
             motion:touchAnchorSide="right"
@@ -41,6 +45,7 @@ A `MotionScene is an XML resource file that contains all of the motion descripti
             motion:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>
 
+    // End position of the Views. 
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@+id/button"
@@ -50,6 +55,10 @@ A `MotionScene is an XML resource file that contains all of the motion descripti
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintTop_toTopOf="parent" />
+            // Set custom attributes here, you'll need a new element for each attribute. 
+            <CustomAttribute
+                motion:attributeName="BackgroundColor"
+                motion:customColorValue="#9999FF"/>
     </ConstraintSet>
 
 </MotionScene>
