@@ -1,12 +1,12 @@
-# Using Contextual action mode
-I user can enable this mode by selecting an item usually with a long click, a contextual action bar appears at the top of the screen to present actions the user can perfrom on the currently selected item. While this mode is enabled, the user can select multiple items, deselect items, and continue to navigate within the activity. The action mode is disabled and the contextual action bar disapppears when the user deselects all items, presses the BACK button, or selects the Done action on the left side of the bar. 
+# Contextual Action Bar
+A contextual action bar appears at the top of the screen, the user can perfrom an action on the currently selected item. While this mode is enabled, the user can select multiple items, deselect items, and continue to navigate within the activity. The action mode is disabled and the contextual action bar disapppears when the user deselects all items, presses the BACK button, or selects the Done action on the left side of the bar. 
 
 For views that provide contextual actions, you should usually invoke the contextual action mode upon one of two events 
 
 1. The users performs a long click
 2. The user selects a checkbox or similar UI component within the view. 
 
-How your application invokes the contextual actionMode and defines the behavior for each action depends on your design. There are basically two designs: 
+There are basically two designs: 
 1. For contextual actions on indiviual arbitrarry views. 
 2. For batch contextual actions on groups of items in a ListView or GridView(allowing the user to select multiple itmes and perform an action on them all). 
 ## Contextaul action mode for indvidual views. 
@@ -65,7 +65,7 @@ fun myCAB() {
 
 
 ## Enabling batch contextual action in a ListView or GridView
-If you have a collection of items ina ListView or GridView (or another extension of AbsListView0 and want to allow users to perform batch actions, you should
+If you have a collection of items in a ListView or GridView (or another extension of AbsListView() and want to allow users to perform batch actions, you should
 - Implement the AbsListView.MultiChoiceModeListener interface and set it for the view group with setMultiChoiceModelIstener(). In the Listener's callback methods, you can specify the actions for the contextual action bar, respond to click events on actions items and handle other callbacks inherited for the Actionmode.callback interface. 
 
 - Call setChoiceMOde() with the CHOICE_MODE_MULTIPLE_MODAL argument
@@ -114,7 +114,12 @@ with(listView) {
 }
 ```
 
-Now when the user selects an item with a long-clic, the system calls the onCreateActionMode() method and displays teh contextual action bar with the specified actions. While the contextual action bar is bisible, users can select additional items. 
+Now when the user selects an item, the system calls the onCreateActionMode() method and displays the contextual action bar with the specified actions. While the contextual action bar is visible, users can select additional items. 
 
 In some cases in which the contextual actions provide common actions items, you might want to ad a checkbox or similar UI element that allows users to select items, becuase they might not discover the long-click behavior. When a user selects the checkbox, you can invoke the contextual action mode by setting the respective list item to the checked state with setItemChecked(). 
 
+## Replace action bar
+When implementing your own action bar, the CAB will push the ActionBar down, instead of covering it. To cover your own action bar with CAB copy the followign into you style XML file. 
+```
+<item name="windowActionModeOverlay">true</item>
+```
