@@ -71,5 +71,3 @@ To summarize the use of a Layout as the basis for a Custom Control has a number 
 
 - In the end, you can very quickly construct arbitrarily complex compound views and re-ues them as if they were a single component. 
 
-
-## Modifying an Exisitng View Type. 
