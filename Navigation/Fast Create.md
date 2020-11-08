@@ -24,8 +24,8 @@ dependencies {
 Right-click res directory, select New > Android Resource File. The New Resource File dailog appears.
 
 
-`File name`: nav_grpah
-`Resource type`: Navigation
+`File name`: nav_graph </br>
+`Resource type`: Navigation </br>
 `Resource Name`: navigation
 
 
@@ -54,7 +54,7 @@ Add View to MainActivity layout.
 
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
-
+```
 
 ## Desination
 1. In the Navigation Editor, click the new Destination icon and then click create new destination
