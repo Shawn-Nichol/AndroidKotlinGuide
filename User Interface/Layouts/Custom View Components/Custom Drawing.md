@@ -1,19 +1,20 @@
 # Implementing Custom drawing
 
 ## Override onDraw()
-The most improtatn step in drawing a custom view is to override the `onDraw()` method. The parameter to `onDraw()` is a `Canvas` object that the view can use to draw itself. The `Canvas` class defines methods for drawing text, lines, bitmaps, and many other graphics primitives. You can use these methods in `onDraw()` to create your custom user interface
+Implements your CustomView drawing. 
 
-Before you can call any drawing methods, though it's necessary to create a `Paint` object. The next section discusses `Paint` in more detail
+@ Canvas The background on which the CustomView will be drawn on. 
+
+Note: Before you call any drawing methods, it's necessary to create a `Paint` object. 
 
 ## Create Drawing Objects
 The android.graphics framework divides drawing into two areas
 - What to draw, handled by `Canvas`
 - How to draw, handled by `Paint`
 
-For instance, `Canvas` provides a method to draw a line, while `Paint` provides methods to define that line's color. `Canvas` has a method to draw a rectangle, while `Paint` defines whether to fill that rectangle with a color or leave it empty. Simply put, `Canvas` defines shapes that you can draw on to the screen, while `Piant` defines the color, style, font and so forth of each shape you draw. 
+`Canvas` defines shapes that you can draw on to the screen, while `Piant` defines the color, style, font and so forth of each shape you draw. 
 
-So, before you draw anything, you need to create one or more `Paint` objects. 
-
+Paint object
 ```
 private val textPaint = Paint(ANTI_ALIAS_FLAG).apply {
     color = textColor
@@ -24,18 +25,21 @@ private val textPaint = Paint(ANTI_ALIAS_FLAG).apply {
     }
 }
 
-private val piePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+private val paintCircle = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    color = Color.GREEN
     style = Paint.Style.FILL
-    textSize = textHeight
+    isAntiAlias = true
+    isDither = true
 }
 
-private val shadowPaint = Paint(0).apply {
-    color = 0x101010
-    maskFilter = BlurMaskFilter(8f, BlurMaskFilter.Blur.NORMAL)
+private val paintBoarder = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    color = Color.BLACK
+    style = Paint.Style.STROKE
+    strokeWidth = borderWidth
 }
 ```
 
-Creating objects ahead of time is improtant optimization. Views are redrawn very frequently, and many drawing objects require expensive initialization. Creating drawing objects within your `onDraw()` method significantly reduces perfomrance and can make your UI appear sluggish. 
+Views are redrawn freqently so it is important to avoid creating objects in `onDraw()` to avoid a sluggish UI. 
 
 ## Handle Layout Events. 
 In Order to properly draw a CustomView, you need to know what size it is. CustomViews often need to preform multiple layout calcualtions depending on the size and shape of their area on screen. Never make assumptions about the size of the view on the screen. Even if only one app uses your view, that app needs to handle different screen sizes, multple screen densities, and various aspect ratios in both protrait and landscape mode. 
@@ -63,7 +67,7 @@ val diameter = Math.min(ww, hh)
 
 If you need finer control over your view's layout parameters, implement `onMeasure()`. This methods parameters are `View.MeasureSpec` values that tell you how big your view's parent wants your view to be, and whether that size is hard maximum or jsut a suggestion. As an optimization, these values are stored as packed integers, and you use the static methos of `View.MeasureSpec` to unpack the information stored in each integer. 
 
-Here's an  exmape implementation of `onMeasure()`.
+`onMeasure()`.
 ```
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     // Try for a width based on our minimum
@@ -87,6 +91,7 @@ There are three improtant things to note.
 
 - The calculations take into account the view's padding. -
 - The helper method `resolveSizeAndState()` is used to create the final width and height values. This helper returns an appropriate `View.MeasureSpec` value by comparing the view's desired size to the spec passed into `onMeasure()`
+- `onMeasusre()` has no return value. Instead the method communicates its results by calling `setMeasuredDimension()`. Calling this method is mandatory. If you omit this call, the 'View' class throws a runtime exception. 
 
 ## Draw
 Once you have your object creation and measuring code defined, you can impelment `onDraw()`. Every view implements `onDraw()` differently, but there are some common operations that most views share: 
