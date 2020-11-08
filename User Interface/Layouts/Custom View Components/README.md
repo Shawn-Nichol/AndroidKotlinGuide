@@ -9,7 +9,7 @@ This class represents the basic building block for user interface components. A 
 Does your drawing
     - Canvas: The canvas on which the background will be drawn on. 
 
-- `onMeasure(widthMeasureSpec, heightMeasureSpec): 
+- `onMeasure(widthMeasureSpec, heightMeasureSpec): `
 Measure the view and its content to determine the measured width and the measured height. 
   - widthMeasureSpec: Horizontal space requirements as imposed by the apretn. 
   - heightMeasureSpec: int: vertical space requiremtnets as imposed by the parent. 
