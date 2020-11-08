@@ -30,6 +30,7 @@ Right-click res directory, select New > Android Resource File. The New Resource 
 
 
 ## Navigation Editor
+In the nav_graph file add the navigation attributes. 
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
