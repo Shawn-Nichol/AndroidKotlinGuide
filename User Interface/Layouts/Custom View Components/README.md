@@ -1,3 +1,7 @@
+# What is a CustomView
+Custom Views extends an existing view class with your own class and overrides some of the desired methods. Use the `onDraw()` to deliver a `Canvas` upon which ou can implement anyting you want in 2D, `onMeasure()` will return the size of your canvas. 
+# Glossary
+
 ### View
 This class represents the basic building block for user interface components. A view occupies a rectanglar area on the screen and is responsible for drawing and event handling. 
 
