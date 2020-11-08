@@ -23,17 +23,21 @@ dependencies {
 ## Create a Nav Graph
 Right-click res directory, select New > Android Resource File. The New Resource File dailog appears.
 
-Give the file a name, such as nav_graph
+
+`File name`: nav_grpah
+`Resource type`: Navigation
+`Resource Name`: navigation
 
 
 ## Navigation Editor
+```
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/nav_graph">
 
 </navigation>
-
+```
 
 ## NavHost Fragment
 Add View to MainActivity layout.
