@@ -13,11 +13,10 @@ nav_graph
     
     <action
       android:id="@+id/action_list_to_details"
-      app:destination="@id/details_dest/>
-    
+      app:destination="@id/details_dest/>  
   </fragment>
   
-    <fragment
+  <fragment
     android:id="@+id/item_details"
     android:label="Item Details
     tools:layout="@layout/item_details_fragment">    
