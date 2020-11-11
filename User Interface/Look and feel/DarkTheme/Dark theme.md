@@ -49,15 +49,6 @@ To swicth the theme, call `AppCompatDelegate.setDefaltNightMode()`.
 
 Note: Starting with App Compat V 1.1.0, setDefaultNightMode() automatically recreates any started activites. 
 
-## Force Dark
-Android 10 provides Force Dark, a Feature for developers to quickly implement a Dark theme without explicitly setting a DayNight theme as described above. 
-
-Force Dark analyzes each view of your light-themed app, and applies a dark theme automatically before it is drawn to the screen. Some developers use a mix of Force Dark and native implementation to cut down on the amount of time needed to impelment Dark theme. 
-
-Apps must opt-in to Force Dark by setting android:forceDarkAllowed="true" in the activity's theme. This attribute is set on all of the system and androidX provided light themes, such as Theme. Material light. When you use Force Dark, you should make sure to test your app thoroughly and exlude views as needed. If your app uses a dark theme, Force dark will not be applied. Similarly, if your app's theme inherits from a DayNight Theme, Force Dark will not be applied, due to the automatic switching 
-
-## Disabling Force Dark on a view
-Force Dark can be controlled on specific views with the anddroid:forceDarkAllowed layout attrbiute or with `setForceDarkAllowed()`
 
 ## Best Practies
 Notification and widgets 
@@ -78,7 +69,7 @@ Commmon pitfalls to llok out for
 In all of these cases, use appropriate theme attrbiutes instead of hardcoded colors. 
 
 ## Launch screens
-If your app has a custom launch screen it may need to be mdofified so that it refelcts the selected theme. 
+If your app has a custom launch screen it may need to be modified so that it refelcts the selected theme. 
 
 Remove any hardcoded colors, for example any background colors pointing may be white. Use the `?android:attr/colorBackground` theme attrbites instead.
 
