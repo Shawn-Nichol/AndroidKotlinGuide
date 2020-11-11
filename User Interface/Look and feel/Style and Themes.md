@@ -1,18 +1,18 @@
 # Style and Themes
-Syltes and theems on Android allow youto separate the details of your app desing from the UI structure and behavior, similar to stylesheets in web design. 
+Syltes and themes on Android allow you to separate the details of your app desing from the UI structure and behavior, similar to stylesheets in web design. 
 
 A style is a collection of attributes that specify the appearnce for a single view. A style can specify attributes such as font color, font size, background color and much more. 
 
-A theme is a collection of attributes that's applied to an entire app, activity, or view hierarchy not just an individual view. When you apply a them, every view in the app or activity applies each of the theme's attributes that it supports. Themes can also apply styles to noon-view elemetns, such as the status bar and window background. 
+A theme is a collection of attributes that's applied to an entire app, activity, or view hierarchy not just an individual view. When you apply a theme, every view in the app or activity applies each of the theme's attributes that it supports. Themes can also apply styles to non-view elemetns, such as the status bar and window background. 
 
-Styles and themes are declared in a style resource file in res/valus// ususally named `styles.xml`
+Styles and themes are declared in a style resource file in res/valus/ ususally named `styles.xml`
 
 Themese and styles have many similarities, but theya re used for differen purposes. Themes and styles have the same basic strcuture a key value pair which maps attributes to resources. 
 
 A styles specifies attributes for a particular type of view. For example, one style might specify a button's attributes. Every attrbiute you specify in a style is an attribute you could set in the layout file. By extracting all the attrbiutes to a style, it's easy to use and maintatin them across multiple widgets. 
-A theme defiens a collection of named resoureces which can be referecned by styles, layouts, widgets and so on. Theems assign semantic names, like colorPrimary, to Android resources. 
+A theme defines a collection of named resources which can be referecned by styles, layouts, widgets and so on. Themes assign semantic names, like colorPrimary, to Android resources. 
 
-Styles and themes are meant to work toegther. For example, you might have a style that specifies that one part of a button should be `colorPriamry,` and another part should be colorSecondaryl. The actual definitions of those colors is providedi n the theme. When the device goes into nightmode, your app can switch form its "light" theme to its "dark" theme, changing the values for all those resources names. you don't need to change the styles, since the styles are using the semantic names and not specific color definitions. 
+Styles and themes are meant to work toegther. For example, you might have a style that specifies that one part of a button should be `colorPriamry,` and another part should be colorSecondary. The actual definitions of those colors is provided in the theme. When the device goes into nightmode, your app can switch from its "light" theme to its "dark" theme, changing the values for all those resources names. you don't need to change the styles, since the styles are using the semantic names and not specific color definitions. 
 
 ## Create and apply a style
 To createa new style or theme, open your project's `res/values/styles.xml` file for each style you want to create, follow these steps. 
@@ -40,7 +40,7 @@ Note: only the element to which you add the style atttribute receives those styl
 However, instead of applying a style to indvidual views, you'll usually apply styles as a theme for your entire app, activity or collection of views. 
 
 ## Extend and customize a style
-When creating your own styles, you should alwasy extend an exisitng style from the famework or support library so that you mantain compatibility witht platfrom UI styles. To extend a style, specify the style you want to extend with the parent atttribute. you can then override the inherited style atttributes and add new ones. 
+When creating your own styles, you should always extend an exisitng style from the framework or support library so that you mantain compatibility witht platfrom UI styles. To extend a style, specify the style you want to extend with the parent atttribute. you can then override the inherited style atttributes and add new ones. 
 
 ```
 <style name="GreenText" parent="@android:style/TextAppearance">
@@ -50,7 +50,7 @@ When creating your own styles, you should alwasy extend an exisitng style from t
 
 However, you should always inherit your core app styles from the Android Support Library. The styles in the support library provide compatibility and Android 4.0 and higher by optimizing each style for the UI attributes available in each version. The support library styles often have a name similar to the style from the platfrom, but with `AppCompat` included. 
 
-To inherit styles from a library or your own project, declare the parent style name withou the `@android:style/`part shown above. For example, the following example inherits text appearance styles form the support library. 
+To inherit styles from a library or your own project, declare the parent style name without the `@android:style/`part shown above. For example, the following example inherits text appearance styles form the support library. 
 ```
 <style name="GreenText" parent="TextAppearance.AppCompat">
     <item name="android:textColor">#00FF00</item>
