@@ -97,3 +97,138 @@ Beginning with Android 5.0 and Android Suppport Library v22.1, you can also spec
 
 The previous examples show how to apply a theme such as `Theme.AppCopmat` that's suppplied by the Android Support Library. but you'll usually want to customize the theme to fit your app's brand. The best way to do so is to extend these styles from the support library and overrid e some of the attributes, as descirbed in the next section . 
 
+## Style Hierarchy
+Android provides a variety of ways to set attrbiutes throughout your Android app. For examlple, you can set attributes directly in a layout, you can apply a style to a view, you can apply a theme to a layout, and you can even set attrbiutes programmatically. 
+
+When choosing how to style your app, be mindful of Android's style heirarchy. In general, you should use themes and styles as much as possible for sonsistency. if you've specified the same attrbiutes in muyltiple places, the list below deteremines which attributes are ultimately applied. The list is ordered from highest precedence t loweset:
+
+1. Apply character or paragraphy-level styleing via text spans to `TextView-derived classes.
+2. Applying attributes progammactically
+3. Applying individual attrbiutes directly to a view
+4. Apply a style to a view
+5. Default styleing
+6. Apllying a theme to a collection of views, an activity, or your entire app
+7. Applying certain View-specific styling, such as setting a TextAppearance on a TextView. 
+
+
+## TextAppearance
+One limitation with styles is that you can apply only one style to a view. In a `TextView`, however you can also specify a `TextAppearance` attrbiute which functions similarly to a style, as shown in the following. 
+
+```
+<TextView
+    ...
+    android:textAppearance="@android:style/TextAppearance.Material.Headline"
+    android:text="This text is styled via textAppearance!" />
+```
+
+`TextAppearance` allows you to define text-specific styling while leaving a `View's` stle available for other uses. Note, however that if you define any text attrbiutes directly on the `View` or in a style, those values would override the `TextAppearance` values. 
+
+`TextAppearance` supports s subset of styling attrbiutes that `TextView` offers. For the full attrbiute list, see `TextAppearance`.
+
+Some common `TextView` atttributes not included are `lineHeight[Multiplier|Extra]`, `lines`, `breakStrategy`, and `hyphenationFreqnency`. `TextAppearance` works at the character level and not he paragraph level, so attributes that affect the entire layout are not supported. 
+
+## Customize the defual theme. 
+When you create a project with Andoid studio, it applies a material design theme t o your app by default, as defined in your project's `styles.xml` file. This `AppTheme` style extends a theme from the support library and includes overrides for color attrbiutes that are used by tkey UI elements, such as the app bar and `FAB`. So you can quickly customize your app's color design by updaitn the provides colors. 
+
+```
+<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+</style>
+```
+
+Notice that the style values are actually reference to other color resources, defined in the project's `res/values/colors.xml` filess. So that's the file you should edit to change the colors. But before you start changing these colors, preview your colors with the `Material Color Tool`. This tool helps you pick colors fomr the material palette and preview how they'll look in an app. 
+
+Once you know your colors, update the values in `res/values/colors.xml`
+```
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--   color for the app bar and other primary UI elements -->
+    <color name="colorPrimary">#3F51B5</color>
+
+    <!--   a darker variant of the primary color, used for
+           the status bar (on Android 5.0+) and contextual app bars -->
+    <color name="colorPrimaryDark">#303F9F</color>
+
+    <!--   a secondary color for controls like checkboxes and text fields -->
+    <color name="colorAccent">#FF4081</color>
+</resources>
+```
+
+And then you can override what ever other styles you want. For exmaple, you can change the activity background color as follows. 
+```
+<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    ...
+    <item name="android:windowBackground">@color/activityBackground</item>
+</style>
+```
+
+For a list of attrbiutes you can use in your theme, see the table of attrbitues at `R.styleable.Theme` and when adding styles for the views in your layout, you can also find attrbiutes by looking at the "XML attrbiutes" table in the view class references. For example, all views support `XML attrbiutes from the base view class.`
+
+Most atttributes are applied to specific types of views, and some apply to all views. However, some theme attrbiutes listed at `R.styleable.Theme` apply to the activity window, no the views in the layout. For example,  windowBackground changes the window background and windowEnterTransition defines a transition animation to use when the aticity starts
+
+The Android Support Library also provies other attributes you can use to customize your theme extend from `Theme.ApCompat`(such as the colorPrimary attribute shown above). Theses are best viewed in teh library's attrs.xml file. 
+
+There are also differen themes available from the suport library that you might want to extned instead of the ones shonwn above. The best place to see the available themes is the library's themes.xml file. 
+
+## Add Version-specific styles
+If a new version of Android adds theme attrbiutes that you want to use, you can add them to your theme while still being compatible with old versions. All you need is another styles.xml file saved in a values directory that includes the resource version qualifier. 
+```
+res/values/styles.xml        # themes for all versions
+res/values-v21/styles.xml    # themes for API level 21+ only
+```
+
+Becuase the styles in the `values/styles.xml` files are available for all version, your themes in `values-v21//styles.xml` can inherit them. As such, you can avoid duplicating styles by beginningwith a "base" theme and then extending it in your version specific styles. 
+
+For exmple, to declare window transitions for Android 5.0 and higher you need to use some new attributes. So your base theme in res/values/styles. xml could look like this. 
+
+```
+<resources>
+    <!-- base set of styles that apply to all versions -->
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryTextColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+    </style>
+
+    <!-- declare the theme name that's actually applied in the manifest file -->
+    <style name="AppTheme" parent="BaseAppTheme" />
+</resources>
+```
+Then add the  version-specific styles in `res/values-v21/styles.xml`
+
+```
+<resources>
+    <!-- extend the base theme to add styles available only with API level 21+ -->
+    <style name="AppTheme" parent="BaseAppTheme">
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@android:transition/slide_right</item>
+        <item name="android:windowExitTransition">@android:transition/slide_left</item>
+    </style>
+</resources
+```
+
+Now you can apply `AppTheme` in your manifest file and the stsytem selects the styles avaialbel for each system version. 
+
+## Customize widget styles 
+Every widget in the framework and support library has a default style. For example, when you style your app using a them from the support library, an instance of  `Button` is styled using the `Widget.AppCompat.Button` style,. If you'd like to apply a different widget style to a button, then you can do so with the style atttrbiute in your layout file. For example, the following applies the library's borderless button style. 
+
+```
+<Button
+    style="@style/Widget.AppCompat.Button.Borderless"
+    ... />
+```
+
+And if you want to apply this style to all buttons, you can declare it in your theme's buttonStyle as follows
+
+```
+<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="buttonStyle">@style/Widget.AppCompat.Button.Borderless</item>
+    ...
+</style>
+```
+
+You can also extend widget styles, just like extending any other tstyle, and then apply your custom widget style in your layout or in your theme. 
+
