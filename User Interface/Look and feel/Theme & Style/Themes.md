@@ -1,4 +1,4 @@
-# Style and Themes
+# Themes
 A theme is a collection of attributes that's applied to an entire app, activity, or view hierarchy not just an individual view. When you apply a theme, every view in the app or activity applies each of the theme's attributes that it supports. Themes can also apply styles to non-view elemetns, such as the status bar and window background. 
 
 Themes are declared in a style resource file in res/valus/ ususally named `styles.xml`
