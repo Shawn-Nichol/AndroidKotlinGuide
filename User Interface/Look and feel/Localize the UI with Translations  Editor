@@ -1,0 +1,151 @@
+# Localize the UI wih Translations Ediotr
+The translations Ediotr provides a consolidated and editable view of all of your default and translated string resources. 
+
+For an introduction to translating your app for a differen lanaguages, read Supporting different languages and cultures. 
+
+## String Resources
+The string resources for a project are contained in `strings.xml` files. Your project has a default `strings.xml` file that contains string resources in the default language for your app, which is the language you expect most of your app users to speak. you can also have translated `strings.xml` files that contain string resources for other languagese that you want your app to accommodate. 
+
+Once you have your default `strings.xml file completed, you can add the tranlations yourself, or pay a professional service to do the tranlsation. Either way, you should take advantage of the Android Studio features to help you manage and test localizable text.
+
+## Open the Tranlastion Editor. 
+You can access the Tranlations Editor form the following places in Android Studio. 
+
+Open from the Android view
+1. In the Project> android panel on the lef, select ModuleName > res > valeus
+2. Righ-click the strings.xml file and select Oppen Tranlations Ediotr. 
+The translations Ediotr displays the key and value pairs from the `string.xml` files. 
+
+Note: When you have translated strings.xml files, your project has multiple corresponding values folderswith suffixes that indicat ehte language, such as values-es for spanish. your default strings.xml file is always in the values folder. 
+
+## Open from within strings.xml
+You can access the Translations Ediotr from within any off your strings.xml files
+1. In the Project > Android panel on the left, select moduleName > res > values.
+2. Double-click strings.xml to open it for editing. 
+3. In strings.xml, click the Open editor link in the upper-right corener. 
+
+Note: If you click the hid notification link .the open editor link goes away. To bring it back, close and reopen the project
+
+## Open fomr the Desing Editor. 
+You can open the tranlsation Ediotr fomr the layotu editor's Design Ediotr to edit your default and tranlated text to better fit your layout. For information about switicing languages in the design editor, see Display tranalted text in the Design Ediotr. 
+
+1. In the Project > Android panel on the left, select ModuleName > res > layout
+2. Double-click content_main.xml to open it for editing. 
+3. Click the Design tab in the lower-left corner to display the Design Editor. 
+4. In the Design Edittore, select the Language drop-down list. 
+5. Select Edit Translations. 
+
+## Configure untranslatable rows. 
+In the Tranlations Ediotr, you can select Unstranslatable to indicate that you do not want the test in this row to be translated. text that you would not want translated might be product-specfic text liek trade names and trade marks, or technical terms that do not have a translations. 
+
+When you check Untranlatable, the correspoding line in the default strings.xml file add translatable="false". In the follwoing example, EasyApp in the top line is not translated becuase  it is thr product name. 
+
+```
+<resources>
+    <string name="app_name" translatable="false">EasyApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="easy_app">I am a Simple App!</string>
+    <string name="next_page">Next Page</string>
+    <string name="second_page_message">I am the Second Page!</string>
+    <string name="title_activity_second">SecondActivity</string>
+</resources>
+```
+
+## Add and delete lanaguages
+The Tranlation Editor supports BCP 45 and combines locale and region cdoces into a single selection for targeted localizations. A locale defines more than the language. A locale includes country-dependent formatting for things liek the date and time, currencies and decimals. 
+
+To add a language, do the following
+1. In the Translation Editor, click the globe icon
+2. Fromt he drop-down list,select the language you want to add.  The new language appears in teh Translation sEditor, and a values-* folder with a strings.xml file is added to the project.
+
+To delte a lanaguage do the following
+You can delte a language in the Translations Editor by deleting every value in the column, or you can delete the project folder for that language aas follows:
+1. In the Projbect > Android panel on the lef, select ModuleName > res
+2. Right click the values-* folder fofr the language you want to delete. For example, values-hi for Hindi. 
+3. From the drop-down list, select Delete to delette the folder and its strings.xml file. 
+
+## Edit, add, and delete text
+You can operate on the text setting directly in the strings.xml file or through the Translations Ediotr. This section describes the Transslations Ediotr approach. in the Translations Ediotr approach. in the Translations Ediotr, you can edit, add, or delte text through the list view or through the Translation fileld at the bottom of the Translations Editor. 
+
+List view
+To edit or add text, do the following
+1. Double-click the cell where you want to edit or add text. 
+2. Copy-paste, or if you have a keyboard that supports diacritic marks, type directly into the list view. 
+3. Tab or move the cursor out of the fild. 
+To delete text, do the following
+1. Double-click the cell you want to delete. 
+2. In the list view, select the text and press Delete. 
+3. Tab or move the cursor out of the field. 
+
+To delete text, do the following. 
+1. Single-click the cell you want to delte. 
+2. In the Translation field, select the text and press Delete. 
+
+## Add and delete keys
+In the Tranalations Ediotr, the Key column lists the unique identifiers for each data item in your stirngs.xml files. You can add and delte keys through the Translations Editor. Wehn you delete a key, the translations editor deltes it and all of its associated translations. The translations Editor uses the safe Delete refactoring to delte a key so you know it fthe key text is used elsewhere and have a chance to make necessary adjustments before you delte the key. The safe Delete refactoring ensures that your code still compiles after you delete the key. 
+
+To add a key, do the following. 
+1. In the Tranlations Editor, click Add key
+2. In the dialog enter a key name, defalt value, and the location of the default stirngs.xml file
+
+To delete a key do the following. 
+1. In the Translations Ediotr, select the key you want to delte 
+2. Click Remove keys
+3. In the Delete dialgo, decide if you want a safe delete and whether you want to search in comments and stirngs, and click ok
+
+If there are no references to the delted key, or if all references are safely cllapsible, th ekey is delted. Otherwise, the Trnaslations Ediotr displays the usages Detected dialgo with the information about the probelm detected. 
+
+4. Sleect the view Usages to review what will be delted. The find safe delete conflicts dialgo shows all ofthe usages that are not safe to deltee so you can edit your corresponding code. 
+
+5. right-click a usage to display the context menu and select Jump to source so you can make the needed changes. 
+6. In the find Safe delete conflicts panel, select Rerun safe Delete to makes rue there  are no other usages that need attention. 
+7. When theusages are cleaned up., click Do refactor to delete the key. 
+
+
+## Display Translated text in the Design Editor
+To see how the translated text displays in your app layout, toggle th etext between the default and translated versions in the Design Editor. as follows. 
+1. In the Project > Android panel on the left, select ModuleName >res >layout
+2. Double-click content_main.xml to open it for editing
+3. Click the Design tab in the lower-left corener to dispaly the Design Ediotr. 
+4. In the Design Ediotr, select the language drop-down list
+5. Select Edit Translations
+6. Sleect the language you want to use to view your app. 
+
+The Design editor displays our app layout in the selected language.
+
+
+## Set the Design Ediotr to the default language. 
+To set the langage back to the default, select ex> Langauge. 
+
+## Managing and text localizable text
+The android platform and Android Studio provide serveral features to help you manage tand test your localizable app text. These features have options to help you target issues with right-to-left scripts, such as Arabic or Hebrew. Testing your localizable text allows you to make adjustments to the UI text and its layout before you mommit your messages to the source respository to be sen for translation later. 
+
+## Refactor you project for RTL support. 
+Android studio has a refactoring command that enables support for bidirectional text in `TextView`, `ConstraintLayout`, and `LinearLayout` elemetns so your apps can display and allow users to edit text in both left-to-right and right-to left scripts. The command also provides automatic mirroring of app UI layouts and all view widgets. To see the text direction change and the layout mirroring, you must alwo set the text and layout direction preoprties in the Layout Ediotr. 
+
+1. Select Refactor > Add RTL support wher possible.
+- If the `<application>` element in your `AndroidManifest.xml` file does not have the `andorid:supportsRTL="true"` attrbiute, the select the Update AndroidManifest.xml checkbox. 
+- If your app's `targetSdkVersion` is 17 or higher, select Replace Left/Right Properites with Start/End properites. In this case, your properties hsould use "Start" and "end" instead of "left" and "right". 
+- If your app's `targetSdkVersion` is 1 or less, select Geenerate -v17 versions in this case, your XML should use both sets of proeprites. For example, your XML should use bothe `android:paddingLeft` and `android:paddingStart`.
+2. To display the Find Refactoryiing Preview window, click Run. 
+3. Do Refactor. 
+
+Text and layout direction properties window on the righ provides the textDirection preoprty to use with text widgets and the layoutDirection property to use with layout widgets to change he direction of text and layout compents. The directio properties are listed in teh Properties window on the righ and work with API level 17 or hgiher. 
+
+To see the text direction chagne and the layout mirroring, you mst also refactor the project for RTL support. In English, thtext direction chagne moves only punctuation from the righ side to the left side.of the text; for exmple, "Hello World" becomes "HellowWorld". To see LTF text switch to RTL, yoou have to use an RTL langauge in your app. If ou want touse English and see the text switch to RTL for testing purposes, use PSeudolcales. Pseudolocales are independent of the refactoing command and the direction properties
+
+To access and use the direction properties, do the following
+1. In the LayoutEditor, select a text widget. 
+2. Open the Properties window and search for the RTL property you want to use. 
+To set the property value, select one of the following 
+- FirstStrong: Default for the root view. The first stonr directiona character determines hte paragraph direction.  If ther eis no strong directional character, the paragprha direction is the view's resolved layout direction. 
+- anyRtl: the paragraph direction is RTL if it contians any strong RTL character; otherwise it is LTR if it contains any strong LTR characters. If there are neither theparagraph direction is the view's resovled layout directions. 
+- ltr: Theparagraph direction is LTR.
+- rtl: The paragrpah direction is RTL
+- locale: The paraagraph direction comes from the styem locale. 
+- inherit: default. Use the direction set in the paret. 
+3. To review thereversed text and layout, run the app. 
+
+
+## Pseudolocales
+A pseudolocale is a simulated locale that is deisgned to assume the characteristics of languages that cause UI, layout, RTL , and other translation problems when an app is translated. PSeudolocales prvoide instant and automatic translations that are readable in English for all localizable messages. This makes it possible for you to catch untranslatable messages in your source code. 
