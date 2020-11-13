@@ -1,7 +1,5 @@
-Adaptive icons
-Android 8.0 introduces adaptive launcher icons, which can display a vriety of shapes across differen device models. For example, an adaptive launcher icon can display a circular shape on one oEM device, and dispaly a aquaircle on another device. Each deice OEM provides a mask wich thte system then uses to render all adaptive icons with thte same shape. Adaptive launcher icons also used in shortcuts, the settings app, sharing dialogs, and the overview screen. 
-
-You can control the look of your adaptive launcher icon by definning 2layouers, consisting of a background a foreground. You must provide icon layers as draables without masks or background shadows around the outline of the icon
+# Adaptive icons
+You can control the look of your adaptive launcher icon by definning layers, consisting of a background a foreground. You must provide icon layers as drawbles without masks or background shadows around the outline of the icon
 
 Layers must be sized at 108 X 108 dp
 The inner 72 X 72 dp of the icon appears within the masked viewport. 
@@ -19,7 +17,7 @@ To add an adaptive icon to an app using XML, begin by updating the `android:icon
 
 ```
 
-Next you must create alternative drawable resources in your app for use with Android 8.0 API level 26. You can then ues the `<adaptive-icon>` element to define the foregroudn and background layer drawables for your icons. The `<foreground>` and `<background>` inner elements both support the android: drawable attribute. 
+Next you must create alternative drawable resources in your app for use with Android 8.0 API level 26. You can then ues the `<adaptive-icon>` element to define the foreground and background layer drawables for your icons. The `<foreground>` and `<background>` inner elements both support the android: drawable attribute. 
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
