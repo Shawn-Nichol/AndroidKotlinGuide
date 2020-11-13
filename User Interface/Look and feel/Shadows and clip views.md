@@ -5,7 +5,7 @@ The elevation of a view, is represented by the Z property. Z property determines
 
 Shadows are drawn by the parent of the elevated view, and thus subject to standard view clipping, clipped by the parent by default. 
 
-Elevation is also useful to create animations where widgets temporarily rise aobove the view plane when performing some action. 
+Elevation is also useful to create animations where widgets temporarily rise above the view plane when performing some action. 
 
 ## Assign Elevation to your views
 The Z values for a view has two compenents
@@ -25,7 +25,7 @@ The Z values are measured in dp
 ## Customize view Shadows and Outlines
 The bounds of a view's background drawable determine the default shape of its shadow. Outlines represent the outer shape of a graphics object and define the ripple area for touch feedback. 
 
-Consider theis view, defined with a background drawable.
+Consider this view, defined with a background drawable.
 ```
 <TextView
     android:id="@+id/myview"
