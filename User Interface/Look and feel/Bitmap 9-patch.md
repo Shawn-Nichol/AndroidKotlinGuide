@@ -1,9 +1,9 @@
 # Create resizable bitmaps
 
-The Draw 9-patch tool is a WYSIWYG editor included in Android Studio that allows you to create bitmap images that automatically resize to accommodate the contents of the view and the size of the screen. Selected parts of the image scaled horizontally or vertically based on indicators drawn within the image. 
+The Draw 9-patch tool is a `WYSIWYG` editor included in Android Studio that allows you to create bitmap images that automatically resize to accommodate the contents of the view and the size of the screen. Selected parts of the image scaled horizontally or vertically based on indicators drawn within the image. 
 
 Quick Guide
-1. Righ-click the PNG image you'd like to cretae a NinPatch image from, then click Create 9-patch file
+1. Righ-click the PNG image you'd like to cretae a 9-Patch image from, then click Create 9-patch file
 2. Type a file name
 3. Open the NinePatch file. The left pane is your drawing area, in which you can edit the lines for the stretchable patches and content area. The right pane is the preview area. 
 4. Click within the 1 pixel perimeter to draw the lines that defien the stretchable patches and optional content area. Right-click to erase previously drawn lines
