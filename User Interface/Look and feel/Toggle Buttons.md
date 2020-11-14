@@ -1,3 +1,4 @@
+# What is a toggle Button
 A toggle button allows the user to change a setting between two states. 
 
 You can add a basic toggle button to your layout with the `ToggleButton` object. Android 4.0 introduces another kind of toggle button called a switch that provides a slider control, which you cna add with a Switch object. SwitchCompat is a version of the Switch widget which runs on a devices back to API 7. 
