@@ -108,7 +108,7 @@ Because the view is yet to load the fragment view cannot be found, for the NavCo
 val navHostFragment: NavHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 ```
 
-Retrieve the NavController directly forn the NavHostFragment
+Retrieve the NavController directly from the NavHostFragment
 ```
 val navController = navHostFragment.navController
 ```
@@ -163,7 +163,7 @@ class MainActivity : AppCopmatActivity() {
 ```
 
 
-## handole Clicks
+## Handle Clicks
 ```
 myNavView.setNavigationIemtSelectedListener { menuItem -> 
   when(menuItem.itemId) {
