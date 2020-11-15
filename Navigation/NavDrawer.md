@@ -117,6 +117,9 @@ Setup a toolbar for use with a NavController
 @ navController: The NavController whose navigation actions will be reflected in the titlle of the Toolbar. 
 @ drawerLayout: The DrawerLayout that should be toggled from the Navigation button.
 ```
+val myToolbar = binding.myToolbar
+val myDrawerLayout = binding.myDrawerLayout
+
 myToolbar.setupWithNavController(navController, myDrawerLayout)
 ```
 
@@ -129,7 +132,12 @@ AppbarConfiguration options for NaviationUI methods that interact with implement
 @ topLevelDestinationIds: Set of destinations by id considreed at the top level, the upbutton will not display
 @ drawerLayout: The openable layout that should be toggeld from the navigation button. 
 ```
-myAppBar = AppBarConfiguration(setOf(R.id.login_dest, R.id.fragmentMenuOne), myDrawerLayout)
+myAppBar = AppBarConfiguration(
+  setOf(
+    R.id.login_dest,
+    R.id.fragmentMenuOne
+    ),
+  myDrawerLayout)
 ```
 
 
@@ -137,7 +145,7 @@ Set up the action bar returned by `AppCompatActivity.getSupportActionbar()` for 
 @navController: The NavController whose navigation actions will be reflected in the title of the action bar. 
 @param: Configuration Additional configuration options for customizing the behavior of the  ActionBar
 ```
-setupActionBarWithNavController(navController, myAppBar
+setupActionBarWithNavController(navController, myAppBar)
 ```
 
 
@@ -145,21 +153,44 @@ Heres what it would look like in the main activity.
 ```
 lateinit var mDrawer: DrawerLayout
 
+lateinit var myAppBar: AppBarConfiguration
+...
 
-class MainActivity : AppCopmatActivity() {
+private fun initNavDrawer()
 
-    lateinit var mDrawer: DrawerLayout
-    lateinit var myAppBar: AppbarConfiguration
-    
-    fun onCreate(savedInstanceState: Bundle?) {
-      val navHostFragment: NavHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-      val navController = navHostFragment.navController
-      myToolbar.setupWithNavController(navController, myDrawerLayout)
-      setSupportActionBar(myToolbar)
-      myAppBar = AppBarConfiguration(setOf(R.id.login_dest, R.id.fragmentMenuOne), myDrawerLayout)
-      setupActionBarWithNavController(navController, myAppBar)
+  // Retrieve the navController from the NavHostFragment.
+  val navHostFragment =
+      supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+
+  val navController = navHostFragment.navController
+  val drawerLayout = binding.myDrawerLayout
+  val toolbar = binding.myToolbar
+
+  // Post the call to the findNavController
+  toolbar.setupWithNavController(navController, drawerLayout)
+
+  // Set toolbar as the action bar
+  setSupportActionBar(toolbar)
+
+  // Pass top level destination, shows Nav drawer on the following fragments
+  myAppBar = AppBarConfiguration(
+      setOf(
+          R.id.dest_loginFragment,
+          R.id.dest_contextual1Fragment,
+          R.id.dest_contextual2Fragment,
+          R.id.dest_contextual3Fragment,
+          R.id.dest_menu1Fragment,
+          R.id.dest_menu2Fragment,
+          R.id.dest_menu3Fragment
+      ),
+      drawerLayout
+  )
+
+  // Setup Action bar
+  setupActionBarWithNavController(navController, myAppBar)
   }
 }
+
 ```
 
 
