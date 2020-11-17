@@ -1,7 +1,7 @@
 # What is an App Bar
-A primary toolbar within the activity that may display the activity title, applicatin-level navigation and other interactive items. The action bar appears a thte top of the activity window whent he activity uses the system
+A primary toolbar within the activity that may display the activity title, application-level navigation and other interactive items. The action bar appears at the top of the activity window when the activity uses the system.
 
-Begining in android API 21 the action bar may be representedd by any Toolbar widget within the application layout. The appllicatino may signal to the activity wchic Toolbar should be treated as the Activit's action bar. Activites that use this feature should use one of the supplied .NoActionBar themes, and set the Windows attrbitue to false. 
+Begining in android API 21 the action bar may be represented by any Toolbar widget within the application layout. The appllication may signal to the activity witch Toolbar should be treated as the Activit's action bar. Activites that use this feature should use one of the supplied .NoActionBar themes, and set the Windows attrbitue to false. 
 
 From your Activity you can retrieve an instance of ActionBar by calling getActionBar()
 
