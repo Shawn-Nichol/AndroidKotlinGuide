@@ -128,11 +128,15 @@ abastract class WordRoomDatabase : RoomDatabase() {
 ## Reposiotry
 
 ```
-class WordRepository(private val playerDao: PlayerDao) {
-  val allWords: LiveData<List<Word>>
+class WordRepository(private val wordDao: WordDao) {
+  val allWords: LiveData<List<Word>> = 
   
-  suspend fun insert(player: Player) {
-    playerDao.insert(player)
+  suspend fun insert(word: Word) {
+    wordDao.insert(word)
+  }
+  
+  supsend fun delete(word: Word) {
+    wordDao.delete(word)
   }
 }
 
