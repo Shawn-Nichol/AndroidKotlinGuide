@@ -125,7 +125,8 @@ override fun onCreate(savedInstanceState: Bundle?) {
   val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
   rv.apply {
     adapter = recyclerViewAdapter
-    layoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.Vertical false)
+    // In an activity you can use basecontext. 
+    layoutManager = LinearLayoutManager(requireContext, LinearLayoutManager.Vertical false)
   }
   
   
