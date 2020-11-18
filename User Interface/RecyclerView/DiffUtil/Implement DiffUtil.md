@@ -2,7 +2,7 @@
 
 
 ## 1) Update RV class Signature
-Extend Listadapter with the desire model type and the class that extendds the ItemViewHolder, and DiffUtil class. Note you need to import androix library the android library will provide errors.
+Extend Listadapter with the desire model type and the class that extends the ItemViewHolder, and DiffUtil class. Note you need to import androix library the android library will provide errors.
 ```
 // Extend the ListAdapter
 //    @Type of list, RecyclerViewAdapterClass>(
