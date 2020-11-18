@@ -94,3 +94,13 @@ override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState
     }
 }
 ```
+
+## Attach to RecyclerView
+
+```
+recyclerView.apply {
+  ...
+  val customItemTouchHeler = ItemTouchHelper(CustomItemTouchHelper(mContext, viewModel))
+  customItemTouchHelper.attachToRecyclerView(recyclerView)
+}
+```
