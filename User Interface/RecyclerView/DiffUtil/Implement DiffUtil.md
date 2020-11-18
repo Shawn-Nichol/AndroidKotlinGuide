@@ -53,7 +53,7 @@ val item = getItem(position)
 ## 5) submit list
 In an Activity or Fragment call Adapter.submitList() to pass the list to DiffUtil, a new list will need to be submited in order for the DiffUtil to compare lists. If you use LiveData you post he new list to LiveData and observer will submit the list. 
 ```
-viewModel.usersList?.observe(this, Observer {
+viewModel.usersList?.observe(viewLifeCycleOwner, Observer {
     it?.let {
         Log.i(TAG, "userListObserver, List submitted $it")
         mAdapter.submitList(it)
