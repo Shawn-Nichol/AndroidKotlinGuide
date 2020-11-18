@@ -1,7 +1,8 @@
 # How to Implement DiffUtil in a RecyclerView
 
 
-## 1) Update RV class Signature to extend Listadapter with the desire model type and the class that extendds the ItemViewHolder, and DiffUtil class. Note you need to import androix library the android library will provide errors.
+## 1) Update RV class Signature
+Extend Listadapter with the desire model type and the class that extendds the ItemViewHolder, and DiffUtil class. Note you need to import androix library the android library will provide errors.
 ```
 // Extend the ListAdapter
 //    @Type of list, RecyclerViewAdapterClass>(
@@ -10,7 +11,7 @@
 class RVAdapter() : ListAdapter<User, RVAdapter.Viewholder>(MyDiffCallback())
 ```
 
-## 2) add the DiffCallback class
+## 2) Add the DiffCallback class
 Add the call back and implement the following methods
 
 - AreItemsTheSame(): Called by the DiffUtil to decide whether two object represent the same item. 
