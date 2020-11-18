@@ -75,7 +75,7 @@ override fun onMove(
 ```
 
 ## onSwiped()
-Decideds what to if an item was swiped off screen, you can different results for left and right swipes. 
+The action to preform on an item if it is swiped off the screen in the left or right direction. 
 ```
 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
     val editList: MutableList<User>? = viewModel.usersList?.value as MutableList<User>?
