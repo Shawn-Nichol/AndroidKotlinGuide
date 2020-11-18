@@ -12,7 +12,7 @@ dependencies {
 
 ```
 ## 2) Create A container 
-A container is where is the View that will display RecyclerView in an Activity or Fragment. A container is created to the XML layout file
+A container is where the RecyclerView will display in the Activity or Fragment. A container is created to the of the Activity or Fragment layout file
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
