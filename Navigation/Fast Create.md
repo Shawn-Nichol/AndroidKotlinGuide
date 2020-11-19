@@ -59,9 +59,7 @@ Add View to MainActivity layout.
 
 ## Desination
 1. In the Navigation Editor, click the new Destination icon and then click create new destination
-
 2. Select fragment for destination, the nav_graph will update. 
-
 
 ## Start Destination
 Select the desired destination and click the assign start destination button.
