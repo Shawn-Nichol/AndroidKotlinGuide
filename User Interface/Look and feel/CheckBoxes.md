@@ -1,14 +1,14 @@
 # CheckBoxes
-Checkboxes allow the user to select one or more options from a set. Typically, you should prseent each checkbox option in a vertical list. 
+Checkboxes allow the user to select one or more options from a set, typically prseneted in a vertical list. 
 
-To create each checkbox option, create a `CheckBox` in your layout. Becuase a set of checkbox options allows the user to select multiple items, each checkbox is managed separately and you must register a click listener ofr each one. 
+To create each checkbox option, create a `CheckBox` in your layout. Because a set of checkbox options allows the user to select multiple items, each checkbox is managed separately and you must register a click listener for each one. 
 
 A key class is the following
 - `CheckBox`
 
 ## Responding to click Events 
-When the user selects a checkbox, the checkBox objec receives an on-click event. 
-TO define the click event handler for a checkbox, add the `android:onClick` attribute to the <CheckBox. eleemtn in your XML layout. THe value fo this attribute must be the name of the method you want to call in response to a click event. The activit hosting the layout must then implement the corresponding method. 
+When the user selects a checkbox, the checkBox object receives an on-click event. 
+To define the click event handler for a checkbox, add the `android:onClick` attribute to the <CheckBox. eleemtn in your XML layout. THe value fo this attribute must be the name of the method you want to call in response to a click event. The activity hosting the layout must then implement the corresponding method. 
 
 For example, here are a couple `CheckBox` objects in a list. 
 
@@ -31,7 +31,7 @@ For example, here are a couple `CheckBox` objects in a list.
 </LinearLayout>
 ```
 
-With the `Activity` that hosts this layout, the following method handles the click event for both checkboxes.
+The `Activity` or `Fragment` that hosts the checkboxes.
 ```
 fun onCheckboxClicked(view: View) {
     if (view is CheckBox) {
@@ -58,7 +58,7 @@ fun onCheckboxClicked(view: View) {
 }
 ```
 
-The method you declare in teh `android:onClick` attribute must have a signature exactly. 
+The method you declare in the `android:onClick` attribute must have a signature exactly. 
 - Be Publicc
 - Return void
 - Define a View as its only parameter. 
