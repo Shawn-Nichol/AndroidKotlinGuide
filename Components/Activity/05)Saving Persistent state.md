@@ -8,74 +8,37 @@ For content provider data use "edit in place", any edits a user makes are effect
 
 - When an activity's onPause() is called, it should commit to the backing content provider or file any changes the user has made. This ensures that those changes will be seen by any other activity that is about to run. you will probably want to commit your data even more aggressively at key times during your activity's lifecycle: for example before starting a new activity, before finishing you own activity, when the use rswitches between input fields
 
-This model is designed to prevent data loss when a user is navigating between activities, and allows the system to safely kill an activity at any time after it has been stopped. Note this implies that the user pressing back from your activity does not mean "cancel" it means to leave the activity with its current contents saved away. Canceling edits in an activity must be provied through some other mechanism, such as an explicit revert or undo option. 
 
-The activity class also provides an API for managing internal persistent state associated with an activity. This can be used for example, to remember the user's preferred inital display in a calendar or the user's default home page in a web browser. 
 
-The activity class also provides an API for managing internal persistent state associated with an activity. This can be used, for example to remember the user's preferred initial display in a calendar or the user's default home page in a web browser. 
-
-Activity persistent state is manged with the method getPreferences(int), allowing you to retrieve and modify a set of name/value pairs associated with the activity. To use preferences that are shared across multiple application components, you can use the underlying Context#getSharedPreferences to retieve a preferences object stored under a specific name.
-
-example with one shared preference file
+## How to Create 
+1) Create Handler for sharedPreference
 ```
-class MainActivity : AppCompatActivity() {
+private lateinit var sharedPref: SharedPrefernces
+```
 
-    // Preference KEY
-    val MY_KEY = "MainAcitivitySavedText"
-
-    // Create a handler, with lateinit because context is required. 
-    lateinit var sharedPref: SharedPreferences
+2) Initilize sharedPref handler in onCreate(), and retrieve KeyValue pair
+```
+override fun onCreate(...) {
+    ...
+    sharedPref = activity?.getSharedPreferences(getString.preference_file_key), Context.MODE_PRIVATE) ?: return
     
-    override fun onCreate(savedInstanceState: Bundle?) {
-        ..
-        sharedPref = getPreferences(Context.MODE_PRIVATE)
-        
-        // Read data from shared preference file, default value needs to be passed incase there is no key to read. 
-        val saveText = sharedPref.getString(MY_KEY, "No value")
+    // retieve Item
+    myData = sharedPref.getInt(MY_KEY, 0)
+}
+```
+
+3) Save Data in onPause()
+```
+override fun onPause() {
+    ...
+    with(sharedPref.edit()) {
+        putInt(MY_KEY, myData)
+        apply() // you can also you use commit see notes below.
     }
 
-    override fun onPause() {
-        ...
-        // Edit the preferences for the file
-        with(sharedPref.edit()) {
-            putString(MY_KEY, "the text i want to save")
-            // Saves the data to the file. 
-            commit()
-        }
-    }
 }
 
 ```
-
-
-example where you name the preference file and can have multiple preference files. 
-```
-class MainActivity : AppCompatActivity() {
-
-    // Preference KEY
-    val MY_KEY = "MainAcitivitySavedText"
-
-    // Create a handler, with lateinit because context is required. 
-    lateinit var sharedPref: SharedPreferences
-    
-    override fun onCreate(savedInstanceState: Bundle?) {
-        ..
-        sharedPref = getSharedPreferences("this is my prefence file", Context.MODE_PRIVATE)
-        
-        // Read data from shared preference file, default value needs to be passed incase there is no key to read. 
-        val saveText = sharedPref.getString(MY_KEY, "No value")
-    }
-
-    override fun onPause() {
-        ...
-        // Edit the preferences for the file
-        with(sharedPref.edit()) {
-            putString(MY_KEY, "the text i want to save")
-            // Saves the data to the file. 
-            commit()
-        }
-    }
-}
-
-```
-
+Note: 
+apply: changes the in-memory SharedPreffence object immediately but writes the updates to the disk Asyncronously. 
+Commit: will write synchronously and could pause the UI well writing to the SharedPrefenece file. 
