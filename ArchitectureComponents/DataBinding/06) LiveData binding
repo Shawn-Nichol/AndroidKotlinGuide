@@ -1,0 +1,56 @@
+## 1) ViewModel
+This is a basic ViewModel class
+```
+class MyVeiwModel : ViewModel() {
+    val _hour = MutableLiveData(-10)
+    val hour: LiveData<Int> = _hour
+}
+```
+
+## 2) Layout
+Create a ViewModelvariable
+```
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="binding"
+            type="com.example.androiddevpractice.topics.userinterface.PickerFragment" />
+        <variable
+            name="viewModel"
+            type="com.example.androiddevpractice.topics.userinterface.picker.PickerViewModel" />
+    </data>
+```
+
+Link the Live data to the View, when LiveData changes the Text View will update automatically. 
+
+ <TextView
+  android:id="@+id/timer"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:text="@{`Selected Time: ` + String.valueOf(viewModel.hour)}"
+  />
+  
+  
+## 3) update binding 
+``
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View? {
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_picker, container, false)
+    binding.binding = this
+   
+    // Set the ViewModel for DataBinding, this allows the bound layout access to all the data in the ViewModel.
+    binding.viewModel = viewModel
+    // Specify the fragment view as the lifecycle owner of the binding. This is used so that the binding can observe LiveData updates
+    binding.lifecycleOwner = viewLifecycleOwner
+
+
+
+    return binding.root
+}
+```
