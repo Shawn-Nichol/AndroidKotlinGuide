@@ -110,5 +110,8 @@ Notification sremain visible until on of the following happens
 - If you set a timeout when creatinga  notification using setTimeoutAFter(), the system cancels the notification after the specified duration elapses. If requried, you can cancel a notification before the specified timout duration elapses. 
 
 
+## Updat a Notification
+To update a notification after you've issued it, call NotficationManagerCompat.notify() and pass it a notification with the same ID you used previously
+
 # Note
 The Android system will remember the prioty level set by the user, if the user has set a low prioty and you are adjusting the code for a higher priority this may result in the notification not working as inteneded. At this point it is best to uninstall the app and reinstall it. 
