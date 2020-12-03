@@ -1,4 +1,4 @@
-# Creating a Dialog
+# AlertDialog
 
 THe alert Dialog class allows you to build a variety of dialog designs and is often the only dialog class you'll need. 
 
@@ -13,7 +13,7 @@ This is optiona and should be sued only when the content are is occupied by a de
 - Neutral Button, use this when you don't want to proceed. 
 
 
-Create a new class that extends DialogFragment
+## Create a new class that extends DialogFragment
 ```
 class MyAlertDialog : DialogFragment() {
 
