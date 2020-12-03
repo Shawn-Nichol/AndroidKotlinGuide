@@ -42,4 +42,7 @@ class MyAlertDialog : DialogFragment() {
 }
 ```
 
+## Dismiss Dialog
+You can perfomr certain actions when the dialog goews away, by implementing the `onDismiss()` method before clo
+
 
