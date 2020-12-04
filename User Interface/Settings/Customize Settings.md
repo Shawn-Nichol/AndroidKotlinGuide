@@ -66,3 +66,77 @@ countingPreference?.summaryProvider = SummaryProvider<EditTextPreference> { pref
 The preference summary now dispalys the length of the saved value or Not set when  no saved value exists. 
 
 ## Customize an EditTextPReference dialog
+Within an EditTextPreference dialog, you can customize text field behavior by attaching an OnBindEditTextLlistener. This listener is invoked hwne the dialog is shown to the user. 
+
+```
+<EditTextPreference
+        app:key="number"
+        app:title="Numbers only preference"/>
+```
+
+Next in onCreatPrefeverences(), create a new OnBindEditTextListener, and override onBindEditText() to customize the EditText when it is shown to the user. 
+
+```
+val numberPreference: EditTextPreference? = findPreference("number")
+
+numberPreference?.setOnBindEditTextListener { editText ->
+    editText.inputType = InputType.TYPE_CLASS_NUMBER
+}
+```
+
+Now ehen the dilog is shwon to the user, the keyboard opens in numeric-only mode, so the user can enter only numbers in ot the EditText. 
+
+## Preference action
+A preference can have a specific action wehn tapped. For example, a Preference can act as a link to a separate part of your application. To add an action to a preference, you can either set an Intent on the Preference directly, or you can set an OnPreferenceClickListener for more specific logic
+
+## Set An Intent
+You can set an Intent on a Prefernce to launch a new Fragment, Actiivty or separate application whenever the preference is tapped. THis is the same as using Context.sttartActivity() with a given intent. 
+
+You can set an Inten in XML using a nested<intent> tag. The example below defines an Intent that launches an Activity. 
+        
+```
+<Preference
+        app:key=”activity”
+        app:title="Launch activity">
+    <intent
+            android:targetPackage="com.example"
+            android:targetClass="com.example.ExampleActivity"/>
+</Preference>
+```
+
+Alternatively, you ucan use `setIntent()` directly on a `Preference`. 
+```
+val intent = Intent(context, ExampleActivity::class.java)
+activityPreference.setIntent(intent)
+```
+
+Include extras in the XML
+```
+<Preference
+        app:key=”activity”
+        app:title="Launch activity">
+    <intent
+            android:targetPackage="com.example"
+            android:targetClass="com.example.ExampleActivity">
+        <extra
+                android:name="example_key"
+                android:value="example_value"/>
+    </intent>
+</Preference>
+```
+
+launches a Webpage example
+```
+<Preference
+        app:key=”webpage”
+        app:title="View webpage">
+    <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://www.google.com" />
+</Preference>
+```
+
+onClickPreference.setOnPreferenceClickListener({
+        // do somethign
+        true
+})
