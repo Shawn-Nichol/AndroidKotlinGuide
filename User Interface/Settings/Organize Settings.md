@@ -1,5 +1,5 @@
 # Organize Settings
-Large complex settings screens can make it difficult for a user to find a specific setting they wourld like to change. The preference library offers the following ways to better organize your settings screens. 
+ 
 
 ## Preference categories
 If you have several related Prefernces ona single screen, you can group them with a PrefernceCategoyr. A PreferenceCategory displays a categroy title and visually spearates the category. 
@@ -35,43 +35,81 @@ To define a PreferfenceCategory in XML, wrap the Preference tags with a Preferen
 ```
 
 ## Split your hierarchy into mutiples screens
-If you have a large number of Preferences or distinct categories, you can display them on  separate screens. Each screen should be a PreferenceFragmentCompat with its own separate hierarchy. Preference on your initial screen can then link to subscreens that contain related Preferences. 
+Preference Screen allows you to separte preferences into different screens keeping a cleaner more organized look. 
 
-To link screens with a PRefernce, you can declare an app:fragment in XML, or you ca use PRefernce.setFragment(). Set the full package name ofhe PrefenceFragmentCompat that should be launched when th PRefernce is tapped as shown below. 
+
+
+### 1) Create Preference XML file
+xml/preference_screen_two
 ```
-<Preference
-        app:fragment="com.example.SyncFragment"
-        .../>
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreferenceCompat
+        app:key="Switch"
+        app:title="Switch"/>
+</PreferenceScreen>
 ```
 
-When a user taps a Preference with an assocaited fragment, the interface mtehod PrefrenceFragmentCompat.OnPReferncestartFragmentCallback.onPrefere ceStartFragment() is called. This method is where you should handle dispaly the new screen and should be implement in the surrounding Activity. 
+### 2) Create a new Preference screen
+Create a new class, that extends PreferenceCompatFragment and overrides `onCreatePreferences`
 
-Note: If you dont implement onPRefernceStartFragment(), a allback implementation is used instead. whil this works in most cases, we strongly recommend implemnting this mehtod so yo can fully configure transitions between fragments objects and update the titel dispalye din you Activity toolbar if applicable. 
 
-class MyActivity : AppCompatActivity(),
-    PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+onCreatePreferences
+Called during onCreate(Bundle) to supply the preferences for this fragment. Subclasses are expected to call setPreferenceScreen(PreferenceScreen) either directly or via helper methods such as addPreferencesFromResource(int)
+@savedInstanceState: Bundle, if the fragment is being re-created from a previous saved state this is the state. 
+@rootKey: String, If non-null, this prefernce fragment should be rooted at the PrefernceScreen with this key. 
 
-    ...
+```
+class ScreenTwo : PreferenceCompatFragment() {
 
-    override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
-        // Instantiate the new Fragment
-        val args = pref.extras
-        val fragment = supportFragmentManager.fragmentFactory.instantiate(
-                classLoader,
-                pref.fragment)
-        fragment.arguments = args
-        fragment.setTargetFragment(caller, 0)
-        // Replace the existing Fragment with the new Fragment
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.settings_container, fragment)
-                .addToBackStack(null)
-                .commit()
-        return true
+    override fun onCreatePreference(savedInstanceState: Bundle?, rootKey: String?) {
+        sestPreferenceFromResource(R.xml.preference_screen_two, rootKey)
+    
     }
 }
+```
 
-## PreferenceScreens
-Declaring nested hierarchies within the samle XML resource using a nested <PrefernceScreen> is no longer supported. You should use nested Fragmet objects instead. 
+### 3) Add Link to New Preference screen. 
+```
 
-## Use separate Activites
-Alernatively, if you need to heavily custoize each scree, or i fyou want fully activity transitions between screens, you can use a separate Activity for each PreferenceFragmentcompat. By doing this, you can fully customize each Activity and its corresponding settgins screen. For most applications this  is not recommend and you should use fragmetns as previousl described. 
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        // set the fragment to the package address of the new screen.
+        app:fragment="com.example.screen2"
+        app:key="UI"
+        app:summary="UI summary"
+        app:title="UI Screen" />
+
+</PreferenceScreen>
+```
+
+### 3) Add `PreferenceFragmentCompat.OnPreferenceStartFramentCallback` to the MainActivity. 
+```
+class MainActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+```
+
+### 4) Override PreferenceStartFragment
+Called when the user clicked on a prefernce that has a fragment calass asssoicated with it. The implmenetaiton shoul dinstantiate and switch to an instance of the given fragment
+@caller: PreferenceFragmentCompate, THe fragment requesting navigation
+@pref: True, if the fragment creation has been handled. 
+```
+override fun onPreferenceStartFragment(
+    caller: PreferenceFragmentCompat?,
+    pref: Preference?
+): Boolean {
+    Log.i(TAG, "onPreferenceStartFragment, pref: $pref, Caller: $caller")
+
+    when(pref?.key) {
+        "ScreenOne" -> navController.navigate(R.id.dest_screenOne)
+        "ScreenTwo" -> navController.navigate(R.id.dest_screenTwo)
+        "ScreenThree" -> navController.navigate(R.id.dest_screenThree)
+    }
+    return true
+}
+```
+
+
