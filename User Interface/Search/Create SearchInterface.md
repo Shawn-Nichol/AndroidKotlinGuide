@@ -21,3 +21,46 @@ The activity that receives the search query , searches your data and displays th
   Using the search widget allows you to put the search box anywhere in your activity. Instead of putting it in your activity layout, you should usually use search View as an action view in teh app bar. 
   
  ## Creating a searchable configuration 
+The first thing you need is an XML file called the searchable configuration. If conifgures certain UI aspects of the search dialog or widget and defines how features succh as suggestion and voice search behave. This file is traditionally named searchable.xml and must be saved in teh res/xml
+
+The searchable configration file must include the <searchable> element as the root node and specifyg one of more attributes. 
+```
+ <?xml version="1.0" encoding="utf-8"?>
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+    android:label="@string/app_label"
+    android:hint="@string/search_hint" >
+</searchable> 
+```
+  
+The android:lable attribute is the only required attribute. It points to a string resource, which should be the application name. THis label isn't actually visible to the user until you enable search suggestions for Quick sesarch box. At that point, this label is  visible in the list of Searchabl eitems in the system settings. 
+
+Trough it's not required, we recommend that you always include the android:hint attribute, which provides a hint strin gin teh search box before users enter a query. The hint is important beuase it provides important clues to users about what they can search. 
+
+The `<searchable>` element acepts several other attributes. however, you don't need most attributes until you add features such as search suggestions and voice search. For detailed information about the searchabl econfiguration file, 
+
+## Create a SEarchable Activity
+A searchable activity is the activity inyour application that perfroms searches based on a query string an dpresents the search results. 
+
+When the user executes a search in teh serach dialog or widget, the system starts your searchable activity and delivers it the search query in an INtent with the ACTION_SEARCH action. Your searchable activity retrieves the query fromt he intent's QUERY extra, then seraches your data na dpresents the results. 
+
+Because you may include the search dialog or widget in any other activity in your application, the system ust known which activity is your searchabl eactivity, so it can properly deliver the search query. So you must first declare your searchable activity inthe Android manifest file. 
+
+## Declaring a searchable activity
+If you don't have one already, create an Activity that will perofrm searches an prsent results. you don't need to implement he serach functionality yet just create an activity that you can declare in the manifest. Inside the manifest `<activity>` element. 
+1. Delcare the activity to accep tht e ACTION_SEARCH  intent, in an <intent-filter> element. 
+2. Specify the searchable configuration to use, in a `<meta_data>` element. 
+```
+  <application ... >
+    <activity android:name=".SearchableActivity" >
+        <intent-filter>
+            <action android:name="android.intent.action.SEARCH" />
+        </intent-filter>
+        <meta-data android:name="android.app.searchable"
+                   android:resource="@xml/searchable"/>
+    </activity>
+    ...
+</application>
+```
+  
+The `<meta-data>` elment must include the `android:name` attribute with a value of android.app.searchable: and the android: resource attribute with a reference ot the searchabl econfigration file
+
