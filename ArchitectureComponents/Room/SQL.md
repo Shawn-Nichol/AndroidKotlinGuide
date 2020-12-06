@@ -75,7 +75,7 @@ SELECT * FROM customers WHERE countr='Germany' AND (City='Berlin or City='Munche
 
 
 
-SQL Order by Keyword
+## SQL Order by Keyword
 The order by keyword is used to sort the result-set in ascending or descending order. The ORDER by keywor sorts the records in ascending order by default. TO sort the records in descending oreder use DESC keyword.
 
 ```
@@ -102,6 +102,59 @@ INSERT INTO table_name (column1, column2, column3) VALUES (value1, value2, value
 If you are adding values for all the columns of the table, you don't need to specify the column names in the SQL query. Hoever, makes ure the order of the values is the same order as the column in the table. 
 
 
+## Null Values
+What is a null value is a field with no value. If a field in table is optional, it is possible to insert a new record or update a record without adding a vlue to this field. Then the field will be saved with a Null value. 
+
+How to Test for null values?
+uset he IS NULL of IS  NOT NUll operators. 
+
+```
+SELECT column1 FROM table_name WHERE column1 IS NOT NULL
+```
+
+```
+SELECT custoemrName, ContactName, Address FROM Customers WHERE Address IS NULL
+```
+
+Not Null 
+```
+SELECT CustomerName, ContactName, Address FROM customers WEhRE ADDRESS IS NOT NULL
+```
+
+## SQL Update
+The Update staement is used to modify the existing records in a table. 
+Update Syntax
+```
+UPDATE table_name SET column1, column2, column3 WHERE conition
+```
+If Where clause was omited all enteries in teh table will be updated. 
+
+
+```
+UPDATE Customers SET ContactName = 'Alfred Schmidt', City= 'FrankFurt' WHERE CustoemrID = 1
+```
+
+Update Mutiple Records
+```
+UPDATE customers SET contactName="Juan" WHERE country = 'Mexico'
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Updates - updates data in a database
 Delete: Deletes data from a database
 Insert into: inserts data into a database
@@ -114,9 +167,3 @@ CreateIndex: creates an index
 Drop Index: Deletes an index. 
 
 
-
-This will select enteris in the customer table. 
-```
-SELECT * FROM customers
-
-```
