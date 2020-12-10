@@ -1,27 +1,23 @@
 # Running Anroid tasks in background threads
-All android apps use a main thread to handle UI operations. Calling long-running operations form this main thread can lead to freezes and unrespponsiveness. For example, if your app makes a network request form the main thread, your app's UI is frozen until it receives the network response. You can create additional background threads to handle along-running operations while the amin thread continues to handle UI updates. 
+All android apps use a main thread to handle UI operations. Calling long-running operations from the main thread can lead to freezes and unrespponsiveness. For example, if your app makes a network request form the main thread, your app's UI is frozen until it receives the network response. You can create additional background threads to handle along-running operations while the main thread continues to handle UI updates. 
 
-## Examples overview
-Based on the Guide to app architecture the examples in this topic make a nework requesst and return the result to the main thread, wher the app then might display that result on the screen. 
+## Thread Pool, Creating Multiple threads
+A thread pool is a managed collection of threads that runs tasks in parallel from a queue. New task are executed on existing thread as those threads become idle. To send a task to a thread pool, use the executor service interface. Note that executor service has nothing to do with services. 
 
-Specifically, the ViewModel calls the respository layer on the main thread  to trigger the network request. The repository alyer is in charge of moving the execution of the network requesst off the main thread and posting the result back to the main thread using a callback. 
+Creating threads is expensive, only create threads during app intitialization. Be sure to save the instance of the Executorservice either in your application class or in a dependency injection container. 
 
-## Creating multipel threads
-A thread pool is amanged collection of threads that runs tasks in parallel from a queue. New taks are executed on existing thread as those threads become idle. To send a task to a thread pool, use the executor service interface. Note that exector SErvice has nothign to do withs ervices., the android application component. 
-
-Creating threads ies expensive, so you should create a threa dpppol only once as your app initializes. Be sure to save the instanceof the Executorservice either in your application class or in a dependency injection container. The following example creates a thread ppol of four thread that we can use to run backgroun tasks. 
-
+ 
+Thread pool that creates 4 threads.
 ```
 class MyApplication : Application() {
   val executorService: ExecutorSErvice = Executors.newFixedThreadPool(4)
 }
 ```
 
-There are other ways you can configure a thread ppol depending on expected workload. 
+## Executing on a backgorund thread
+Making a network request on the main thread blocks the main thread until it receives a response. The OS can't call onDraw(), and the app freezes, potenially leading to an Applcaitoin Not Responding (ANR). 
 
-## Executing ain a backgorund thread
-Making a network request on the main thread causes the thread to wait, or block, until it receives a response. Since the thread is blocked, the OS cann't call onDraw(), and your app freezes, potenially leading to an applcaitoin not responding ANR dialog. Instead, let's run this operation on a backgroun thread. 
-
+How to run on a backbround thread.
 ```
 sealed class Result<out R> {
     data class Success<out T>(val data: T) : Result<T>()
@@ -50,7 +46,7 @@ class LoginRepository(private val responseParser: LoginResponseParser) {
 }
 ```
 
-makeLoginRequest() is synchronous and blocks the calling thead. Tomodel the response of the network request, we have our own reult class. 
+makeLoginRequest() is synchronous and blocks the calling thead. To model the response of the network request, we have our own result class. 
 The ViewModel triggers the network request when the user taps on a button. 
 ```
 class LoginViewModel(
@@ -63,7 +59,7 @@ class LoginViewModel(
 }
 ```
 
-With the previous code, LoginViewModel is blocking the main thread when making the network request. We can use th thread pool that we've instantiated to move the execution to a backgorun thread. First following the principles of dependcy injection, loginRepository mtakes an instance of executor as opposed to executore service because it's executing code and not managingf threads. 
+With the previous code, LoginViewModel is blocking the main thread when making the network request. We can use th thread pool that we've instantiated to move the execution to a backgound thread. First following the principles of dependcy injection, loginRepository takes an instance of executor as opposed to executore service because it's executing code and not managingf threads. 
 
 ```
 class LoginRepository(
@@ -96,7 +92,29 @@ class LoginRepository(
 }
 ```
 
-Inside the execute() method, we create a new Runnable with the block of cod ewe want to execute int eh backgroun thread- in our case, the synchronous network requeset method. Internally, the executor service manges the runable and exsecutes it in ana vailable thread. 
+Inside the execute() method, we create a new Runnable with the block of code we want to execute in the background thread in our case, the synchronous network requeset method. Internally, the executor service manges the runable and exsecutes it in ana vailable thread. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Considerations
 Any thread in your app can run in parallel to other threads, including the main thread, so you should ensure that your codei s thread-safe. Notice that in our example that we avoid writing to variables shared between threads, passing immutable data instead. This is a good practice, becuase each thread works with its own instance of data, and we avoid the complexity of synchronization. 
