@@ -1,20 +1,17 @@
-# Running Anroid tasks in background threads
-All android apps use a main thread to handle UI operations. Calling long-running operations from the main thread can lead to freezes and unrespponsiveness. For example, if your app makes a network request form the main thread, your app's UI is frozen until it receives the network response. You can create additional background threads to handle along-running operations while the main thread continues to handle UI updates. 
+# Thread Pool, Creating Multiple threads
+A thread pool is a managed collection of threads that runs tasks in parallel from a queue. New task are executed on existing thread as those threads become idle. To send a task to a thread pool, use the `executor service` interface. Note that executor service has nothing to do with services. 
 
-## Thread Pool, Creating Multiple threads
-A thread pool is a managed collection of threads that runs tasks in parallel from a queue. New task are executed on existing thread as those threads become idle. To send a task to a thread pool, use the executor service interface. Note that executor service has nothing to do with services. 
-
-Creating threads is expensive, only create threads during app intitialization. Be sure to save the instance of the Executorservice either in your application class or in a dependency injection container. 
+Creating threads is expensive, only create threads during app intitialization. Be sure to save the instance of the `ExecutorService` either in your application class or in a dependency injection container. 
 
  
-Thread pool that creates 4 threads.
+Ex. Thread pool that creates 4 threads.
 ```
 class MyApplication : Application() {
   val executorService: ExecutorSErvice = Executors.newFixedThreadPool(4)
 }
 ```
 
-## Executing on a backgorund thread
+## Executing on a background thread
 Making a network request on the main thread blocks the main thread until it receives a response. The OS can't call onDraw(), and the app freezes, potenially leading to an Applcaitoin Not Responding (ANR). 
 
 Use thread pool to move the execution to a backgound thread. First following the principles of dependcy injection, loginRepository takes an instance of executor as opposed to executore service because it's executing code and not managing threads. 
@@ -41,7 +38,7 @@ class LoginRepository(
 }
 ```
 
-Inside the execute() method, we create a new Runnable with the block of code we want to execute in the background thread in our case, the synchronous network requeset method. Internally, the executor service manges the runable and excutes it in an available thread. 
+Inside the execute() method, we create a new Runnable with the block of code we want to execute in the background thread in our case, the synchronous network requeset method. Internally, the executor service manages the runable and excutes it in an available thread. 
 
 ## Considerations
 Any thread in your app can run in parallel to other threads, including the main thread, so you should ensure that your code is thread-safe. Avoid writing to variables shared between threads, passing immutable data instead. This is a good practice, becuase each thread works with its own instance of data, and we avoid the complexity of synchronization. 
@@ -75,7 +72,7 @@ class LoginRepository(
 }
 ```
 
-The ViewModel needs to implement the callback now. It can perfrom different logic dpeneding on the result. 
+The ViewModel needs to implement the callback now. It can perfrom different logic depending on the result. 
 
 ```
 class LoginViewModel(
@@ -95,9 +92,9 @@ class LoginViewModel(
 In this example the callback is executed in the calling thread, which is a background thread. This means that you cannot modify or communicate directly with the UI layer until you switch back to the main thread. 
 
 Using handlers 
-You can use a handler to enqueue an action to be performed on a different thread. To specify the thread on which to run the aciton, construct the handler using a looper for the thread. A looper is an object that runs the message loop for an associated thread. Once you've created a handler, you can then use th epost(ruunable) method to run a block of code in the corresponding thread. 
+You can use a handler to enqueue an action to be performed on a different thread. To specify the thread on which to run the aciton, construct the handler using a looper for the thread. A looper is an object that runs the message loop for an associated thread. Once you've created a handler, you can then use the post(ruunable) method to run a block of code in the corresponding thread. 
 
-Looper includes a helper function getMainLooper(), which retrieves the looper of the main thread. you can run code in the main thread by using this looper to create a handler. As this is somethign you might do quite often, you can also save an instance of the hadnler int eh same place you saved the executorService
+Looper includes a helper function getMainLooper(), which retrieves the looper of the main thread. you can run code in the main thread by using this looper to create a handler. As this is something you might do quite often, you can also save an instance of the handler in the same place you saved the `executorService`
 
 ```
 class MyApplication : Application() {
@@ -106,7 +103,7 @@ class MyApplication : Application() {
 }
 ```
 
-It's good practtice ot inject the handler to the respository, as it gives you  more flexibility. For example, in the future you might want to pass in a different handler to sechule tasks on a separate thread. if you're always communcating back to the same thread, you ca pass the Handler into the Repository construcotor. 
+It's good practice to inject the handler to the respository, as it gives you  more flexibility. For example, in the future you might want to pass in a different handler to schedule tasks on a separate thread. if you're always communcating back to the same thread, you can pass the Handler into the Repository construcotor. 
 
 ```
 class LoginRepository(
@@ -159,7 +156,7 @@ class LoginRepository(...) {
 In this example, the callback passed into the Repository's makeLogin Request call is executed on the main thread. That means you can directly modify the UI from the callaback or use LiveData.setValue to communciate with the UI. 
 
 ## Configuring a thread pool
-You can create a thread pool using one of the executor helper functiosn with predefined settings, as shown in the previous example code. Alterntively, if you want to customize the details of the thread pool, you can create an instance using ThreadPoolExecutor directly. you can configure the following detials. 
+You can create a thread pool using one of the executor helper functiosn with predefined settings, as shown in the previous example code. Alterntively, if you want to customize the details of the thread pool, you can create an instance using `ThreadPoolExecutor` directly. you can configure the following detials. 
 
 - Initial and maximum pool size. 
 - Keep alive time and time unit. Keep alive time is the maximum duration that a thread can remain idle before it shuts down. 
