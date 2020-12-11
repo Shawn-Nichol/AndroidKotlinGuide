@@ -6,22 +6,23 @@ To allevaite the issue Android 7.0 (API 24) applies the following restrictions
 
 - Apps cannot send or receive ACTION_NEW_PICTURE or ACTION_NEW_VIDEO broadcasts. This optimization affects all apps, not only those targting Android 7.0
 
-If your app uses any of these intents, you should remove dependencies on them as soon as possible so that you can properly target devices running Android 7.0 or higher. The android famework provides several solutions to mitigate the need for these implicit broadcassts. OR example JobScheduler and the new WorkManager provide robuts mechanisms to schedule network operations when specified conditions such as a connection, an unmetered network are met. You use JobScheduler to react to changes to content providers. JobInfo objects encapsulate the parameters that Jobscheudler uses to schedule the job. When the conditions of the job are met the system executes this job on your apps JobService. 
+`JobScheduler` and the `WorkManager` provide robuts mechanisms to schedule network operations when specified conditions such as a connection, an unmetered network are met. Use `JobScheduler` to react to changes to content providers. `JobInfo` objects encapsulate the parameters that `Jobscheudler` uses to schedule the job. When the conditions of the job are met the system executes this job on your apps `JobService`. 
 
 ## User-initiated restirctions
 Beginning in Android 9 API 28, if an app exhibits some of the bad behaviors describe in Adnroid vitals, the system prompts the user to restrict the app's access to system resources. 
 
 If the system notices that an app is consuming excessive resources, it notifies the user and gives the user the option of resticting the app's actions. Behaviors that can trigger the notification include. 
+
 - Excessive wake locks: 1 partial wake lock held for an hour when screen is off
 - Excessive backgroun services: if app targets API level lower than 26 and has excessive background services 
 
-The precise restrictions imposed are deteremined by the device manufactureer. For exmple on AOSP builds, restricted apps cannot run jobs, trigger alarms, or use the network except when the app is in the foregournd
+The restrictions imposed are deteremined by the device manufactureer. For exmple on AOSP builds, restricted apps cannot run jobs, trigger alarms, or use the network except when the app is in the foregournd
 
-## Restrictiosn on receivnig network activiity broadcasts
+## Restrictiosn on receivnig network activity broadcasts
 Apps targeting android 7.0 do not receive CONNECTIVITY_ACTION broadcasts if they register to receive them in their manifest, a processes that depend on this broadcast will not start. This could pose a problem for apps that want to listen for network chagnes or perform bulk network activites when the device connects to an unmetereed network. Several solutions to get around this restriction already exist in the Android famework. 
 
 ## Schedule network jobs on unmetered connections 
-When using the JobInfo.Builder class to build your Jobinfo object apply the setRequireNetworkType() method and pass JobInfo.NETWORK_TYPE_UNMETERED as a job parameter. The following schdules a service to run when the device connects to an unmetereed network and is charging
+When using the `JobInfo.Builder` class to build your `Jobinfo` object apply the setRequireNetworkType() method and pass JobInfo.NETWORK_TYPE_UNMETERED as a job parameter. The following schdules a service to run when the device connects to an unmetereed network and is charging.
 
 ```
 const val MY_BACKGROUND_JOB = 0
@@ -39,28 +40,21 @@ fun scheduleJob(context: Context) {
 }
 ```
 
-When the conditions of your job are met, your app receives a callback to run the onstartJob() method in the specified Jobservice.class.
+When the conditions of your job are met, your app receives a callback to run the `onStartJob()` method in the specified `Jobservice.class`.
 
-A new alternative to Jobscheduler is `WorkManager`, an API that allows yout to schedule background tasks that need guaranteed completion, regardless of whether the app process is around or not. `WorkManager` chooses the appropriate way to run the work (either directly on a thread in your app process as well as using JobScheduler, FirebaseJobDispatcher, or AlarmManager) based on such factors as the device API level. Additionally, `WorkManager` does not require Play Services and provides several advanced features, such as chaining tasks together or checking a task's status. 
-
-
-
-
-
-
-
+A new alternative to `Jobscheduler` is `WorkManager`, an API that allows you to schedule background tasks that need guaranteed completion, regardless of whether the app process is around or not. `WorkManager` chooses the appropriate way to run the work (either directly on a thread in your app process as well as using JobScheduler, FirebaseJobDispatcher, or AlarmManager) based on such factors as the device API level. Additionally, `WorkManager` does not require Play Services and provides several advanced features, such as chaining tasks together or checking a task's status. 
 
 ## Monitor network connectivity while the app is running 
-App that are running can still listen for Connectivity_change with a registered BroadcastReciever. However, the connectivity Manager API privdes a more robust method to request a callback only when specified newtork conditions are met. 
+Apps that are running can still listen for `Connectivity_change` with a registered BroadcastReciever. However, the connectivity Manager API provides a more robust method to request a callback only when specified newtork conditions are met. 
 
-Network requests objects deine the parameters of the newtork callback in terms of Network capabilities. you create Network request objects with the NetworkRequest.Builder class. registerNetworkCallback() then passes the networkReuqest objects with the networkRequest object to the system. When the nework conditions are met, the app receives a callback to execute the onAvailable) method defined in its connectivity Manger. Networkcallback classs. 
-Teh app continue sot receive callback until either the app exits or it calls unregisterNetworkCallaback(). 
+Network requests objects define the parameters of the newtork callback in terms of Network capabilities. Create Network request objects with the `NetworkRequest.Builder` class. `registerNetworkCallback()` then passes the networkReuqest objects with the networkRequest object to the system. When the nework conditions are met, the app receives a callback to execute the `onAvailable()` method defined in its connectivity Manger. `NetworkCallback` classs. 
+The app continues to receive callbacks until either the app exits or it calls `unregisterNetworkCallaback()`. 
 
 ## Restrictiosn on receiving image and video broadcasts
-In android 7 (API 24) apps are nota ble to send or receive ACTION_NEW_PICTURE or ACTION_NEW_VIDEO broadcasts. This restiction helps alleviate the performance and user experince impacts when sevarl apps must wake up in order to prcess a new image or video. Android 7 extends Jobinfo and jobpramaeters to provide an alternative solution.
+In android 7 (API 24) apps are not able to send or receive `ACTION_NEW_PICTURE` or `ACTION_NEW_VIDEO` broadcasts. This restiction helps alleviate the performance and user experince impacts when sevral apps must wake up in order to prcess a new image or video. Android 7 extends Jobinfo and jobpramaeters to provide an alternative solution.
 
-## Trigger jbos on ocntent URI changes 
-To trigger jobs on content URI chagnes, Android 7 extends the JbInfo ApI with the follwoig methods 
+## Trigger jbos on content URI changes 
+To trigger jobs on content URI chagnes, Android 7 extends the JobInfo API with the follwoig methods 
 
 `JobInfo.TriggerContentUri()`
 Encapsulates parameters required to trigger a job on a ocntnent URI chagnes.
@@ -70,7 +64,7 @@ Passes a triggerCOntentUri object ot JobInfo. A ContentObserver onitors the enca
 
 Add a the TriggerContentUri.FLAGNOTIFY_FOR_DESENDANTS flag to triggger the job if any descendants of the given URI chagne. This flag coresponds to the notify FOrDesendants parameter passed to registerContentOBserver
 
-The following samle code schdules a job to trigger when the system reports a chagen to the conten t URI, Media URI
+The following sample code schedules a job to trigger when the system reports a change to the content URI, Media URI
 ```
 const val MY_BACKGROUND_JOB = 0
 ...
@@ -91,7 +85,7 @@ fun scheduleJob(context: Context) {
 }
 ```
 
-When the system reports a chagne in teh specified content URI, your appp receives a callback and a JobParameters object  is passed ot he onsTartJob() in `mediaContentJob.class`
+When the system reports a change in the specified content URI, your app receives a callback and a JobParameters object  is passed to the `onStartJob()` in `mediaContentJob.class`
 
 ## Determine which content authroities triggered a job
 Android 7 also extends JobParameters to allow your app to receive useful information about what content authroities and URI triggered the job
@@ -100,9 +94,9 @@ URI getTriggeredContentURis()
 returns an array of URIs that have triggered the job. This will be null if either no URIS have triggered the job (for exmaple, the job was triggered dueu to a deadline or some oher reason), or the number of chagned URIs is greater than 50. 
 
 `String[] getTriggeredContentAuthorities()`
-Returns a string array of content authroities that have triggered the job. If the returend array is not null, use getTriggeredContentUris(0 to retrieve the details of which URIs have chagned. 
+Returns a string array of content authroities that have triggered the job. If the returend array is not null, use `getTriggeredContentUris()` to retrieve the details of which URIs have chagned. 
 
-The following sample code override the JobService.onStartJob() method and records the content authroities and URIs that have triggered the job. 
+The following sample code override the `JobService.onStartJob()` method and records the content authroities and URIs that have triggered the job. 
 ```
 override fun onStartJob(params: JobParameters): Boolean {
     StringBuilder().apply {
