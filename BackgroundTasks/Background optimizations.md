@@ -1,25 +1,27 @@
 # Background optimizations
-Background processes can be memory and batter intensive. For exmple an implicit broadcast may start many background processes that have registered to listen for it, even if theose process may not do much work. This can have s ubstantial impact on both device perfromancce and user experince. 
-To allevaite the issue Android 7.0 (API 24) applies the following restrictions
-- Apps targeting Android 7.0 and higher do not receive CONNECTIVITY_ACTION broadcasts if they delcare their broadcast receiver in teh manifest. Apps will still receive CONNECTIVITY_ACTION broadcasts if they register their BroadcastReceiver with the COntext.registerReceiver() and that context is still valid. 
-- Apps cannot ssend or receive ACTION_NEW_PICTURE or ACTION_NEW_VIDEO broadcasts. This optimization affects all apps, not only those targting Android 7.0
+Background processes can be memory and battery intensive. For exmple an implicit broadcast may start many background processes that have registered to listen for it, even if those process may not do much work. This can have substantial impact on both device perfromance and user experince.
 
-If your app uses any of these intents, you should remove dpendencies on them as soon as possible so that you can properly target devices running Android 7.0 or higher. The android famework provides everal solutions to mitigate the need for these implicit broadcassts. OR example JobScheduler and the new WorkManager provide robut mechanisms to shcdule network operations when spedified conditions such as a connectio an unmetereed network are met. You can now also use JobScheduler to react to chagne to content providers. JobInfo objects encapsulate the parameters that Jobscheudler uses to sehdule tyour job. When the conditions of the job ar met the system executes this job on your apps JobSErvice. 
+To allevaite the issue Android 7.0 (API 24) applies the following restrictions
+- Apps targeting Android 7.0 and higher do not receive CONNECTIVITY_ACTION broadcasts if they delcare their broadcast receiver in the manifest. Apps will still receive CONNECTIVITY_ACTION broadcasts if they register their BroadcastReceiver with the Context.registerReceiver() and that context is still valid. 
+
+- Apps cannot send or receive ACTION_NEW_PICTURE or ACTION_NEW_VIDEO broadcasts. This optimization affects all apps, not only those targting Android 7.0
+
+If your app uses any of these intents, you should remove dependencies on them as soon as possible so that you can properly target devices running Android 7.0 or higher. The android famework provides several solutions to mitigate the need for these implicit broadcassts. OR example JobScheduler and the new WorkManager provide robuts mechanisms to schedule network operations when specified conditions such as a connection, an unmetered network are met. You use JobScheduler to react to changes to content providers. JobInfo objects encapsulate the parameters that Jobscheudler uses to schedule the job. When the conditions of the job are met the system executes this job on your apps JobService. 
 
 ## User-initiated restirctions
-Beginning in Android 9 API 28, if an app exhibits some of the bad behaviors describe din Adnroid vitals, the system prompts the user to restrict the app's access to system resources. 
+Beginning in Android 9 API 28, if an app exhibits some of the bad behaviors describe in Adnroid vitals, the system prompts the user to restrict the app's access to system resources. 
 
-If the system notices that an app is consuming excessive resources, it notifies the user and gives the user th eoption of resticting the app's actions. Behaviors that can trigger the notifies the user and igves the user the option of restictin the app's actions. Behaviors that can trigger the notice include
-- excessive  wake locks: 1 partial wake lock held for an hour when screen is off
+If the system notices that an app is consuming excessive resources, it notifies the user and gives the user the option of resticting the app's actions. Behaviors that can trigger the notification include. 
+- Excessive wake locks: 1 partial wake lock held for an hour when screen is off
 - Excessive backgroun services: if app targets API level lower than 26 and has excessive background services 
 
 The precise restrictions imposed are deteremined by the device manufactureer. For exmple on AOSP builds, restricted apps cannot run jobs, trigger alarms, or use the network except when the app is in the foregournd
 
-## Restrictiosn on receivnig network activiity braodcasts
-Apps targeting android 7.0 do not receiv eCONNECTIVITY_ACTION broadcasts if they register to receive them in their manifest, and processes that depend on this broadcast will not srat. This could pose a problem for apps that want to listen for network chagnes or perform bulk network activites when the device connects to an unmetereed network. Several solutions to get around this restriction already exist in teh Android famework, but choosing the righ one depends on what you want  your app to accomplish
+## Restrictiosn on receivnig network activiity broadcasts
+Apps targeting android 7.0 do not receive CONNECTIVITY_ACTION broadcasts if they register to receive them in their manifest, a processes that depend on this broadcast will not start. This could pose a problem for apps that want to listen for network chagnes or perform bulk network activites when the device connects to an unmetereed network. Several solutions to get around this restriction already exist in the Android famework. 
 
 ## Schedule network jobs on unmetered connections 
-When using the JobInfo.Builder class to build your Jobinfo jobject apply the sestRequireNetworkType() method and pass JobInfo.NETWORK_TYPE_UNMETERED as a job parameter. The followin gcode sample schdules a ssercie to run when the device connects to an unmetereed network and is chargin
+When using the JobInfo.Builder class to build your Jobinfo object apply the setRequireNetworkType() method and pass JobInfo.NETWORK_TYPE_UNMETERED as a job parameter. The following schdules a service to run when the device connects to an unmetereed network and is charging
 
 ```
 const val MY_BACKGROUND_JOB = 0
@@ -37,11 +39,18 @@ fun scheduleJob(context: Context) {
 }
 ```
 
-When the donditions ofr your job ar met, your app receives a callback to run the onstartJob() method in the specified Jobservice.class. To
+When the conditions of your job are met, your app receives a callback to run the onstartJob() method in the specified Jobservice.class.
 
-A new alternative to Jobscheduler is workmanager, an ApI that allows yout to schedule background tasks that need guaranteed completion, regardless of whether the app process is around or not. Workmanager choose the appropriate way to run the work (either directly on a thread in your app process as well as using JobScheduler, FirebaseJobDispatcher, or AlarmManager) based on such factors as the device API level. Additionally, WorkMaanager does not require Play services and provides several advanced features, such as chaining tasks together or chcking a task's staus To lear 
+A new alternative to Jobscheduler is `WorkManager`, an API that allows yout to schedule background tasks that need guaranteed completion, regardless of whether the app process is around or not. `WorkManager` chooses the appropriate way to run the work (either directly on a thread in your app process as well as using JobScheduler, FirebaseJobDispatcher, or AlarmManager) based on such factors as the device API level. Additionally, `WorkManager` does not require Play Services and provides several advanced features, such as chaining tasks together or checking a task's status. 
 
-## Monitor network connectivit while the app is running 
+
+
+
+
+
+
+
+## Monitor network connectivity while the app is running 
 App that are running can still listen for Connectivity_change with a registered BroadcastReciever. However, the connectivity Manager API privdes a more robust method to request a callback only when specified newtork conditions are met. 
 
 Network requests objects deine the parameters of the newtork callback in terms of Network capabilities. you create Network request objects with the NetworkRequest.Builder class. registerNetworkCallback() then passes the networkReuqest objects with the networkRequest object to the system. When the nework conditions are met, the app receives a callback to execute the onAvailable) method defined in its connectivity Manger. Networkcallback classs. 
