@@ -32,6 +32,20 @@ To categorize a task, answer the following questions, and traverse the correspon
 
 
 
+# Glossary
+## JobScheduler
+This is an API for scheduling various types of jobs against the framework that will be executed in the application own process. `JobInfo` objects will be passed to `JobScheduler` with `schedule()`. When the criteria declared are met, the system will execute this job on your application `JobService`. Identify  the service component that implements the logic for your job when you construct the JobInfo.
+
+The framework will be intelligent about when it executes jobs, and attempt to batch and deffer them as much as possible. Typically if you don't specify a deadline on a job, it can be run at any moment depending on the current state of the JobScheduler's internal  queue. 
+
+## JobInfo
+Container of data passed to the `JobScheduler` fully encapsulating the parameters required to schedule work against the calling application. These are constructed using the `JobInfo.Builder`. The goal here is to provide the scheduler with high-level semantics about thw rwork you want to accomplish
+
+## JobService
+Entry point for the callback from the `JobScheduler`. This is the base class that handles asynchonous requests that were previously scheduled. you are responsible for overriding `JobService#onStartJob(JobParameters)`, which is where you will implement your job logic
+
+This service executes each incomign job on  a Handler running  on your applications main thread. This means that you must offload your executio nlogic to another thread/handler/Asynctask of your choosing. not doing so will result in flocking any future callbacks from the JobManager specificially `onStop()`, which is meant to inform you that the scheuldling requirements are no longer being met. 
 
 
-
+## WorkManger 
+`WorkManager` API makes it easy to schedule deferrable, asynchronous tasks that must be run reliably. These APIs let you createa task and hand it off to WorkManager to Run when the work contraints are met. 
