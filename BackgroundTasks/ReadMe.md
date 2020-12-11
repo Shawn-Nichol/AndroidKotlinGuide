@@ -1,3 +1,6 @@
+# Threads
+All  adnroid apps use a main thread to and thandel UI oeprations. calling long-running oeprations from the main thread can lead to freezes and unresponsive apps. For example apps that makes network request from the main thread wil freeze your UI on the app receives a response a network response. Create additional threads to handle long running operations while the main thread continues to handle UI updates. 
+
 # Background Tasks
 Any task that takes more than a few milliseconds should be delegated to a background thread. Common long-running tasks include things like decoding a bitmap, acccessing storage, working on a mahicne learning model, or perform network requersts. 
 
@@ -49,3 +52,42 @@ This service executes each incomign job on  a Handler running  on your applicati
 
 ## WorkManger 
 `WorkManager` API makes it easy to schedule deferrable, asynchronous tasks that must be run reliably. These APIs let you createa task and hand it off to WorkManager to Run when the work contraints are met. 
+
+## Executor 
+An object that executes submitted Runnable tasks. This interface provides a way of decoupling tasks submission from the mechanics of how each task will be run, including details of thread use., scheduling etc. An Executor is normally used instead of explicitly creating threads
+```
+Executor excutor = anExecutor()
+executor.execute(new RunnableTask1())
+executor.execute(new RunnableTask2())
+```
+
+
+## Executor service
+An executor that provides methods to manage termination and methods that can produce a Future for tracking progress of one or more asynchronous tasks. An ExecutorSErvice can be shutdown, whcih will cause it to reject new tasks. Two different methods are provided for shutting down and ExecutorService. The shudown() method will allow previously submitted tasks to execute before terminating, while the shutdownNow() method prevents wating tasks from starting and attempts to stop currently executing tasks. upong termination an executor has not tasks atviely executing, nono tasks awating execution, and no new tasks can be submitted. An unused ExecutorService should be sut down to allow reclamation of its resrouces. Method sumbit extenese base method Exec
+
+## Future
+A future represents the result of an asynchronous computation. Methods are  provided to check if the computations  is complete, to wait for its completion, and to retrieve the result of teh computation. The result can only be retrieved using method get when the computation has completed, blocking if necessary until it is ready. Cancellation is perfromed by the canel method. Additional methods are provided to determine if the task completed normally or was cancelled. Once a computation has completed, the computation cannot be cancelled. If you would like to use a future for the sake of cancellability but not provide a usable result, you can declare types of the from future and return null as a result of the underlying tasks. 
+
+## ThreadPoolExecutor
+An ExecutorSErvice that executes each submitted task using one of possibly several pooled threads, normally configured using executors factory methdos. Thread pools address two different problems: they usually provide improved perfromance when executing large numbers of asynchronous tasks, due to reduced per-task invocation overhead, and theyprovide a means of bounding and managing the resources, inlcuding threads, consumed when executing a collection of tasks. Each ThreadPoolExecutor also maintains some basic statistics such as the number of completed tasks. 
+
+
+## immutable data
+Immutable can be used to mark class as producing immutable instances. The immutability of the class is not validated and is a promise by the tyhpe that ll publicly accessible properties and fields will not change after the instance is constructed. This is a stronger promise than val as it promises that the value will enver change not only that values cannot be changed through a setter. 
+
+Immutable is used by composition which enables composition optimizations that can be perfromed based on the assumption that values read from th etype will not change. 
+
+Data classes that only contain val properties that do not have custom getters can safely be marked as Immutable if thje types of preoprties are either primitive types or also Immutable. 
+
+## Threadsafe
+In some situations, the methods you implement might be called from more than one thread, and therefore  must be written to be trehad-safe.
+
+The primarily  tture for methods that can be called remotely such as methods in a bound service. When a call on a method implemnted in aa IBinder origniates inthe same process in which the IBinder is running, the methods is executed in the callers thread. However when the call orignates in antoehr process, the methods is executed in a thread chosen from a ppol of threads that the system maintains in the same processas as the IBinder it's not executed in the UI thread or the process. For example wheras a servies onBind method would be called form the UI  thread of the service process, methods implemented int he object that onBind returns for exmaplle a subclass that implemtns pool thread can engage the same IBinder method at the same time
+
+## Handlers
+A Handler allows you to send and process Message and runable objectss associated with a thread's Message quueue Each handler instance is assocated with a single thread and that thread's message queue. When you create a new Handler it is bound to a looper. It will deliver messages and runnables to that Loopers message queue ane executge them on the Loopers thread. 
+1. To schedule messages and runnables to be executed at some point in the future
+2. To enqueue an action to be performed on a different thread than your own. 
+
+## Looper
+Class used to run  mesage loop for a  thread. Threads by default do not have a message loop associated with them too create one, call prepare() in the thread that is to run the loop, and then loop9) to have it process messages until the loop is stopped. Most interaction with a message looop is throgh the handler class. 
