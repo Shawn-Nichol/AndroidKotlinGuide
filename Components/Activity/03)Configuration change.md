@@ -1,5 +1,5 @@
 # Configuration changes
-If the configuration of the device changes then anything displaying a user interface will need to be update to match that configuration. Because Activity is the primary mechanism for interacting with the user, it includes special support for handling configuration changes.
+A configuration chagne occurs when the a device is changed from landscape mode to Portrait mode, because Activity is the primary mechanism for interacting with the user, it includes special support for handling configuration changes.
 
 Unless you specify otherwise a configuration change will cause your current activity to be destroyed, going through the normal activity lifecycle process of onPause(), onStop(), and onDestroy() as appropriate. If the activity had been in the foreground or visible to the user, once onDestroy() is called in that instance then a new instnace of the activity will be created, with whatever savedInstanceState the previous instnace had generated from onSaveInstanceState(bundle).
 
