@@ -1,6 +1,6 @@
 ## Activity 
 Activity is component that interacts with user providing a GUI. 
-Manifest example include here
+
 
 ## Activity lifecyce
 Is list of methods that the activity will run depending on where it is in the lifecycle. 
