@@ -9,7 +9,7 @@ class MyService : Service() {
 }
 ```
 
-2) Override the following methods
+## 2) Override the following methods
 
 `onCreate()` <br>
 The system invokes this method to preform one-time procedures when the service is initially created. If the service is already running this method isn't called. 
@@ -51,7 +51,7 @@ class MyService: Service() {
 
 ```
 
-## Add Service to Manifest
+## 03) Add Service to Manifest
 If the service isn't added to the manifest the service won't install. 
 
 ```
@@ -62,8 +62,8 @@ If the service isn't added to the manifest the service won't install.
 </application>
 ```
 
-## StartService. 
-To start a service you'll need to call the Intent for the service some where in the Activity or fragment. 
+## 04) Start/Stop Service. 
+To start/stop a service you'll need to call the Intent for the service some where in the Activity or fragment. Fragments don't have context so you'll need to provide the context of the Activity in order to call startService or stopService.
 ```
 class MyFragment: Fragment() {
   
