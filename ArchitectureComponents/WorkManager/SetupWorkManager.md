@@ -107,3 +107,12 @@ val workRequest = OneTimeWorkRequestBuilder<MyWorker>()
   .setInputData(myData)
   .build()
 ```
+
+`WorkManager`
+The last step is to submit the WorkRequest to WorkManager. The exact time that worker is going to be executed depenends on the constraints that are used in the WorkRequest and on system optimization. WorkManager is desgned to give the best behavior under these restrictions
+
+```
+WorkManager
+  .getInstance(myContext)
+  .enqueue(workRequest)
+```
