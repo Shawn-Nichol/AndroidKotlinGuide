@@ -21,3 +21,18 @@ workManager.getWorkInfoByIdLiveData(syncWorker.id)
         "Completed, Snackbar.LENGTH_SHORT
       ).show()
 ```
+
+## Observing Progress
+Observing progress information is also simple. You can use the getWorkInfo By or getWorkInoBy LiveData methods and geta  reference to WorkInfo.
+```
+WorkManager.getInstance(applicationContext)
+  // requestId is the WorkRequest ID.
+  .getWorkInfoByIdLiveDAta(requesteId)
+  .observe(observer, Observer { workInfo ->
+    if(workInfo != null) {
+      val progress = workInfo.progress
+      val value = progress.getInt(Progress, 0)
+      // Do something. 
+    }
+  
+```
