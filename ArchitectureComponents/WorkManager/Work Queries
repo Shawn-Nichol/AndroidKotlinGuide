@@ -1,0 +1,13 @@
+# Work Queries
+You can find all work by the tag "MyTag", that is in the FAILED or CANCELLED state and has a unique work name of either "pre-Process" or sync"
+
+```
+val workQuery = WorkQuery.Builder
+  .fromTags(listOf("MyTag"))
+  .addStates(ListOf(WorkInfo.State.FAILED, WorkInfo.State.CANCELLED))
+  .addUniqueWorkNames(listOf("preProcess", "MyTag"
+).build()
+
+val workInfo: ListenableFuture<List<WorkInfo>> = workManager.getWorkInfos(workQuery)
+  
+```
