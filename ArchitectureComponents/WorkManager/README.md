@@ -60,3 +60,18 @@ Resulotion policys
 
 `Cancel and Stopping Work`
 If the work no longer needs to run you can request it to be canceled. 
+
+## WorkInfo
+Infomration about a particular WorkRequest contianing the id of the WorkRequest, its current WorkInfo.State, output tags, and run attempt count. note that output is only available for the terminal states.
+
+`getProgress`</br>
+Get the progress Data associated with the WorkRequest.
+
+`getTags`</br>
+Get the set of tags assocaited with the WorkRequest
+
+`getState`</br>
+Get the current WorkInfo.state of the WorkRequest
+
+## ListenableWorker
+A class that can perform work asynchronously in WorkManager. For most cases Worker will do fine.
