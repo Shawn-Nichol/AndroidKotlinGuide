@@ -1,0 +1,5 @@
+- A test is a procedure used to evaluate if a method, an entire class, a module or even a whole application behaves correctly.
+- Tests can act as complementary documentation of the application features
+- Tests should be short simple to read and easy to follow.
+- Test should relate to the logic of the application
+- You can test coverage tools to find untested code that should be tested. 
