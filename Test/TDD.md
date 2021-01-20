@@ -22,3 +22,9 @@ TDD is a process in which you write the tets for the code you are going to add o
 
 `Refactor`:Clean the code and makes sure the test passes. 
 
+## Key Points
+- TDD is a process of writing tests before you write your actual code. You can apply TDD to any sort of programming
+- Practicing TDD helps you to code quickly and with intent, docuemtn automatically, have confidence your codei smaintainable, and ahve better test coverage
+- This process should start with writing a failing test. no matter what , you always want to see the test fail. 
+- only after you write your test and see it fail do you write new code or change the existing code.
+- Only write enough code to  make the test pass. If there's more code you need to write, you need another test first.
