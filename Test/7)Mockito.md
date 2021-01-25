@@ -20,4 +20,7 @@ dependencies {
 ```
 Mockito-Kotlin is a wrapper library around Mockito. It provides top-level functiosn to allow for a more kotlin like approach and also solves a few issues with using the Mockito Java library in kotlin. 
 
-Unit tets
+Kotlin classes and methods are final by default. mockito won't work with the final classes methods out of the box. To fix this you have the following options
+- Use a mock-maker-inline extension: to allow Mockito mock final classes method
+- Add the open keyword to classes and methods that you'll mock
+- Create an interface and have the class implement the interface. Then just mock the interface.
