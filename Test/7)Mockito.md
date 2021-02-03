@@ -17,6 +17,8 @@ Kotlin classes and methods are final by default. mockito won't work with the fin
 - Add the open keyword to classes and methods that you'll mock
 - Create an interface and have the class implement the interface. Then just mock the interface.
 
+## Mock
+using a Mock of a class will let you stub methods simulate a particular situation in a test. It'll also verify if one or more methods were called on that mock. 
 
 ## Stubbing
 Uses a fake collaborator object that always returns the same results.
@@ -38,7 +40,7 @@ inOrder(sharedPreferencesEditor) {
 ```
 
 ## Spying
-Lets you call the methods of real object, while also tracking every interaction, just as you would do with a mock. When setting up spies, you need to use `doReturn/whenever/method` to stub a method.
+Using a spy is similar to using a mock, but on real instances. You'll be able to stub a method and verify if a method was called just like a mock, but also be able to call the real methods of the instance.  When setting up spies, you need to use `doReturn/whenever/method` to stub a method.
 
 ## Mock-makerinlline extension
 Allows Mockito mock finals classes methods.  
