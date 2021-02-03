@@ -55,3 +55,8 @@ implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 testImplementation 'androidx.arch.core:core-testing:2.0.1'
 ```
 Use `@get:Rule`. This is a test rule, A test rule is a tool to change the way tests run, somtimes adding additional checks or running code before and after your tests. Android architecture componets use a bakcground executor that is asynchronous. `InstantTaskExecutorRule` is a rule that swaps out that executor and replaces it with syncronous one. This will ensure when using Livedata with ViewModel it all runs syncronously in the test. 
+
+
+## Annotation
+`@RunWith(MockitoJUnitRunner::class)`: instructs that you are going to write tests using Mockito. Now you can annotate using @Mock every preoopty that you'll later use as mocks. 
+`@Mock`
