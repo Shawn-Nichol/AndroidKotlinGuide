@@ -58,5 +58,5 @@ Use `@get:Rule`. This is a test rule, A test rule is a tool to change the way te
 
 
 ## Annotation
-`@RunWith(MockitoJUnitRunner::class)`: instructs that you are going to write tests using Mockito. Now you can annotate using @Mock every preoopty that you'll later use as mocks. 
+`@RunWith(MockitoJUnitRunner::class)`: instructs that you are going to write tests using Mockito. Now you can annotate using @Mock every preoopty that you'll later use as mocks. </br>
 `@Mock`
