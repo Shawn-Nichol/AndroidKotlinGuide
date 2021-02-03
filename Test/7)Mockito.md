@@ -1,15 +1,7 @@
-## Blackbox Testing
-- Configure what you're testing.
-- Execute the method that ou want to test
-- Finally verify the result by chcking the state of the object under test. 
-
-`State verification`: The object under test has to collaborate with another one. Becuase you want to focus on the first object, in the configuration phase, ou want to provide a test double collaborator to your object under test. The fake collaborator is just for testing purposes and you configure it to behave as you want. 
-
-`Stubbig method`: set the method to always return the same result. 
-
-## Whitebox testing
-You want to ensure that hyour object under test will call specific collaborator methods. ex you may have a repository object that retrieves the data from the newtork, and before returning the results, it calls a collaborator object to save them into a database. You can use Mockito to keep an eye on a collaborator and verify if sspecific methods were called on it. 
-
+# Mockito
+- Step one: Configure what you're are going to test
+- Step two: Execute the method that you want to test
+- Step three: Vefiry the result by checking the state of the object under test. This is called state verification or black-box testing. 
 
 ## Setting up Mockito
 add dependencies 
@@ -24,3 +16,42 @@ Kotlin classes and methods are final by default. mockito won't work with the fin
 - Use a mock-maker-inline extension: to allow Mockito mock final classes method
 - Add the open keyword to classes and methods that you'll mock
 - Create an interface and have the class implement the interface. Then just mock the interface.
+
+
+## Stubbing
+Uses a fake collaborator object that always returns the same results.
+```
+whenever(object.method(arguement matcher))).thenReturn(results)
+whenever(question.answer(anyString())).thenReturn(true)
+```
+
+## Verfication
+
+Modes: tiems(), are: never(), atLeast(), atMost(). Other areguemtn matchers eq(), are same(), any()
+
+You can very mupltiple object in a predfined order
+```
+inOrder(sharedPreferencesEditor) {
+  verify(sharedPReferencesEditor).putInt(any(), eq(score))
+  verify(sharedPreferencesEditor).apply()
+}
+```
+
+## Spying
+Lets you call the methods of real object, while also tracking every interaction, just as you would do with a mock. When setting up spies, you need to use `doReturn/whenever/method` to stub a method.
+
+## Mock-makerinlline extension
+Allows Mockito mock finals classes methods.  
+
+implement </br>
+Create a resources directory under app/src/test/mockito-extensions and create a file called org.mockito.pluginsMockMaker with the following code
+```
+mock-maker-inline
+```
+## Testing ViewModel LiveData
+Add dependencies
+```
+implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+testImplementation 'androidx.arch.core:core-testing:2.0.1'
+```
+Use `@get:Rule`. This is a test rule, A test rule is a tool to change the way tests run, somtimes adding additional checks or running code before and after your tests. Android architecture componets use a bakcground executor that is asynchronous. `InstantTaskExecutorRule` is a rule that swaps out that executor and replaces it with syncronous one. This will ensure when using Livedata with ViewModel it all runs syncronously in the test. 
