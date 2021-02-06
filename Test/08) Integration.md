@@ -5,7 +5,7 @@ tegration test.
 
 
 - Integration tests verify the way different parts of your app work together
-- You can use dexmaker-ockito-inline to mock final classes for android test. 
+- Roboelectic can use dexmaker-ockito-inline to mock final classes for android test
 
 
 One of the most frequent dependencies that force you to use an integration test is the android famework. This does not necessarily mean it uses the screen; it can be any component of the SDK. When your code ends up interacting with android, you can't get away with unit tests. 
