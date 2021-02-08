@@ -1,3 +1,13 @@
+# Key points
+- Use Software architecture to communicate development standards between team memebers.
+- It's not uncommon to reusee software architecture on different projects
+- When starting a new progject, on e of the first decisions is to decide on its software architecture.
+- Proper software architecture helps with testing
+- Support your software architecture using design pattters and the SOLID principles
+- Design pattersn are classified into thredd categories: creational, structural and behavioral
+- The dependency injection pattern i the key to having a testablel architecutre
+- There are other user interfacce design pattersn such as MVC, MVP and MVVM. 
+
 ## Architecting
 - Use software architecture to communicate development standards between team members
 - It's not uncommon to reuse software architecture on different projects
