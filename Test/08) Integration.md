@@ -1,5 +1,11 @@
+# Key points
+ - Integration tests verify the way different parts of your app work together. 
+ - They are slower than unit tests, and should thereforre fonly be used when you need to test how things interact
+ - when interacting with the Android framework you can rely on an android device or emulator or use Robolectric
+ - You can use dexmaker-mockito-inline to mock final class for android tests. 
+ 
+ 
 # Integration tests
-
 When you want to createa a unit test but can't quit tests it in isolation. Integration tests tend to be slower than unit tests, but quicker than UI tets. Becuase of this, you want to first put everyting you can into unit tests. You start using integration tests when you need to test something that you cannot do without interacting with another part of your app or an external element. 
 tegration test. 
 
