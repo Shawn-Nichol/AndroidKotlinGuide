@@ -1,3 +1,10 @@
+# Key Points
+- With JUnit you can do stat verification also called black-box testing
+- With Mockito you can pefrom behaiovr verification or white-box testing. 
+- Using a mock of a class will let you stub methods simulate a particular situation in a test. It'll also verify if one or more methods were called on that mock. 
+- Using a spy is similar to using a mock, but on real instances. You'll be able to stub a method and verify if a method was called just like a mock, but also be able to call the real methods of the instance 
+- Remember: Red Green Refactor. 
+
 # Mockito
 - Step one: Configure what you're are going to test
 - Step two: Execute the method that you want to test
