@@ -22,3 +22,5 @@ You want to ensur ehtat your object under test will call specific collaborator m
 `@Before`: This method runs before each test. </br>
 `@BeforeClass`: Theis method will be executed only once before all the tests are executed. </br>
 
+## Test Runner
+A test runner is a JUnit componet that runs tests. Without a test runner, your tess would not run. There's a default test runner provided by  JUnit that youget automatically. @RunWith waps out that default test runner. The AndroidJunit4 test runner allows for android X test to run your test differently depending on whether they are insturmented or locat test. 
