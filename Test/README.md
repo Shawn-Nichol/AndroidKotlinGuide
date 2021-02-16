@@ -16,6 +16,15 @@
 ## White Box testing
 You want to ensur ehtat your object under test will call specific collaborator methods. ex you may have a repository object that retrieves the data from the network, and before returning the results, it calls a collaborator object to save them into a database. You can use Mockito to keep an eye on a collaborator and verify if specific methods were called on it. 
 
+
+## Test Doubles
+Test double is a version of a class crafted specifically for testing. It is meant to replace the real version of a clas in tests. It's similar to how a stund double is an actor who specializes in stunts, and replaces the real actor for dangerous actions. 
+`Fake` A test double that has a working implementation of the class, but it's implemented in a way that makes it good for testsw but unsuitable for production. 
+`Mock` Tracks which of its methods were called. it then passes or ails a test depending  on whether it's methods were called correctly.
+`Stub` Includes no logic and only returns what you program it to return. A stubTaskReppository could be programmed to return certain combinations tasks. 
+`Dummy` Is passed around but not used, such as if you need to provide it as a paramaeter. If you had a NoOptaskRepository, it would just implement the TaskREpository with no code in any of the  methods. 
+`Spy` keeps track of some additional information; for example if you made a spyTaskRepository, i t might keep track of the number of times the addTask methodd was called.
+
 ## Anotations
 `After`:The method will be executed after each test. </br>
 `@AfterClass`: The method only executes once after all the tests are run. </br>
