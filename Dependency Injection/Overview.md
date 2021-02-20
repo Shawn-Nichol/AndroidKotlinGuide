@@ -1,17 +1,18 @@
-Dependency Injection is a technique widely used in programming and well suited to android development. By following the principles of DI, you lay the groundwork for  good app architecture. Implementing depenecy injectino provides the following advantages. 
+Dependency Injection is a technique widely used in programming and well suited for android development. By following the principles of DI, you lay the ground work for good app architecture. Implementing DI provides the following advantages. 
+
 - Reusability of code. 
 - Ease of refactoring
 - Ease of testing
 
 # Fundamentals of DI
-Class often require reference to other classes. Fore example, a car class might need a reference to an engine class. These reqquired classes are called dependencies, and in this example the car class is dependent on having an instance of the engine class to run. 
+Classes often require reference to other classes. Fore example, a car class might need a reference to an engine class. These required classes are called dependencies, and in this example the car class is dependent on having an instance of the engine class to run. 
 
-There are three ways for a class to get an object it needs. 
-1. The class constructs the dependency it needs. In the example above, Car would create and initialize its own instance of engine. 
+There are three ways for a class to get an object
+1. The class constructs the dependency it needs. The object Car would create and initialize its own instance of engine. 
 2. Grab it from somewhere else. Some Android APIs, such as context getters and getSystemService(), work this way. 
-3. Have it uspplied as a parameter. The app can provide these dependencies when the class is constructoed or pass them in the functions that need each dependency, the car constructor would receive engine as a aparametere. 
+3. Have it supplied as a parameter. The app can provide these dependencies when the class is constructed or passed them in the functions that need each dependency, the car constructor would receive engine as a aparametere. 
 
-The third option is dependency injectino! with this appraoch you take the dependencies of a class and provide them rather than having the class instance obtain them itself. 
+The option 3 is dependency injection! This appraoch you take the dependencies of a class and provide them rather than having the class instance obtain them itself. 
 
 ```
 class Car {
@@ -28,13 +29,13 @@ class Car {
 }
 ```
 
-This is not an examlple of dependency injection becuase the car class is constructing its own engine. This can be problematic becuase  
-- Car and Engine are tightlly coupled - an instance of Car uses on type of Engine, and  no subclasses or alertnative implementations can easily be used. If the car were to construct its own Engine, you would have to create two teypes of Car instead of just reusing the same Car for engines of types Gas and Electric. 
-- The hard dependency of Engine makes testing more difficult. Car uses a real instance of Engine, thus preventin yo ufrom using a test double ot modify Engine for differenct test cases. 
+This is not an examlpe of dependency injection becuase the car class is constructing its own engine. This can be problematic becuase  
+- Car and Engine are tightlly coupled - an instance of Car uses one type of Engine, and no subclasses or alertnative implementations can easily be used. If the car were to construct its own Engine, you would have to create two types of Cars instead of just reusing the same Car for engines of types Gas and Electric. 
+- The hard dependency of Engine makes testing more difficult. Car uses a real instance of Engine, thus preventing you from using a test double to modify Engine for differenct test cases. 
 
 Instead of each instance of Car constructing its own Engine object or initialization, it receives an Engine object as a parameter in its constructor. 
 
-````
+```
 Class Car(private val engine: Engine) {
   fun start() {
     engine.start()
@@ -48,7 +49,7 @@ Class Car(private val engine: Engine) {
 }
 ```
 
-The main functino uses Car. Becuase Car depends on Engine, the app creates an instance of eEngine and then uses it to construct an instance of Car. The benefits of this DI-based apprach are
+The main functino uses Car. Becuase Car depends on Engine, the app creates an instance of Engine and then uses it to construct an instance of Car. The benefits of this DI-based apprach are
 
 - Reusability of Car. You can pass in different implementations of Engine to Car. For example you might define a new subclass of Engine called ElectricEngine that you want Car to use. If you use DI, all you need to do is pass in an instance of the updated ElectricEngine subclass, and Car still works without any further changes. 
 - Easy testing of Car. You can pass in test doubles to test your different scenarios. For example, you might create a test double of Engine called FakeEngine and configure it for different tests. 
@@ -74,23 +75,23 @@ fun main(args: Array) {
 ```
 
 ## Automated dependency Injection
-The previous exmaples are refereed to dependency injection by hand, or manual dependency injection.
+The previous exmaples are refered to as dependency injection by hand, or manual dependency injection.
 
-- For big apps, taking al l the dependencies and connectin them correctly can require a large amount of boilerplate code. In a multi-layered architecture, in order to create an object for a top layer, you have to provide all the depenedcies of the layers below it. As a concrete example, to build a real car you migh need an engine a transmission, a chassis and other parts; and an engine in turn needs cylinders and spark plugs. 
+- For big apps, taking all the dependencies and connecting them correctly can require a large amount of boilerplate code. In a multi-layered architecture, in order to create an object for a top layer, you have to provide all the depenedcies of the layers below it. As a concrete example, to build a real car you might need an engine a transmission, a chassis and other parts; and an engine in turn needs cylinders and spark plugs. 
 
-- When you're nota ble to construct dependencies before passing them in - for examole when using lazy insinitlizatino or scoping object to flow of your app you need to write and maintain a custom container or graph of dependencies that managges the lifetimes of your dpenedencies in memory. 
+- When you're notable to construct dependencies before passing them in - for example when using lazy insinitlization or scoping object to flow of your app you need to write and maintain a custom container or graph of dependencies that manages the lifetimes of your dependencies in memory. 
 
-THere are libraires that solve this probelm by automatin th e process of creating an dprovidng dependencies. They fit into tow categories. 
+There are libraires that solve this problem by automating the process of creating and providng dependencies. They fit into two categories. 
 - Reflectino-bases solutions that connect dependencies at runtime. 
 - Static solutions that generate the codes to connect depenedenceis at compile time. 
 
-Dagger is a popular dependency injection library for Java, Kotlin and Android that is maintaned by Google. Dagger facilitates uisn DI in your app by creating and managinthe graph aof dependencies for you. It provides fully static and compile-time dependeencies addressing many o fthe development and perfromance issues of relection-bases solutions such as Guice. 
+Dagger is a popular dependency injection library for Java, Kotlin and Android that is maintaned by Google. Dagger facilitates using DI in your app by creating and managing the graph of dependencies for you. It provides fully static and compile-time dependencies addressing many of the development and perfromance issues of relection-bases solutions such as `Guice`. 
 
 ## Alternatives to dependency injection
-An alternative to dependency injectin is using a service locator. The service locator design patter aslo improves decoup0ling of classes from concrete dependencies. You createa  classsknown as the service locator that creates an stores dependencies and then provide s those dependencies on demand. 
+An alternative to dependency injectin is using a service locator. The service locator design patter aslo improves decoupling of classes from concrete dependencies. You createa  classsknown as the service locator that creates an stores dependencies and then provides those dependencies on demand. 
 
 ## Alertantives to dependency injection
-An alternative to dependency injection is using a service locator. The service locator design patter also improves decoupling of classses from concrete dependencies. You create a a class known as the service locator that createws and stores dependencies and then provides those dependencies on demand. 
+An alternative to dependency injection is using a service locator. The service locator design patter also improves decoupling of classses from concrete dependencies. You create a class known as the service locator that creates and stores dependencies and then provides those dependencies on demand. 
 
 ```
 object ServiceLocator {
@@ -116,7 +117,7 @@ The service locator pattern is different from dependency injection in the way th
 Compared to dependency injection
 - The collection of dpenedencies require by a service locatore makes code hard to test becuase all the tests have to inertact with the same global service locator. 
 
-- Dependencies are encoded in the class implementation, not in the API surface. As a result, it's hrader to know what a class needs from the outside. As a result, changes to Car or the dependencies available in eh service locator might result in runtime or test failures by causing reference to fail. 
+- Dependencies are encoded in the class implementation, not in the API surface. As a result, it's hrader to know what a class needs from the outside. As a result, changes to Car or the dependencies available in the service locator might result in runtime or test failures by causing reference to fail. 
 
 - Managin liftimes of objects is more difficult if you want to scope to anything other than the lifetime of the entier app. 
 
@@ -130,5 +131,5 @@ Hilt is build on top of the popular DI library Dagger to benefit form the compil
 ## Conclusion
 Dependency injectin provides your app with the following advantages. 
 - Reusability of classes and decoupleing of dependencies: It's easier to swap out implementations of dependency Code reuse is improved becuase of inversion of control, and no longer control how theier dependencies are created, but instead work with any configuration. 
--  Ease of refactoring: The dependencies beocme a verifiable part of the API surface, so they can be checked at object-creation time or at compile time rather than being hidden as implementations detials. 
+-  Ease of refactoring: The dependencies become a verifiable part of the API surface, so they can be checked at object-creation time or at compile time rather than being hidden as implementations detials. 
 -  Ease of testing: A class doesn't manage its dependencies, so when you're testing it, you can pass in different implementations to test all of your different cases. 
