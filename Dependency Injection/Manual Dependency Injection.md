@@ -1,13 +1,13 @@
-Android recommended app architecture encourgaes divding your doe into classes to benefit from separation of concerns, a principle where each class of the hierarchy has a single defined responsibility. This leads to more, smaller class that need to be connected together to fulfill each other's dependencies. 
+Android recommended app architecture encourgaes dividing your code into classes to benefit from separation of concerns, a principle where each class of the hierarchy has a single defined responsibility. This leads to more, smaller class that need to be connected together to fulfill each other's dependencies. 
 
-The dependencies between classes can be represented as a graph, in which eeach class is connected to the classes. it depeneds on. The representation of all your classes and their dependencies makes up the applicationgraph.
+The dependencies between classes can be represented as a graph, in which each class is connected to the classes it depeneds on. The representation of all your classes and their dependencies makes up the application graph.
 
-Dependency inejction helps make these connections and enables you to swap out implementations for  testing. For exmaple, when testing a ViewModel that depends on a repository, you can pass differen timplementations Repsotiry with either fakes or mocks to test eh differenct cases. 
+Dependency inejction helps make these connections and enables you to swap out implementations for testing. For exmaple, when testing a ViewModel that depends on a repository, you can pass different implementations Repsotiry with either fakes or mocks to test the differenct cases. 
 
 ## Basics of manual dependency injection
 Consdider a flow to be a group of screens in your app that conrresponds to a feature. Login, registration, and checkout are all examples of flows. 
 
-When covering a login flow for a typical Android app, the LoginActivity depends on LoginViewModel, which in turn dpeneds on UserRespository. Then UserRepostiroy depends on a UserLocalDatasource and UserRemoteDataSource, which in turn depends on a Retrofit service.
+When covering a login flow for a typical Android app, the LoginActivity depends on LoginViewModel, which in turn depeneds on UserRespository. Then UserRepostiroy depends on a UserLocalDatasource and UserRemoteDataSource, which in turn depends on a Retrofit service.
 
 LoginActivity is the entry point to the login flow and the user intereacts with the activity. Thus LoginActivity needs to create the LoginViewModel with all its dependencies. 
 
@@ -55,16 +55,16 @@ class LoginActivity: Activity() {
 
 There are issues with this approach
 1. There's a lot boilerplat code. If you wanted to create another instance of LoginViewModel in another part of the ccode, you'd have code duplication. 
-2. Depeendencies have to be declared in order. You ahve to instantiate UserRepostory before LoginViewModel in order to create it. 
+2. Depeendencies have to be declared in order. You have to instantiate UserRepostory before LoginViewModel in order to create it. 
 3. It's difficult to reuse objects. if you wanted to reuse UserRepostory across multiple features, you'd have to make it follow the singleton patter. The signleton pattern makes testing more difficult becuase all tests share the same singleton instance. 
 
 ## Managing dependencies with a container. 
 To sovle the issue of reusing objects, you can create your own dependencies container, class that you use to get dependencies. All instances provided by this container can be public. In the exmaple, becuase you only need an instance of UserRepsotory, you can make its dependencies private with the option of making them public in the future if they need to be provieded. 
 
 ```
-// Container of objects ahred across the whole app
+// Container of objects shared across the whole app
 class AppContainer {
-  // Since you want to expose userRepository out of the contaienr, you need to satisfy its dependencies as you did before. 
+  // Since you want to expose userRepository out of the container, you need to satisfy its dependencies as you did before. 
   ```
   private val retrofit = Retrofit.Builder()
     .baseUrl("https://example.com")
@@ -80,10 +80,10 @@ class AppContainer {
 }
 ```
 
-Becuase these dependencies are used across the whole application, they need to be palced in a common place all activites can use: the application class. Create a custom application class that contains an AppContainer instance. 
+Becuase these dependencies are used across the whole application, they need to be placed in a common place all activites can use: the application class. Create a custom application class that contains an AppContainer instance. 
 
 ```
-// Custom Application class that needs to be specified in the Android Mnaifest.xml file
+// Custom Application class that needs to be specified in the Android Manifest.xml file
 class  MyApplication: Application() {
   // Instance of AppContainer that will be used by all the activites of the app
   val appContainer = AppContainer()
@@ -148,14 +148,14 @@ class LoginActivit: Activity() {
 }
 ```
 
-This approach is better than the previous one, but there are still some challenges to consider
+This approach is better than the manual inejction, but there are still some challenges to consider
 1. You manage the AppContainer yourself, creating instances for all dependencies by hand. 
 2. There is still a lot of boilerplate code. You need to create factories or parameters by hand depending on whether you want to reuse an object or not. 
 
 ## Managing dependencies in application flow
-AppContainer gets complicated when you want to include more functionality in the progject. When your app becomes larger and you start introducing different feature flows, there are even more probelmsthat arise
+AppContainer gets complicated when you want to include more functionality in the progject. When your app becomes larger and you start introducing different feature flows, there are even more probelms that can occur.
 
-1.  When you have different flows, you migh want object to just live in the scope of that flow. Fore example, when creating LoginUserData(that might consist of the username and password used only in the login flow) you don't want to persist data from an old login flow from a different user. You want a new instance for ever new flow. YOu can achieve that be creating FlowContainer objects inside the AppContainer. 
+1.  When you have different flows, you might want object to just live in the scope of that flow. Fore example, when creating LoginUserData(that might consist of the username and password used only in the login flow) you don't want to persist data from an old login flow from a different user. You want a new instance for ever new flow. YOu can achieve that be creating FlowContainer objects inside the AppContainer. 
 
 2. Optimizing the application graph and flow container can also be difficult. You need to remeber to delete instances that you don't need, depending on the flow you're in. 
 
@@ -178,7 +178,7 @@ class AppContainer {
   var loginContainer: LoginContainer? = null
 ```
 
-Once you have a container specific to a flow, you ahve to decide when to create adn delte the container instance. Becuse your login flow is self-contained in an activity,(LoginActivity), the activity is the one managing the lifecycle of the container. LoginActivity can create the instance in onCreate(0 and delte it in onDestory()
+Once you have a container specific to a flow, you have to decide when to create and delete the container instance. Becuse your login flow is self-contained in an activity,(LoginActivity), the activity is the one managing the lifecycle of the container. LoginActivity can create the instance in onCreate(0 and delte it in onDestory()
 
 ```
 class LoginActivity: Activity() {
@@ -191,7 +191,7 @@ class LoginActivity: Activity() {
     appContinaer = (application as MyApplication).appContainer
     
     // Login flow has started. Populate loginContainer in AppContainer
-    appContainer.oginContainer = Logincontainer(appContainer.userRepsotory)
+    appContainer.loginContainer = Logincontainer(appContainer.userRepsotory)
     
     loginViewModel = appContainer.loginContainer.loginViewModelFactory.create()
     loginData = appContainer.lgoinContainer.loginData
