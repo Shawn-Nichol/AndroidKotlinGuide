@@ -242,4 +242,145 @@ interface ApplicationComponent {
     fun loginComponent(): LoginComponet.Factory
 }
 ```
-5.
+
+## Assigning to subcomponents
+if you build the project, you create instances of both ApplicationComponent and LoginComponent. ApplicationComponent is attached to the lifecycle of the application becuase you want to use the same instance of the graph as long as the application isin memory. 
+
+What's the lifecycle of Logincomponent? One of the reasons why you needed LoginComponent is becuase you needed to share the same instance of the LoginViewModel between Login-related fragemtns. But also, you want  different instances of LoginViewModel whenever there's a new login flow. LoginActivity is the right lifetime for LoginCopmonen: for ever new activity, you need a new instance of LoginComponent and fragemtns that can use that instance of loginComponent
+
+Becuase LoginComponetn is attached to the LoginActivity lifecycle, you have to keep a reference to the cmoponent in the activity in the same way you kept the refernce to the applicationCompoonet in the applicatino class. That way, fragmetns can access it. 
+
+```
+class LoginActivity: Acitivty() {
+    // Reference to the Login graph
+    latteinit var LoginComponet: LoginComponent
+}
+```
+Notice that the variable loginComponent is not annotated with @Inject becuase you're not expecting that variable to be prvoided by dagger. 
+
+You can use the ApplicationComponent to get a reference to loginCOMponent and then inejct LoginActivity as follows. 
+
+```
+class LoginActivity: Activity() {
+    // Reference to login graph
+    lateinit var loginComponent: LoginComponent
+    
+    // Fields that need to be injected by the login graph
+    @Inject late val var loginViewModel: LoginViewModel
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // Creation of the login graph using  the application graph
+        loginComponent = (applicationContext as MyDaggerApplication)
+            .appComponent.loginCompponet().create()
+        
+        // Make Dagger instantiate @Inject fields in LoginActivity
+        loginComponent.inject(this)
+        
+        super.onCreate(savedinstanceState)
+    }
+}
+```
+
+LoginComponent is created in the activity's onCreate(0 method, and it'll get implicitly destroyed when the activity gets destroyed. 
+
+The loginComponet must always provide the same instance of LoginViewModel each time it's requested. You can ensure this by creating a custom annotatioin scope and annotating both LoginComponent and LoginViewModel with it. Note that you cannot use the @Singleton annotation becuase it's already been used by the parent component and that'd make the object an application singleton (unique instance for the whole app). You need to create a differenct annotation scope. 
+
+`Scopping Note`
+- When a type is marekd with scope annotation, it can only be used compoonents that are annotated witht the same scope. 
+- When a component is marked with a scope annotatin, it can only provide types with that  annotation or types that have no annotation. 
+-  A subcomponent cannot use a scope annotation used by one of its parent components. 
+Components alos involve subcomponents in this context. 
+
+
+In this case, you chould have called this scope @LoginScope but it's not a good practice. The scope annotation's name should not be explicit to the purpose it fulfills. Instead. it should be named depending on its lifetime becuase annotations can be reused by sibling components such as RegistrationComponent and SettignsComponents. That's why you should call it @ActivityScope instaed of @LoginScope. 
+
+```
+// Definetion of a custom scope called ActivityScope
+@Scope
+@Retention(value = AnnotationREtention.RUNTIME)
+annotation class ActivityScope
+
+
+// Classes annotated with @ActivityScope are scoped to the graph and the same instance of that type is provided every time the type is requested
+@ActivityScope
+@Subcomponent
+interface LoginComponent { ... }
+
+// A unique instance of LoignViewModel is provided in Components
+// annotated with @activityScope
+class LoginViewModel @Inject constructor( 
+    private val userRepository: UserRepository
+)  { ... }
+```
+
+Now if you have two fragments that need LoginViewModel, both of them are provided with the same instance. For example, if you have a LoginUsernameFragemnt and a LoginPasswordFragemtn they need to get injected by the LoginComponent. 
+
+```
+@ActivityScoope
+@Subcomponent
+interfaceLoginComponet {
+
+    @Subcomponent.Factory
+    interface Factory {
+        fun create(): LoginComponent
+    }
+    
+    // All LoginActivity, LoginUsernameFragment and LoginPasswordFragment request injection from LoginComponent. The graph needs to satisfy all the dependencies of the fields
+    // those classes are injecting 
+    fun inject(loingAcitvity: LoginActivity)
+    fun inject(usernameFragment: LoginUsernameFragment)
+    fun inject(passwordFragment: LoginPasswordFragment)
+}
+```
+
+The components access the instance of the compnoent that lives in the LoginActivity object.
+```
+class LoginUsernmaeFragment: Fragment () {
+    // Fields thatt need to be injected by the login graph
+    @Inject lateinit var loginViewModel: LoginViewModel
+    
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Obtaining the login graph from loginActivity and instantiate the @Inject fields with objects from the graph. 
+       (activity as LoginActivity).loginComponent.inject(this)
+       
+       // Now you can access loginViewModel here and onCreatedView too
+       // (shared instance with the Activity and other fragmetns. 
+    }
+}
+```
+
+## Working with Dagger Modules
+Dagger modules are a way to encapsulate how to provide objects in a semantic way. You can include modules in components but you can slo include modules inside other modules. This is powerful, but can be easily misused. 
+
+Once a modlue has been added to either a component or another module, it's already in the DAgger graph; Dagger can provide those objects in that component. Before adding a moduel, check if that module is part of the Dagger graph already by checking if it's already added to theocmponent or by compiling the project and seeing if Dagger can find the required dependencies for that module. 
+
+Good practie dicatest tha modules should only be ecalred once in a component (outside of specific advanced Dagger use cases)
+
+Lets say you have your graph configured in thsi way. ApplicationComponent includes Moduel1 and Module2 and Module1 includes Module2. 
+
+```
+@Componet(modules = [Module1::class, Module2::class])
+interface ApplicationComponent { ... }
+
+@Module(includes = [ModuleX::class])
+class Module 1 { ... }
+
+@Module
+class Module2 { ... }
+```
+
+Good Practice
+```
+@Component(modules = [Modules:: class, Module2::class, ModuleX::class])
+interface ApplicationComponet { ... }
+
+@Module 
+class Module1 { ... }
+
+@Module
+class Module2 { ... }
+```
+
+## Assisted injection
+Assisted inejction is a DI pattern used to construct an object where  soem parameters may be provided by the DI framework and others must be passed in at creation time by the user. 
