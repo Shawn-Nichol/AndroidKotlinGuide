@@ -129,3 +129,117 @@ interface ApplicationComponent {
 The recommended way to add types to the Dagger Graph is by using constructor inejction. Sometimes this is not possible and you have to use Dagger modules. one example is when you want Dagger to use the reulst of computation to determine how to create an instance of an object. Whenever it has to provide an instance of that type, Dgger runs the code inside the @Provides method
 
 ```
+
+## Dagger scopes
+Becuase you might want to use UserRepository in other features of the app and might not want to create a new object every time you need, it, you can designate it as a unique instance for the whole app. It is the same for LoginRetrofitService: it can be expensive to create, and you also want a unique instance of that object to be reused. Creating an instance of UserRemoteDataSource is not that expensive, so scoping it to the conponents's lifecycle is not necessary. 
+
+@SingleTone is the only scope annotation that comes with the javax.inject package. you can use it to annotate ApplicationComponent and the objects you want to reuse across the whole application. 
+
+```
+@Singleton
+@Component(modules = [NetworkModule::class])
+interface ApplicationComponent {
+    fun inject(activity: LoginActivity)
+}
+
+@Singleton
+class UserRepository @Inject constructor (
+   private val localDataSource: UserLocalDataSource
+   private val remoteDataSource: UserRemoteDataSource
+) { ... }
+
+@Module
+class NetworkModule {
+    // Way to scope types inside a Dagger Module. 
+    @Singleton
+    @Provides
+    fun provideLoginRetrofitService(): LoginRetrofitService { ... }
+}
+```
+Take care not to inroduce memory leaks when applying scopes to objects. As long as the scoped component is in memory, the created object is in memory too. Becuase ApplicationComponent is created when the app is launched (in the application class), it is destoryed when the app  gets destroyed. Thus, the unique instance of UserREpsotiory always remains in memory until the application is destroyed. 
+
+
+## Dagger Subcomponents
+If your login flow (managed by a single LoginActivity) consists of multiple fragments, you should reuse the same instance of LogingViewModel in all fragments. @Singleton cannot annotate LoginViewModel to reuse the instance for the following reasons 
+1. The instance of LoginViewModel would persist in memory after the flow has finished. 
+2. You want a different instance of LoginViewModel for each login flow. For example if the user logs out, you want a different instance of LginViewModel, rather than the same instance as when the user logged in for the first time. 
+
+To scope LoginViewModle to the lifecycle of LoginActivity you need to create a new component ( a new subgraph) for the login flow and a new scope. 
+
+```
+@Component
+interface LoginComponent {}
+```
+
+Now, LoginActivity should get injections from LoginComponent becuase it has a login-specific configuration. This ermoves the responsibility to inject LoginActivity from the Applciation Component class. 
+
+```
+@Component
+interface LoignComponent( {
+    fun inject(activity: LoginActivity)
+}
+```
+
+LoginComponent  must be able to access the objects form ApplicationComponent becuase LoginViewModel depends on UserRepository. The way to tell Dagger that you want a component to use part of another component is with Dagger subcomponents. The new component must be a subcomponent of the component containing shared resources. 
+
+Subcomponents are components that inherit and extend the object graph of a parent component. Thus, all objects provided in the parent component are provided in the subcomponent too. In this way, an object form a subcomponent can depend on a object provied by the parent component. 
+
+To create instances of subcompnents, you need an instance of the parent  compnent. Therefore, the objects provided by the parent compnent to the subcompnent are still scoped to the parent component. 
+
+```
+// @Subcomponent annotation infroms Dagger this interface is a Dagger Subcomponent.
+@Subcomponent
+interface LoginComponent {
+    // This tells Dagger that LoginActivity request injection from Login Compnent so that this subcompnent graph needs to satisfy all teh dependencies of the fields
+    // that LoginActivity is injectin
+    fun inject(loingActivity: LoginActivity) 
+}
+```
+
+You also must define a subcomponent factory inside LoginComponent so that ApplicationComponent knows how to create instance of LoginComponent. 
+
+```
+@Subcomponent
+interface LoginComponent {
+    // Factory that is used to create instance of this subcomponent
+    @Subcomponent.Factory {
+        fun create(): LoginComponent
+    }
+    
+    fun inject(loingActivity: LoginActivity)
+}
+```
+
+To tell Dagger that LoginComponent is a subcompnent of ApplicationComponent, you have to indicate it by 
+
+1. Creating a new Dagger module passing the subcomponents class to the subcomponents attribute of thea nnotation
+```
+// The subcomponents attribute in the @Module annotation tells Dagger what
+// Subcomponents are children of the Component this module is included in. 
+@Module(subcomponents  = LoginComponent:class)
+class SubcomponentsModule {}
+```
+2. Adding the new module
+
+```
+// Including SubcomponentsModule, tell ApplicationComponent that
+// LoginComponent is its cusbcomponent. 
+@Singleton
+@Component(modules = [NetworkModulle::class, SubcomponentsModule::class])
+interface ApplicationComponent
+```
+Note that ApplicationComponent doesn't need to inject LoginActivity anymore becuase that responsibility now belongs to LoginComponent, so you can remove theinejct() method from ApplicationComponet.
+
+Consumers of ApplicationComponent need to know how to create instances of LoignComponent. THe parent component must add a method in its interface to let consumers create instances of teh subcomponent out of an instance of the parent compnent. 
+
+3. Expose the factore that creates instances of Loign COmponets in the interface. 
+```
+@Singleton
+@Component(modules = [NetworkModules::class, Subcomponents::class]) 
+interface ApplicationComponent {
+    // This function exposes the LoginComponent factory out of the graph so consumers 
+    // can use it to obtain new instances of LoginComponent. 
+    fun loginComponent(): LoginComponet.Factory
+}
+```
+5.
