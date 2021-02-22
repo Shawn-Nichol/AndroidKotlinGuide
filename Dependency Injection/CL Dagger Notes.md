@@ -14,3 +14,10 @@ Certain Android famework classes such as Activites and Fragmetns are instantiate
 Instead of creating the depndencies an Activity requires in the onCreate method as we do with manual depndency injection, we want Dagger to populate those dependencies for us. For field injection (that is commonly used in Activites and Fragments), we annotate with @Inject the fields that we want Dagger to provide. 
 
 @Componet interface gives the information Dagger needsd to generate the gtrpah at compile-time. The parameter of the interface mthods define what classes request injection. 
+
+
+`@Proivde` use Provides to tell DAgger how to provide a class that your probject doesn't own.
+
+Modules are way to encapsulate how to provide objects in semantic way.
+
+`@BindsInstance` for objects that are constructed outside of the graph (eg, context)
