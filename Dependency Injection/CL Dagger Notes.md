@@ -21,3 +21,17 @@ Instead of creating the depndencies an Activity requires in the onCreate method 
 Modules are way to encapsulate how to provide objects in semantic way.
 
 `@BindsInstance` for objects that are constructed outside of the graph (eg, context)
+
+
+Abstract class cann not instantiated means we can not create object for that class
+- We can't create an object from an abstract class
+- All the variables and member functions of an abstract class are by default non-abstract. So, if we want to override these members in the child class then we nneed to use open keyword.
+- If we delcare a member function as abasstract then we do not need to annotate with open keyword.
+- An abstracdt memeber function doesn't have a body, and it must be implemented in the derived class
+
+`Lazy` the value gets computed on first use. 
+
+
+An Activity injects Dagger in the onCreate method before calling super. 
+A Fragment injects Dagger in the onAttach method after calling super. 
+
