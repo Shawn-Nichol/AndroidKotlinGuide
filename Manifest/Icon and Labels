@@ -1,0 +1,6 @@
+Icons and labels
+A number of manifest elements have icon and label attributes for displaying a small icon and text label, respectively, to users for the corrresponding app componenet. In every case, the icon and label that are set in a parent element become the default icon and label value for all child elements. 
+
+Ex, the icon and label that are set in the <application> element are the default icon and label for each of the app's components (such as all activites). 
+
+The icon and label that are set in a component's <intent-filter> are shown to the user whenever that component is presented as an option to fulfilll an intent. By deffault, this icon is inherited from which ever icon is declared for the parent component(either the <activity> or <application> element), but you might want to change the icon for an inent filter if it provides a unique action that you'd like to better indicate in the choose dialog. 
