@@ -35,3 +35,12 @@ Abstract class cann not instantiated means we can not create object for that cla
 An Activity injects Dagger in the onCreate method before calling super. 
 A Fragment injects Dagger in the onAttach method after calling super. 
 
+There are two ways to interact with the Dagger graph. 
+1. Declaring a function that returns unit and  takes a class as a parametere allows field injection in that class
+2. Declaring a function that returns a type allows retrieving types from the graph. 
+
+## Scoping Rules
+When a type is marked with a sscope annotations, it can only be used by components that are annotated with the same scope
+- When a Component is marked with a scope annotation, it can only provide types with that annotation or types that have no annotation. 
+- A subcomponent cannot use a scope annotation used by one of its paretn components. 
+- 
