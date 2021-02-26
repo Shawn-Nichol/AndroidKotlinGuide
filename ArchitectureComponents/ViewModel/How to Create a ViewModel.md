@@ -54,7 +54,7 @@ A ViewModel factory is used to create ViewModel and pass in data.
 ## 1) Create a ViewModelFactory
 Create a ViewModelFacotory class, and pass in the starting data. 
 ```
-class MyFragmentViewModelFacotry(private val number: Int) : ViewModelFacotry) {
+class MyFragmentViewModelFacotry(private val number: Int) : ViewModelProvider.Factory {
   override fun<T : ViewModel?> create(modelClass: Class<T>): T {
     if(modelClass.isAssignableFrom(MyFragmentViewModel::class.java)) {
       return MyFragmentViewModel(number) as T
