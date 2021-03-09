@@ -2,11 +2,12 @@
 # FAB Behavior
 This class is called from the FAB attributes in XML layout. 
 ```
+<coordinatorlayout>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/my_fab"
             ...
             app:layout_behavior=".playerlist.ui.FABBehavior"/>
-
+<coordinatorlayout/>
 ```
 
 ## Create FAB Behavior class
@@ -83,7 +84,7 @@ Override `onNestedScroll`, this fun is called when the user is scrolling.
     }
 ```
 
-## onStopScrolling
+## onStopScrollinG
 Override `onStopNestedScrolling`, the fun is called after the user has stopped scrolling. 
 ```
     override fun onStopNestedScroll(
