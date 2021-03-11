@@ -1,22 +1,22 @@
 ## Grouping resource types. 
 You should place each type of resource in a specific subdirectory of your progject's res/ directory 
 
-</br>
+
 `animator:` XML files that define property animations
 
-</br>
+
 `anim:` XML files that define tween animations. (Property animations can also be saved in this directoyr, but the animator/ directory is preferred for property animations to distinguish betweeen the two types. 
 
-</br>
+
 `color:` XML filese that define a state list of colors
 
-</br>
+>
 `drawable` Bitmap files(.png, .9.png, .jpg, .gif) or XML files are complied into the following drawable resource subtypes. 
 
-</br>
+
 `mipmap:` Drawable filese for different launcher icon densities. For more information on managing launcher icons with mipmap/ folders see Managing Progjects Overview
 
-</br>
+
 `layout:` XML files that define a user interface layout.
 
 `menu:` XML files that define app menus, such as an options menu, context menu, or sub menu
