@@ -1,24 +1,30 @@
 ## Grouping resource types. 
 You should place each type of resource in a specific subdirectory of your progject's res/ directory 
 
-animator/ XML files that define property animations
+</br>
+`animator:` XML files that define property animations
 
-anim/ XML files that define tween animations. (Property animations can also be saved in this directoyr, but the animator/ directory is preferred for property animations to distinguish betweeen the two types. 
+</br>
+`anim:` XML files that define tween animations. (Property animations can also be saved in this directoyr, but the animator/ directory is preferred for property animations to distinguish betweeen the two types. 
 
-color/ XML filese that define a state list of colors
+</br>
+`color:` XML filese that define a state list of colors
 
-drawable/ Bitmap files(.png, .9.png, .jpg, .gif) or XML files are complied into the following drawable resource subtypes. 
+</br>
+`drawable` Bitmap files(.png, .9.png, .jpg, .gif) or XML files are complied into the following drawable resource subtypes. 
 
-mipmap/ Drawable filese for different launcher icon densities. For more information on managing launcher icons with mipmap/ folders see Managing Progjects Overview
+</br>
+`mipmap:` Drawable filese for different launcher icon densities. For more information on managing launcher icons with mipmap/ folders see Managing Progjects Overview
 
-layout/ XML files that define a user interface layout.
+</br>
+`layout:` XML files that define a user interface layout.
 
-menu/ XML files that define app menus, such as an options menu, context menu, or sub menu
+`menu:` XML files that define app menus, such as an options menu, context menu, or sub menu
 
-raw/ Arbitrary files to save in their raw form. To oopen these resoources with a raw InputStream, call Resources.openRawResource() with the resource ID, which is R.raw.filename
+`raw:` Arbitrary files to save in their raw form. To oopen these resoources with a raw InputStream, call Resources.openRawResource() with the resource ID, which is R.raw.filename
 however, if you need access to original file names and file hierarchy, you might consider saving some resources in the assets/ directory (instead of res/raw/). Files in assets/ aren't given a resrouce ID, so you can read them only using AssetManager. 
 
-values/ XML files that contain simple values, such as strings, integers and colors. Where as XML resource files in other res/ subdirectiories define a single resource based on the XML filename, files inteh values/ directory describe multiple resources. For a file in this directory, each child of the <resources> element defines a single resource. For example, a <String> element creates an R.string resource and <color> element creates an R.color resource. 
+`values:` XML files that contain simple values, such as strings, integers and colors. Where as XML resource files in other res/ subdirectiories define a single resource based on the XML filename, files inteh values/ directory describe multiple resources. For a file in this directory, each child of the <resources> element defines a single resource. For example, a <String> element creates an R.string resource and <color> element creates an R.color resource. 
   
 Becuase each resource is defined with its own XML element, you can name the file whatever you want and place different resource types in one file. However, for clarity, you might want to place unique resource types in different files. For example, here aree some filename conventions for resources you can create in this directory. 
 - arrays
@@ -27,13 +33,10 @@ Becuase each resource is defined with its own XML element, you can name the file
 - strings
 - styles
 
-xml/ Arbitrary XML files that can be read at runtime by calling Resources.getXML(). Various XML configuration files must be saved here, such as a searchable configuration. 
-font/ Font files with extensions such as .ttf, otf, or .ttc, or XML files that include a <font-family> element. 
-  
-The resouces that you save in the subdirectories defined are "default resources. That is, these ressources define the default design and content for your app. However, different types of Android-powered devices might call for different types of resources. For example, if a device has a larger than normal screen, then you should provide different layout resources that take advantage of different string resources that translate the text in your user interafce. To provide these different resources for different device configurations, you need to provide alternative resources, in addition to your default resources. 
 
+  
 ## Providing alternative resources
-Almost every app should provide alternative resoources to support specific device configurations. For instance, you should include alternative drawable resources for different screen densities and alternative string resources for different languages. At runtime, Android detects the current device configuration and loads the appropriate resources for your app. 
+Almost every app should provide alternative resources to support specific device configurations and different screen sizes. For instance, you should include alternative drawable resources for different screen densities and alternative string resources for different languages. At runtime, Android detects the current device configuration and loads the appropriate resources for your app. 
 
 To specify configuration-specific alternatives for a set of resources:
 1) Create a new directory in res/ named in the form <resources_name>-<qualifier>
