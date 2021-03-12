@@ -1,9 +1,6 @@
 ## NavHostFragment
-NavHostFragment is the continer which Navigation will be using to swap in out destinations, the NavHostFragment should be added to your main_acitivity_layout.
 
 
-
-The XML shows NavHostFragment
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
