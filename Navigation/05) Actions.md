@@ -39,14 +39,14 @@ You can use the Navigation editor to connect two destinatioons.
  
   
 ## Navigation to a destination
-Navigation to a destination is done using a NavController, an object hat manages app navigation within a NavHost. Each NavHost has its own correspondingn Navcontroller. you can retireve a NavController by uing one of the following methos
+Navigation to a destination is done using a NavController, an object that manages app navigation within a NavHost. Each NavHost has its own correspondingn Navcontroller. you can retireve a NavController by uing one of the following methos
 
 Kotlin
 - Fragment.findNavController()
 - View.findNavController()
 - activity.findNavController()
 
-When createing the NavHostFragment using FragmentContainerView or if manually adding the NavHostFramgent to your activity via a FragmentTransaction, attempting to retrieve the NavController in onCreate(0 of an activity via navigation.findNavController(Activity, #EdRes int) will fail. You should retrieve the NavController directly from the NavHostFragment instead. 
+When createing the NavHostFragment using FragmentContainerView or if manually adding the NavHostFramgent to your activity via a FragmentTransaction, attempting to retrieve the NavController in onCreate( of an activity via navigation.findNavController(Activity, #EdRes int) will fail. You should retrieve the NavController directly from the NavHostFragment instead. 
 
 ```
 val navHostFragment = suppoortFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
