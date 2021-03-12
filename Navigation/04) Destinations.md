@@ -1,7 +1,4 @@
 # Destinations
-Destinations are different content areas in your app, they are created from fragment or activities. 
-
-
 You can create a destination from an existing fragment or activity. You can also use the Navigation editor to create a new destination or create a placeholder to later replace with a fragment or activity. 
 
 
