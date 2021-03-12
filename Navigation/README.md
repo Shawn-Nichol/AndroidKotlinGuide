@@ -28,11 +28,20 @@ The Navigation component consists of three key parts tha are descibed below.
 
 `Dialog Destination:` If you have an existing Dialog Fragment, you can use the dialog element to add the dialog to the navigation graph. 
 
+## Actions
+`Actions:` Actions connect one Destination to another, they are represented in the navigation graph as arrows and can have multiple paths.
+
+`Navcontroller:` is an object that manages app navigation within a NavHost. Each NavHost has its own corresponding NavController. you can retireve a Navcontroller with the following. 
+- Fragment.findNavController()
+- View.findNavController
+- activity.findNavController()
+
+
 
 `Top-LevelNavigation:` Top-level navigation graphs should start with the initial destination the user sees when launching he app and should include the destinations that thye see as they move about your app. 
 
 
 
-`Actions:` Are logical connectoins between your destinations that represent paths that users can take. 
+
 
 
